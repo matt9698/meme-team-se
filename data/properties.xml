@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<properties>
+    <property pos="2" group="1" name="Crapper Street" cost="60"/>
+    <property pos="4" group="1" name="Gangsters Paradise" cost="60"/>
+    <property pos="7" group="2" name="Weeping Angel" cost="100"/>
+    <property pos="9" group="2" name="Potts Avenue" cost="100"/>
+    <property pos="10" group="2" name="Nardole Drive" cost="120"/>
+    <property pos="12" group="3" name="Skywalker Drive" cost="140"/>
+    <property pos="14" group="3" name="Wookie Hole" cost="140"/>
+    <property pos="15" group="3" name="Rey Lane" cost="160"/>
+</properties>
