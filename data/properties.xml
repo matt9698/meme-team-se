@@ -1,11 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<properties>
-    <property pos="2" group="1" name="Crapper Street" cost="60"/>
-    <property pos="4" group="1" name="Gangsters Paradise" cost="60"/>
-    <property pos="7" group="2" name="Weeping Angel" cost="100"/>
-    <property pos="9" group="2" name="Potts Avenue" cost="100"/>
-    <property pos="10" group="2" name="Nardole Drive" cost="120"/>
-    <property pos="12" group="3" name="Skywalker Drive" cost="140"/>
-    <property pos="14" group="3" name="Wookie Hole" cost="140"/>
-    <property pos="15" group="3" name="Rey Lane" cost="160"/>
-</properties>
+<gameData>
+    <propertyGroups>
+        <propertyGroup id="1" name="Brown" />
+        <propertyGroup id="2" name="Blue" />
+        <propertyGroup id="3" name="Purple" />
+        <propertyGroup id="4" name="Orange" />
+        <propertyGroup id="5" name="Yellow" />
+        <propertyGroup id="6" name="Red" />
+        <propertyGroup id="7" name="Green" />
+        <propertyGroup id="8" name="Deep Blue" />
+    </propertyGroups>
+    <properties>
+        <property pos="2" group="1" name="Crapper Street" cost="60"/>
+        <property pos="4" group="1" name="Gangsters Paradise" cost="60"/>
+        <property pos="7" group="2" name="Weeping Angel" cost="100"/>
+        <property pos="9" group="2" name="Potts Avenue" cost="100"/>
+        <property pos="10" group="2" name="Nardole Drive" cost="120"/>
+        <property pos="12" group="3" name="Skywalker Drive" cost="140"/>
+        <property pos="14" group="3" name="Wookie Hole" cost="140"/>
+        <property pos="15" group="3" name="Rey Lane" cost="160"/>
+        <property pos="17" group="4" name="Cooper Drive" cost="180"/>
+        <property pos="19" group="4" name="Wolowitz Street" cost="180"/>
+        <property pos="20" group="4" name="Penny Lane" cost="200"/>
+        <property pos="22" group="5" name="Yue Fei Square" cost="220"/>
+        <property pos="24" group="5" name="Mulan Rouge" cost="220"/>
+        <property pos="25" group="5" name="Han Xin Gardens" cost="240"/>
+        <property pos="27" group="6" name="Kirk Close" cost="260"/>
+        <property pos="28" group="6" name="Picard Avenue" cost="260"/>
+        <property pos="30" group="6" name="Crusher Creek" cost="280"/>
+        <property pos="32" group="7" name="Sirat Mews" cost="300"/>
+        <property pos="33" group="7" name="Ghengis Cresent" cost="300"/>
+        <property pos="35" group="7" name="Ibis Close" cost="320"/>
+        <property pos="38" group="8" name="Hawking Way" cost="350" />
+        <property pos="40" group="8" name="Turing Heights" cost="400" />
+    </properties>
+</gameData>
