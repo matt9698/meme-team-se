@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
  * @author adam
  * Class board represents the board which the game will be played on
  */
-public class Board {
+public class Board { //test
 
     private final int width = 10, height = 10;
     //Board is made up of a 10x10 grid of tiles where the outer tiles are properties, inner tiles can be ignored
