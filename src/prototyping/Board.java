@@ -11,7 +11,7 @@ public class Board {
 
     private final int width = 10, height = 10;
     //Board is made up of a 10x10 grid of tiles where the outer tiles are properties, inner tiles can be ignored
-    private Tile[][] tiles;
+    private Tile[][] tiles; //hi
 
     public Board() {
 
