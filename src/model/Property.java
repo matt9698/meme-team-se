@@ -8,9 +8,9 @@ package model;
  *
  * @author matth
  */
-public class Game
+public class Property implements Board.Position, Asset
 {
-    public static class Data
+    public static class Group
     {
         
     }

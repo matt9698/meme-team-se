@@ -8,10 +8,7 @@ package model;
  *
  * @author matth
  */
-public class Game
+public class FreeParking implements Board.Position, Asset.Owner
 {
-    public static class Data
-    {
-        
-    }
+    
 }

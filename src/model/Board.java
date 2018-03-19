@@ -8,9 +8,9 @@ package model;
  *
  * @author matth
  */
-public class Game
+public class Board
 {
-    public static class Data
+    public static interface Position
     {
         
     }

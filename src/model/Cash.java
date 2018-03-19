@@ -8,10 +8,7 @@ package model;
  *
  * @author matth
  */
-public class Game
+public class Cash implements Asset
 {
-    public static class Data
-    {
-        
-    }
+    
 }

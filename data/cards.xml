@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<gameData>
+    <cardGroups>
+        <cardGroup id="1" name="Pot Luck" />
+        <cardGroup id="2" name="Opportunity Knocks" />
+    </cardGroups>
+    <cards>
+        <card group="1" action="transaction(bank, currentPlayer, cash(100))" 
+              description="You inherit {currency}100" />
+        <card group="1" action="transaction(bank, currentPlayer, cash(20))" 
+              description="You have won 2nd prize in a beauty contest, collect {currency}20" />
+        <card group="1" action="moveBack(currentPlayer, 2)"
+              description="Go back to {tile(2)}" />
+    </cards>
+</gameData>

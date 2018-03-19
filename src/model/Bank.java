@@ -8,10 +8,7 @@ package model;
  *
  * @author matth
  */
-public class Game
+public class Bank implements Asset.Owner
 {
-    public static class Data
-    {
-        
-    }
+    
 }

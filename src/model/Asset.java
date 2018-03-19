@@ -8,9 +8,9 @@ package model;
  *
  * @author matth
  */
-public class Game
+public interface Asset
 {
-    public static class Data
+    public static interface Owner
     {
         
     }
