@@ -14,10 +14,6 @@ public class Event<T> extends EventObject
 {
     public Event(T source)
     {
-        if(source == null) {
-          throw new IllegalArgumentException("source can not be null");
-        }
-
         super(source);
     }
 
