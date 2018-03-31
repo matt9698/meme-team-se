@@ -6,6 +6,7 @@ package view;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.Game;
 
 /**
  *
@@ -17,6 +18,8 @@ public class GameView extends Application
     {
         Application.launch(args);
     }
+    
+    private Game model;
     
     @Override
     public void start(Stage stage)
