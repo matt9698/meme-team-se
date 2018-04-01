@@ -4,6 +4,8 @@
  */
 package propertyTycoon.model;
 
+import prototyping.Asset;
+
 /**
  *
  * @author matth

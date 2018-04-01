@@ -2,7 +2,7 @@
  * Meme Team Software Engineering Project
  * Property Tycoon
  */
-package prototyping;
+package prototyping.old;
 
 import java.util.Random;
 

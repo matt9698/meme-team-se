@@ -2,7 +2,7 @@
  * Meme Team Software Engineering Project
  * Property Tycoon
  */
-package propertyTycoon.model;
+package prototyping;
 
 /**
  * Represents a game item that players and other entities may own.

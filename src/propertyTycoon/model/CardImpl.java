@@ -2,10 +2,9 @@
  * Meme Team Software Engineering Project
  * Property Tycoon
  */
-package propertyTycoon.model.card;
+package propertyTycoon.model;
 
 import java.util.Arrays;
-import propertyTycoon.model.Player;
 
 /**
  *
@@ -14,23 +13,34 @@ import propertyTycoon.model.Player;
 class CardImpl extends Card
 {
     private final Action[] choices;
+    private final String description;
     private final Group owner;
-    
-    public CardImpl(Group owner, Action... choices)
+
+    public CardImpl(Group owner, String description, Action... choices)
     {
-        // Argument checking       
+        // Check arguments       
         assert owner != null : "owner cannot be null.";
         assert choices != null : "choice cannot be null.";
-        
+
         int i = 0;
         while(i < choices.length && choices[i] != null) {
             i++;
         }
         assert i == choices.length : "choices elements cannot be null.";
-        
-        // Assign arguments to fields
+
+        assert choices.length == 1 || description != null :
+            "description cannot be null for a choice card.";
+
+        // Assign fields
         this.owner = owner;
-        
+
+        if(choices.length > 1) {
+            this.description = description;
+        }
+        else {
+            this.description = null;
+        }
+
         // Copy the array so that element references
         // cannot be subsequently modified by external code.
         this.choices = Arrays.copyOf(choices, choices.length);
@@ -39,30 +49,42 @@ class CardImpl extends Card
     @Override
     public int getActionCount()
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return choices.length;
     }
 
     @Override
     public String getActionDescription(int action)
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return choices[action].getDescription();
     }
 
     @Override
     public String getDescription()
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        if(isChoice()) {
+            return description;
+        }
+        else {
+            return getActionDescription(0);
+        }
+    }
+
+    @Override
+    public Group getOwner()
+    {
+        return owner;
     }
 
     @Override
     public boolean isSpent()
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return false;
     }
 
     @Override
     public void spend(int action, Player context)
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        choices[action].execute(context);
+        owner.replaceCard(this);
     }
 }
