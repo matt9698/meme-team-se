@@ -2,7 +2,7 @@
  * Meme Team Software Engineering Project
  * Property Tycoon
  */
-package model.event;
+package propertyTycoon.model.event;
 
 import java.util.EventObject;
 
