@@ -13,19 +13,57 @@ import java.util.List;
  */
 public abstract class Card
 {
-    public static Card create(Group owner, Action action)
+    /**
+     * Creates and returns an instance of a single action card
+     * with the specified action associated with it.
+     * A single action card is a <code>Card</code>
+     * that offers no choice of action when spent.
+     *
+     * @param action The <code>Action</code> that should
+     *               be associated with this card. Should not be null.
+     *
+     * @return A new <code>Card</code> instance.
+     *
+     * @throws IllegalArgumentException if <code>action</code> is null.
+     */
+    public static Card create(Action action)
     {
-        return create(owner, null, action);
+        if(action == null) {
+            throw new IllegalArgumentException("action should not be null.");
+        }
+
+        return create(null, action);
     }
 
-    public static Card create(Group owner, String description, Action... choices)
+    /**
+     * Creates and returns an instance of a choice card
+     * with the specified description and actions associated with it.
+     * A choice card is a <code>Card</code>
+     * that offers a choice of action when spent.
+     *
+     * @param description A description of the this card and its choices.
+     *                    Ignored if choices has only one element
+     *                    <code>(choices.length == 1)</code>.
+     *                    Should not be empty or null when there is more
+     *                    than one element in choices
+     *                    <code>(choices.length > 1)</code>.
+     * @param choices     The <code>Actions</code> that should
+     *                    be associated with this card.
+     *                    Should not be null or contain null elements.
+     *
+     * @return A new <code>Card</code> instance.
+     *
+     * @throws IllegalArgumentException if <code>choices</code> is null
+     *                                  or contains null elements, or if
+     *                                  description is null or empty when there
+     *                                  is more than one element in choices
+     *                                  <code>(choices.length > 1)</code>.
+     */
+    public static Card create(String description, Action... choices)
     {
         // Check arguments
-        if(owner == null) {
-            throw new IllegalArgumentException("owner cannot be null.");
-        }
         if(choices == null) {
-            throw new IllegalArgumentException("choices cannot be null.");
+            throw new IllegalArgumentException("choices should not be null.");
         }
 
         // Check choices elements aren't null
@@ -37,7 +75,7 @@ public abstract class Card
         if(i != choices.length) {
             throw new IllegalArgumentException(
                 String.format(
-                    "choices elements cannot be null."
+                    "choices should not contain null elements."
                     + " One or more choices elements is null;"
                     + " the first occurence of null is at index %0$td.",
                     i));
@@ -45,22 +83,51 @@ public abstract class Card
 
         if(choices.length > 1 && description == null) {
             throw new IllegalArgumentException(
-                "description cannot be null for a choice card.");
+                "description should be null for a choice card.");
         }
 
-        return new CardImpl(owner, description, choices);
+        return new CardImpl(description, choices);
     }
 
     /**
      * Gets the number of action choices associated with this card.
      *
-     * @return
+     * @return The number of action choices associated with this card.
      */
     public abstract int getActionCount();
 
-    public abstract String getActionDescription(int action);
+    /**
+     * Gets the description of the specified <code>Action</code>.
+     * The <code>Action</code> is specified with an index.
+     * associated with the specified index.
+     *
+     * @param index The index associated with the
+     *               <code>Action</code> in question.
+     *
+     * @return The description of the specified <code>Action</code>.
+     */
+    public abstract String getActionDescription(int index);
 
+    /**
+     * Gets the description of this card.
+     * For single action cards calling this method is 
+     * equivalent to calling <code>getActionDescription(0)</code>.
+     * @return The description of this card.
+     */
     public abstract String getDescription();
+
+    /**
+     * Gets the owner <code>Group</code> of this card.
+     * The owner must be set using <code>setOwner()</code> 
+     * before this method can be used.
+     * 
+     * @return The owner group of this card.
+     */
+    public abstract Group getOwner();
+
+    public abstract void setOwner(Group g);
+
+    public abstract boolean hasOwner();
 
     /**
      * Indicates if this card offers a choice of actions.
@@ -100,8 +167,6 @@ public abstract class Card
 
     public abstract void spend(int action, Player context);
 
-    public abstract Group getOwner();
-
     /**
      * Represents the action associated with a card.
      */
@@ -130,7 +195,7 @@ public abstract class Card
         public Card drawCard()
         {
             assert !cards.isEmpty();
-            return cards.remove(0);
+            return new CardProxy(cards.remove(0));
         }
 
         public String getDescription()
@@ -140,16 +205,16 @@ public abstract class Card
 
         public void shuffle()
         {
-            throw new UnsupportedOperationException("Not yet implemented");           
+            throw new UnsupportedOperationException("Not yet implemented");
         }
 
         protected void replaceCard(Card c)
         {
-            if(c.getOwner() != this) {
+            if(c.hasOwner() && c.getOwner() != this) {
                 throw new IllegalArgumentException(
                     "card must be owned by this group.");
             }
-            
+
             cards.add(c);
         }
     }

@@ -15,13 +15,12 @@ class CardProxy extends Card
     
     public CardProxy(Card realCard)
     {
-        // Argument checking        
-        assert realCard != null : "realCard cannot be null.";
+        // Check arguments       
+        assert realCard != null : "realCard should not be null.";
         
-        // Assign arguments to fields
+        // Assign fields
         this.realCard = realCard;
         
-        // Assign default values to fields
         isSpent = false;
     }
     
@@ -47,6 +46,18 @@ class CardProxy extends Card
     public Group getOwner()
     {
         return realCard.getOwner();
+    }
+
+    @Override
+    public void setOwner(Group g)
+    {
+        realCard.setOwner(g);
+    }
+
+    @Override
+    public boolean hasOwner()
+    {
+        return realCard.hasOwner();
     }
 
     @Override

@@ -14,12 +14,11 @@ class CardImpl extends Card
 {
     private final Action[] choices;
     private final String description;
-    private final Group owner;
+    private Group owner;
 
-    public CardImpl(Group owner, String description, Action... choices)
+    public CardImpl(String description, Action... choices)
     {
-        // Check arguments       
-        assert owner != null : "owner cannot be null.";
+        // Check arguments
         assert choices != null : "choice cannot be null.";
 
         int i = 0;
@@ -32,8 +31,6 @@ class CardImpl extends Card
             "description cannot be null for a choice card.";
 
         // Assign fields
-        this.owner = owner;
-
         if(choices.length > 1) {
             this.description = description;
         }
@@ -44,6 +41,8 @@ class CardImpl extends Card
         // Copy the array so that element references
         // cannot be subsequently modified by external code.
         this.choices = Arrays.copyOf(choices, choices.length);
+        
+        this.owner = null;
     }
 
     @Override
@@ -72,7 +71,31 @@ class CardImpl extends Card
     @Override
     public Group getOwner()
     {
+        if(owner == null) {
+            throw new IllegalStateException("Card has no owner.");
+        }
+        
         return owner;
+    }
+
+    @Override
+    public void setOwner(Group g)
+    {
+        if(owner != null) {
+            throw new IllegalStateException("Card already has an owner.");
+        }
+        
+        if(g == null) {
+            throw new IllegalArgumentException("group cannot be null.");
+        }
+        
+        owner = g;
+    }
+
+    @Override
+    public boolean hasOwner()
+    {
+        return owner != null;
     }
 
     @Override
@@ -84,6 +107,11 @@ class CardImpl extends Card
     @Override
     public void spend(int action, Player context)
     {
+        if(owner == null) {
+            throw new IllegalStateException("Card has no owner Group."
+                + " A Card must be assigned an owner before being used.");
+        }
+        
         choices[action].execute(context);
         owner.replaceCard(this);
     }
