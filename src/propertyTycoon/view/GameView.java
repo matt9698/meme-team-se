@@ -6,7 +6,7 @@ package propertyTycoon.view;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import propertyTycoon.model.Game;
+import prototyping.Game;
 
 /**
  *
