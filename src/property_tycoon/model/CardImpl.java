@@ -15,8 +15,9 @@ class CardImpl extends Card
     public final Action[] choices;
     public final String description;
     public Group group;
+    private final boolean isImmediate;
 
-    public CardImpl(String description, Action... choices)
+    public CardImpl(String description, boolean isImmediate, Action... choices)
     {
         // Check arguments
         assert choices != null : "choices should not be null.";
@@ -36,7 +37,19 @@ class CardImpl extends Card
             assert !description.isEmpty() :
                 "description cannot be empty for a choice card.";
         }
-
+        
+        // If the card is immediate use then check at least
+        // one of its actions is always executable.
+        if(isImmediate) {
+            while(i < choices.length && !choices[i].isAlwaysExecutable()) {
+                i++;
+            }
+            
+            assert i != choices.length : 
+                "actions should contain at least one always"
+                    + " executable action for an immediate use card.";
+        }
+            
         // Assign fields
         if(choices.length > 1) {
             this.description = description;
@@ -48,6 +61,8 @@ class CardImpl extends Card
         // Copy the array so that element references
         // cannot be subsequently modified by external code.
         this.choices = Arrays.copyOf(choices, choices.length);
+        
+        this.isImmediate = isImmediate;
 
         this.group = null;
     }
@@ -106,9 +121,9 @@ class CardImpl extends Card
     @Override
     public boolean isImmediate()
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return isImmediate;
     }
-
+    
     @Override
     public boolean isUseable()
     {
@@ -155,5 +170,4 @@ class CardImpl extends Card
         choices[action].execute();
         getGroup().replace(this);
     }
-
 }

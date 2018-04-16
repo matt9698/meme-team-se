@@ -28,21 +28,27 @@ public abstract class Card
      * A single action card is a <code>Card</code>
      * that offers no choice of action.
      *
-     * @param action The <code>Action</code> that should
-     *               be associated with this card. Should not be null.
+     * @param action      The <code>Action</code> that should
+     *                    be associated with this card. Should not be null.
+     *                    <code>isAlwaysExecutable() == true</code>
+     *                    when <code>isImmediate == true</code>.
+     * @param isImmediate Indicates if this card should be used on
+     *                    the same turn it is drawn.
      *
      * @return A new <code>Card</code> instance.
      *
-     * @throws IllegalArgumentException if <code>action</code> is null.
+     * @throws IllegalArgumentException if <code>action</code> is null or if
+     *                                  <code>action.isAlwaysExecutable() == false</code>
+     *                                  when <code>isImmediate == true</code>.
      */
-    public static Card create(Action action)
+    public static Card create(Action action, boolean isImmediate)
     {
         // Check argumments
         if(action == null) {
             throw new IllegalArgumentException("action should not be null.");
         }
 
-        return create(null, action);
+        return create(null, isImmediate, action);
     }
 
     /**
@@ -56,10 +62,14 @@ public abstract class Card
      *                    <code>(choices.length == 1)</code>.
      *                    Should not be null or empty when there is more
      *                    than one element in choices
-     *                    <code>(choices.length > 1)</code>.
+     *                    <code>(choices.length &gt; 1)</code>.
+     * @param isImmediate Indicates if this card should be used on
+     *                    the same turn it is drawn.
      * @param choices     The <code>Actions</code> that should
      *                    be associated with this card.
      *                    Should not be null, empty or contain null elements.
+     *                    If <code>isImmediate == true</code> then 
+     *                    <code>isAlwaysExecutable() == true</code> for at least one action.
      *
      * @return A new <code>Card</code> instance.
      *
@@ -67,9 +77,15 @@ public abstract class Card
      *                                  or contains null elements, or if
      *                                  description is null or empty when there
      *                                  is more than one element in choices
-     *                                  <code>(choices.length > 1)</code>.
+     *                                  <code>(choices.length &gt; 1)</code>,
+     *                                  or if <code>isImmediate == true</code> but
+     *                                  <code>isAlwaysExecutable() != true</code>
+     *                                  for any action in choices.
      */
-    public static Card create(String description, Action... choices)
+    public static Card create(
+        String description,
+        boolean isImmediate,
+        Action... choices)
     {
         // Check arguments
         if(choices == null) {
@@ -106,8 +122,22 @@ public abstract class Card
                     "description should not be empty for a choice card.");
             }
         }
+        
+        // If the card is immediate use then check at least
+        // one of its actions is always executable.
+        if(isImmediate) {
+            while(i < choices.length && !choices[i].isAlwaysExecutable()) {
+                i++;
+            }
+            
+            if(i == choices.length) {
+                throw new IllegalArgumentException(
+                    "actions should contain at least one always"
+                        + " executable action for an immediate use card.");
+            }
+        }
 
-        return new CardImpl(description, choices);
+        return new CardImpl(description, isImmediate, choices);
     }
     
     /**
@@ -127,7 +157,7 @@ public abstract class Card
      *
      * @throws IndexOutOfBoundsException if the action index is out of bounds
      *                                   <code>action &lt; 0</code> or
-     *                                   <code>action >= getActionCount()</code>.
+     *                                   <code>action &gt;= getActionCount()</code>.
      */
     public abstract String getActionDescritpion(int action);
     
@@ -191,19 +221,51 @@ public abstract class Card
     public abstract boolean isImmediate();
 
     /**
-     * Indicates if at least one action associated with this card is useable.
+     * Indicates if at least one action associated with this card is usable.
      * This method should always return true for 
-     * an immediate use card at the time it is drawn.
+     * an immediate use card.
      * 
-     * @return true if at least one action associate with this card is useable,
+     * @return true if at least one action associate with this card is usable,
      *         false otherwise.
      */
     public abstract boolean isUseable();
 
+    /**
+     * Indicates if the specified action is usable at this time.
+     * @param action The index of the action in question.
+     * 
+     * @return true if the specified action is usable, false otherwise.
+     * 
+     * @throws IndexOutOfBoundsException if the action index is out of bounds
+     *                                   <code>action &lt; 0</code> or
+     *                                   <code>action &gt;= getActionCount()</code>.
+     */
     public abstract boolean isUseable(int action);
     
+    /**
+     * Indicates if this card is a valid proxy that can 
+     * be used access mutator methods of a real card.
+     * This method doesn't make sense and is unsupported by real cards.
+     * Any mutator methods on a proxy card will raise 
+     * an exception if this method returns false.
+     * 
+     * @return true if this card is a valid proxy, false otherwise
+     * 
+     * @throws UnsupportedOperationException if this is a real card.
+     */
     public abstract boolean isValid();
 
+    /**
+     * Uses the card, executing its associated action 
+     * and replacing it in its owner Group.
+     * This is a convenience method for using a single action card 
+     * without specifying the action index explicitly.
+     * Calling this method on a single action card is 
+     * equivalent to calling <code>use(0)</code>.
+     * Calling this method on a choice card will raise an exception.
+     * 
+     * @throws UnsupportedOperationException if this card is a choice card.
+     */
     public final void use()
     {
         if(isChoice()) {
@@ -213,6 +275,18 @@ public abstract class Card
         use(0);
     }
 
+    /**
+     * Uses the card, executing the specified action
+     * and replacing it in its owner group.
+     * Raises an exception if the card is not usable for the specified action.
+     *
+     * @param action The index of the action to execute when using this card.
+     *
+     * @throws IndexOutOfBoundsException if the action index is out of bounds
+     *                                   <code>action &lt; 0</code> or
+     *                                   <code>action &gt;= getActionCount()</code>.
+     * @throws IllegalArgumentException  if action is not usable at this time.
+     */
     public abstract void use(int action);
 
     /**
@@ -220,12 +294,33 @@ public abstract class Card
      */
     public static interface Action
     {
+        /**
+         * Executes this action.
+         * Raises an exception if this action is not executable at this time.
+         */
         void execute();
         
+        /**
+         * Gets a description of this action.
+         * 
+         * @return A description of this action.
+         */
         String getDescription();
-
+        
+        /**
+         * Indicates if this action is always executable.
+         * 
+         * @return true if this action is always executable, false otherwise. 
+         */
+        boolean isAlwaysExecutable();
+        
+        /**
+         * Indicates if this action is executable at this time.
+         * Always returns true is isAlwaysExecutable() == true.
+         * 
+         * @return true if this action is executable, false otherwise.
+         */
         boolean isExecutable();
-
     }
 
     /**
@@ -237,6 +332,19 @@ public abstract class Card
         private List<Card> cards;
         private String description;
 
+        /**
+         * Creates a new group instance with the specified description 
+         * and containing the specified cards.
+         * 
+         * @param description The name of this group.
+         * @param cards       The cards contained in this group.
+         *                    Should not be null, empty or contain null elements.
+         *                    Should not contain any cards that already have an owner.
+         * 
+         * @throws IllegalArgumentException if description is null or empty or
+         *                                  if any of the cards already
+         *                                  belong to another group.
+         */
         public Group(String description, Card[] cards)
         {
             // Check arguments
@@ -273,6 +381,20 @@ public abstract class Card
                             + " One or more elements in cards is null;"
                             + " the first occurence of null is at index %0$td.",
                         i));
+            }
+            
+            i = 0;
+            while(i < cards.length && !cards[i].hasGroup()) {
+                i++;
+            }
+            
+            if(i != cards.length) {
+                throw new IllegalArgumentException(
+                    String.format(
+                    "cards should not contain elements that already have an owner."
+                        + " One or more elements in cards already has an owner;"
+                        + " the first occurence of a card with an owner is at index %0$td.",
+                    i));
             }
 
             // Assign fields
