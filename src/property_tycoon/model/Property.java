@@ -12,28 +12,56 @@ public abstract class Property
 {
     private static final int MORTGAGE_FACTOR = 2;
 
-    public abstract String getDescription();
+    public abstract Property buy(Player buyer);
 
-    public abstract boolean hasGroup();
+    public abstract void downgrade();
+
+    public abstract String getDescription();
 
     public abstract Group getGroup();
 
     public abstract void setGroup(Group g);
 
-    public abstract boolean hasOwner();
+    public int getImprovementCost(Level to)
+    {
+        if(!hasGroup()) {
+            throw new IllegalStateException("Property has no group.");
+        }
 
-    public abstract Player getOwner();
+        return getHouseCost()
+            * (to.getValue() - getLevel().getValue());
+    }
 
-    public abstract int getValue();
+    public abstract Level getLevel();
 
-    public int getMortgageValue()
+    public int getMortgagedValue()
     {
         return getValue() / MORTGAGE_FACTOR;
     }
 
-    public abstract int getRentCost();
+    public abstract Player getOwner();
 
-    public abstract Level getLevel();
+    public int getRentCost()
+    {
+        return getRentCost(getLevel());
+    }
+    
+    public abstract int getRentCost(Level l);
+    
+    public int getHouseCost()
+    {
+        if(!hasGroup()) {
+            throw new IllegalStateException("Property has no group.");
+        }
+        
+        return getGroup().getHouseCost();
+    }
+
+    public abstract int getValue();
+
+    public abstract boolean hasGroup();
+
+    public abstract boolean hasOwner();
 
     public boolean isImproved()
     {
@@ -44,59 +72,63 @@ public abstract class Property
 
     public abstract boolean isValid();
 
-    public abstract void buy();
-
-    public abstract void sell();
-
-    public abstract void improve(Level to);
-
-    public abstract void trade(Player with);
-
-    public int getImproveCost(Level to)
-    {
-        if(!hasGroup()) {
-            throw new IllegalStateException();
-        }
-
-        return getGroup().getHouseCost()
-            * (to.getValue() - getLevel().getValue());
-    }
-
     public abstract void mortgage();
+
+    public abstract int sell();
+
+    public abstract Property trade(Player buyer, Player seller);
 
     public abstract void unmortgage();
 
-    public static enum Level
-    {
-        UNIMPROVED(0),
-        ONE_HOUSE(1),
-        TWO_HOUSES(2),
-        THREE_HOUSES(3),
-        FOUR_HOUSES(4),
-        ONE_HOTEL(5)
-
-        private Level(int value)
-        {
-            this.value = value;
-        }
-
-        private int value;
-
-        public int getValue()
-        {
-            return value;
-        }
-    }
+    public abstract void upgrade();
 
     public static class Group
     {
+        private int houseCost;
         private String name;
         private Property properties[];
-        private int houseCost;
 
         public String getDescription()
         {
             return name;
+        }
+
+        public Level getHighestLevel()
+        {
+            Level max = properties[0].getLevel();
+            for(int i = 1; i < properties.length; i++) {
+                if(properties[i].getLevel().getValue() > max.getValue()) {
+                    max = properties[i].getLevel();
+                }
+            }
+
+            return max;
+        }
+
+        public int getHouseCost()
+        {
+            return houseCost;
+        }
+
+        public Level getLowestLevel()
+        {
+            Level min = properties[0].getLevel();
+            for(int i = 1; i < properties.length; i++) {
+                if(properties[i].getLevel().getValue() < min.getValue()) {
+                    min = properties[i].getLevel();
+                }
+            }
+
+            return min;
+        }
+
+        public Player getOwner()
+        {
+            if(!hasOwner()) {
+                throw new IllegalStateException();
+            }
+
+            return properties[0].getOwner();
         }
 
         public boolean hasOwner()
@@ -115,31 +147,79 @@ public abstract class Property
 
             return i == properties.length;
         }
+    }
 
-        public Player getOwner()
+    public static class Level implements Comparable<Level>
+    {
+        public static final Level FOUR_HOUSES = new Level();
+        public static final Level ONE_HOTEL = new Level();
+        public static final Level ONE_HOUSE = new Level();
+        public static final Level THREE_HOUSES = new Level();
+        public static final Level TWO_HOUSES = new Level();
+        public static final Level UNIMPROVED = new Level();
+
+        private static final Level[] LEVELS = {
+            UNIMPROVED,
+            ONE_HOUSE,
+            TWO_HOUSES,
+            THREE_HOUSES,
+            FOUR_HOUSES,
+            ONE_HOTEL
+        };
+
+        private static int indexOf(Level level)
         {
-            if(!hasOwner()) {
-                throw new IllegalStateException();
+            int i = 0;
+            while(LEVELS[i] != level) {
+                i++;
             }
 
-            return properties[0].getOwner();
+            return i;
         }
 
-        public Level getLevel()
+        private Level()
         {
-            Level min = properties[0].getLevel();
-            for(int i = 1; i < properties.length; i++) {
-                if(properties[i].getLevel().getValue() < min.getValue()) {
-                    min = properties[i].getLevel();
-                }
+        }
+
+        @Override
+        public int compareTo(Level other)
+        {
+            return Integer.compare(getValue(), other.getValue());
+        }
+
+        public Level getNext()
+        {
+            if(isMax()) {
+                throw new IllegalStateException(
+                    "ONE_HOTEL is the highest level.");
             }
 
-            return min;
+            return LEVELS[indexOf(this) + 1];
         }
 
-        public int getHouseCost()
+        public Level getPrevious()
         {
-            return houseCost;
+            if(isMin()) {
+                throw new IllegalStateException(
+                    "UNIMPROVED is the lowest level.");
+            }
+
+            return LEVELS[indexOf(this) - 1];
+        }
+
+        public int getValue()
+        {
+            return indexOf(this);
+        }
+
+        public boolean isMax()
+        {
+            return indexOf(this) == LEVELS.length - 1;
+        }
+
+        public boolean isMin()
+        {
+            return indexOf(this) == 0;
         }
     }
 }

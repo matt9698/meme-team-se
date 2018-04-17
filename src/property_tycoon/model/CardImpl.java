@@ -12,9 +12,9 @@ import java.util.Arrays;
  */
 class CardImpl extends Card
 {
-    public final Action[] choices;
-    public final String description;
-    public Group group;
+    private final Action[] choices;
+    private final String description;
+    private Group group;
     private final boolean isImmediate;
 
     public CardImpl(String description, boolean isImmediate, Action... choices)
@@ -58,13 +58,13 @@ class CardImpl extends Card
             this.description = null;
         }
 
-        // Copy the array so that element references
-        // cannot be subsequently modified by external code.
+        // Copy the array so that element cannot
+        // be subsequently modified by external code.
         this.choices = Arrays.copyOf(choices, choices.length);
         
         this.isImmediate = isImmediate;
 
-        this.group = null;
+        group = null;
     }
     @Override
     public int getActionCount()
@@ -94,7 +94,7 @@ class CardImpl extends Card
     public Group getGroup()
     {
         if(group == null) {
-            throw new IllegalStateException("Card has no owner.");
+            throw new IllegalStateException("Card has no group.");
         }
         
         return group;
@@ -103,8 +103,8 @@ class CardImpl extends Card
     public void setGroup(Group g)
     {
         if(group != null) {
-            throw new IllegalStateException("Card already has an owner."
-                + " A Card can only be assigned an owner once.");
+            throw new IllegalStateException("Card already has a group."
+                + " A Card can only be assigned a group once.");
         }
         
         if(g == null) {
