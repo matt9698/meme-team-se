@@ -102,7 +102,7 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public void mortgage()
+    public int mortgage()
     {
         throw new UnsupportedOperationException();
     }
@@ -120,7 +120,7 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public void unmortgage()
+    public int unmortgage()
     {
         throw new UnsupportedOperationException();
     }

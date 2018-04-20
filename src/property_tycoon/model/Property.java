@@ -234,13 +234,13 @@ public abstract class Property
 
     public abstract boolean isValid();
 
-    public abstract void mortgage();
+    public abstract int mortgage();
 
     public abstract int sell();
 
     public abstract Property trade(Player buyer, Player seller);
 
-    public abstract void unmortgage();
+    public abstract int unmortgage();
 
     public abstract void upgrade();
 

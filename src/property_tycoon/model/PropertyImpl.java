@@ -195,7 +195,7 @@ class PropertyImpl extends Property
     }
 
     @Override
-    public void mortgage()
+    public int mortgage()
     {
         if(!hasOwner()) {
             throw new IllegalStateException(
@@ -208,6 +208,8 @@ class PropertyImpl extends Property
         }
 
         isMortgaged = true;
+        
+        return getValue() - getMortgagedValue();
     }
 
     @Override
@@ -235,7 +237,7 @@ class PropertyImpl extends Property
     }
 
     @Override
-    public void unmortgage()
+    public int unmortgage()
     {
         if(isMortgaged()) {
             throw new IllegalStateException(
@@ -243,6 +245,8 @@ class PropertyImpl extends Property
         }
 
         isMortgaged = false;
+        
+        return getValue() - getMortgagedValue();
     }
 
 }

@@ -110,13 +110,13 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public void mortgage()
+    public int mortgage()
     {
         if(!isValid()) {
             throw new IllegalStateException();
         }
 
-        realProperty.mortgage();
+        return realProperty.mortgage();
     }
 
     @Override
@@ -140,13 +140,13 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public void unmortgage()
+    public int unmortgage()
     {
         if(!isValid()) {
             throw new IllegalStateException();
         }
 
-        realProperty.unmortgage();
+        return realProperty.unmortgage();
     }
 
     @Override
