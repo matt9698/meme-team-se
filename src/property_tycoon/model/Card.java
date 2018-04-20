@@ -12,12 +12,12 @@ import java.util.List;
  * Represents a card.
  * This class is abstract and cannot be instantiated directly.
  * Subclasses of this class are not publicly exposed and
- * thus cannot be instantiated directly.
- * 
+ * thus cannot be instantiated directly either.
+ *
  * The only way to create a <code>Card</code> instance is to
  * use the static <code>create()</code> methods (recommended)
  * or to extend this class (not recommended).
- * 
+ *
  * @author Matt
  */
 public abstract class Card
@@ -68,7 +68,7 @@ public abstract class Card
      * @param choices     The <code>Actions</code> that should
      *                    be associated with this card.
      *                    Should not be null, empty or contain null elements.
-     *                    If <code>isImmediate == true</code> then 
+     *                    If <code>isImmediate == true</code> then
      *                    <code>isAlwaysExecutable() == true</code> for at least one action.
      *
      * @return A new <code>Card</code> instance.
@@ -122,14 +122,14 @@ public abstract class Card
                     "description should not be empty for a choice card.");
             }
         }
-        
+
         // If the card is immediate use then check at least
         // one of its actions is always executable.
         if(isImmediate) {
             while(i < choices.length && !choices[i].isAlwaysExecutable()) {
                 i++;
             }
-            
+
             if(i == choices.length) {
                 throw new IllegalArgumentException(
                     "actions should contain at least one always"
@@ -139,11 +139,11 @@ public abstract class Card
 
         return new CardImpl(description, isImmediate, choices);
     }
-    
+
     /**
      * Gets the number of action choices associated with this card.
      * For a single action card this method returns 1.
-     * 
+     *
      * @return The number of action choices associated with this card.
      */
     public abstract int getActionCount();
@@ -160,20 +160,20 @@ public abstract class Card
      *                                   <code>action &gt;= getActionCount()</code>.
      */
     public abstract String getActionDescritpion(int action);
-    
+
     /**
      * Gets the description of this card.
      * For a single action card calling this method is equivalent to
      * calling <code>getActionDescription(0)</code>.
-     * 
+     *
      * @return The description of this card.
      */
     public abstract String getDescription();
-    
+
     /**
      * Gets the owner <code>Group</code> (deck) of this card.
      * Throws and IllegalStateException if this card has no owner
-     * (<code>hasGroup() == false</code> and <code>setGroup()</code> 
+     * (<code>hasGroup() == false</code> and <code>setGroup()</code>
      * has not been called previously).
      *
      * @return The owner <code>Group</code> (deck) of this card.
@@ -181,36 +181,36 @@ public abstract class Card
      * @throws IllegalStateException if this card has no owner.
      */
     public abstract Group getGroup();
-    
+
     /**
      * Sets the owner <code>Group</code> (deck) of this card.
-     * This method can only be called once, and subsequent attempts to call it 
-     * (<code>hasGroup() == true)</code> will raise an IllegalStateException.
-     * 
-     * @param g The group to set as the owner.
-     * 
+     * This method can only be called once, and subsequent attempts to call it
+     * (<code>hasGroup() == true</code>) will raise an IllegalStateException.
+     *
+     * @param g The group to set.
+     *
      * @throws IllegalArgumentException if g is null.
-     * @throws IllegalStateException if this card already has an owner.
+     * @throws IllegalStateException if this card already has a group.
      */
     public abstract void setGroup(Group g);
-    
+
     /**
      * Indicates if this card has an owner <code>Group</code> (deck).
-     * 
+     *
      * @return true if this card has an owner, false otherwise.
      */
     public abstract boolean hasGroup();
 
     /**
      * Indicates if this card offers a choice of action.
-     * 
+     *
      * @return true if this card offers a choice of action, false otherwise.
      */
     public final boolean isChoice()
     {
         return getActionCount() > 1;
     }
-    
+
     /**
      * Indicates if this card must be used immediately when drawn,
      * or if it can be kept for later use.
@@ -222,9 +222,9 @@ public abstract class Card
 
     /**
      * Indicates if at least one action associated with this card is usable.
-     * This method should always return true for 
+     * This method should always return true for
      * an immediate use card.
-     * 
+     *
      * @return true if at least one action associate with this card is usable,
      *         false otherwise.
      */
@@ -233,37 +233,37 @@ public abstract class Card
     /**
      * Indicates if the specified action is usable at this time.
      * @param action The index of the action in question.
-     * 
+     *
      * @return true if the specified action is usable, false otherwise.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the action index is out of bounds
      *                                   <code>action &lt; 0</code> or
      *                                   <code>action &gt;= getActionCount()</code>.
      */
     public abstract boolean isUseable(int action);
-    
+
     /**
-     * Indicates if this card is a valid proxy that can 
+     * Indicates if this card is a valid proxy that can
      * be used access mutator methods of a real card.
      * This method doesn't make sense and is unsupported by real cards.
-     * Any mutator methods on a proxy card will raise 
+     * Any mutator methods on a proxy card will raise
      * an exception if this method returns false.
-     * 
+     *
      * @return true if this card is a valid proxy, false otherwise
-     * 
+     *
      * @throws UnsupportedOperationException if this is a real card.
      */
     public abstract boolean isValid();
 
     /**
-     * Uses the card, executing its associated action 
+     * Uses the card, executing its associated action
      * and replacing it in its owner Group.
-     * This is a convenience method for using a single action card 
+     * This is a convenience method for using a single action card
      * without specifying the action index explicitly.
-     * Calling this method on a single action card is 
+     * Calling this method on a single action card is
      * equivalent to calling <code>use(0)</code>.
      * Calling this method on a choice card will raise an exception.
-     * 
+     *
      * @throws UnsupportedOperationException if this card is a choice card.
      */
     public final void use()
@@ -299,25 +299,25 @@ public abstract class Card
          * Raises an exception if this action is not executable at this time.
          */
         void execute();
-        
+
         /**
          * Gets a description of this action.
-         * 
+         *
          * @return A description of this action.
          */
         String getDescription();
-        
+
         /**
          * Indicates if this action is always executable.
-         * 
-         * @return true if this action is always executable, false otherwise. 
+         *
+         * @return true if this action is always executable, false otherwise.
          */
         boolean isAlwaysExecutable();
-        
+
         /**
          * Indicates if this action is executable at this time.
          * Always returns true is isAlwaysExecutable() == true.
-         * 
+         *
          * @return true if this action is executable, false otherwise.
          */
         boolean isExecutable();
@@ -326,21 +326,21 @@ public abstract class Card
     /**
      * Represents a deck of cards.
      */
-    public static class Group
+    public static class Group implements Board.Position
     {
         private Card awaitingReplace;
         private List<Card> cards;
         private String description;
 
         /**
-         * Creates a new group instance with the specified description 
+         * Creates a new group instance with the specified description
          * and containing the specified cards.
-         * 
+         *
          * @param description The name of this group.
          * @param cards       The cards contained in this group.
          *                    Should not be null, empty or contain null elements.
          *                    Should not contain any cards that already have an owner.
-         * 
+         *
          * @throws IllegalArgumentException if description is null or empty or
          *                                  if any of the cards already
          *                                  belong to another group.
@@ -352,7 +352,7 @@ public abstract class Card
                 throw new IllegalArgumentException(
                     "description should not be null.");
             }
-            
+
             if(description.isEmpty()) {
                 throw new IllegalArgumentException(
                     "description should not be empty.");
@@ -382,12 +382,12 @@ public abstract class Card
                             + " the first occurence of null is at index %0$td.",
                         i));
             }
-            
+
             i = 0;
             while(i < cards.length && !cards[i].hasGroup()) {
                 i++;
             }
-            
+
             if(i != cards.length) {
                 throw new IllegalArgumentException(
                     String.format(
@@ -441,7 +441,7 @@ public abstract class Card
                 throw new IllegalArgumentException(
                     "card should not be null.");
             }
-            
+
             if(awaitingReplace != null) {
                 if(c != awaitingReplace) {
                     throw new IllegalStateException(
@@ -449,7 +449,7 @@ public abstract class Card
                         + " An immediate use card (isImmediate() == true)"
                         + " has not been used and returned to this Group");
                 }
-                
+
                 awaitingReplace = null;
             }
 

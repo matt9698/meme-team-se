@@ -6,24 +6,22 @@ package property_tycoon.model;
 
 /**
  *
- * @author mm933
+ * @author Matt
  */
-
-
-public class PropertyPosition extends Property
+class PropertyPosition extends Property implements Board.Position
 {
     private final Property realProperty;
-    
+
     public PropertyPosition(Property realProperty)
     {
         // Check arguments
         assert realProperty != null : "realProperty should not be null";
         assert realProperty.hasGroup() : "realProperty should have a group.";
-        
+
         // Assign fields
         this.realProperty = realProperty;
     }
-    
+
     @Override
     public Property buy(Player buyer)
     {
@@ -51,7 +49,8 @@ public class PropertyPosition extends Property
     @Override
     public void setGroup(Group g)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "setGroup() is not supported by proxy properties.");
     }
 
     @Override
@@ -131,5 +130,5 @@ public class PropertyPosition extends Property
     {
         throw new UnsupportedOperationException();
     }
-    
+
 }
