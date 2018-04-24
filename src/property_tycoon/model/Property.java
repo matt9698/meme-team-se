@@ -4,6 +4,8 @@
  */
 package property_tycoon.model;
 
+import java.util.Arrays;
+
 /**
  * Represents a property.
  * This class is abstract and cannot be instantiated directly.
@@ -64,7 +66,10 @@ public abstract class Property
 
         if(rent.length != Level.LEVEL_COUNT) {
             throw new IllegalArgumentException(
-                "rent should contain exactly 6 elements.");
+                String.format(
+                    "rent should contain %d (Level.LEVEL_COUNT) elements not %d.", 
+                    Level.LEVEL_COUNT, 
+                    rent.length));
         }
 
         // Check rent elements are positive
@@ -75,7 +80,10 @@ public abstract class Property
 
         if(i != rent.length) {
             throw new IllegalArgumentException(
-                "rent should only contain positive elements.");
+                String.format("rent should only contain positive elements.\n"
+                    + "One or more elements in rent is not positive;\n"
+                    + "the first occurence of a non-positive element is at index %d.",
+                i));
         }
 
         return new PropertyImpl(description, value, rent);
@@ -145,11 +153,11 @@ public abstract class Property
     public int getImprovementCost(Level to)
     {
         if(!hasGroup()) {
-            throw new IllegalStateException("Property has no group.");
+            throw new IllegalStateException(
+                "Property has no group, house cost is derived from Group.getHouseCost(). ");
         }
 
-        return getHouseCost()
-            * (to.getValue() - getLevel().getValue());
+        return getHouseCost() * (to.getValue() - getLevel().getValue());
     }
 
     /**
@@ -208,7 +216,8 @@ public abstract class Property
     public int getHouseCost()
     {
         if(!hasGroup()) {
-            throw new IllegalStateException("Property has no group.");
+            throw new IllegalStateException(
+                "Property has no group, house cost is defined by Group.getHouseCost().");
         }
 
         return getGroup().getHouseCost();
@@ -237,6 +246,17 @@ public abstract class Property
     public abstract int mortgage();
 
     public abstract int sell();
+    
+    @Override
+    public String toString()
+    {
+        return String.format(
+            "Property{description=%s, group=%s, value=%d, owner=%s}",
+            getDescription(),
+            hasGroup() ? getGroup().getDescription() : "<none>",
+            getValue(),
+            hasOwner() ? getOwner().getDescription() : "<none>");
+    }
 
     public abstract Property trade(Player buyer, Player seller);
 
@@ -246,20 +266,85 @@ public abstract class Property
 
     public static class Group
     {
-        private int houseCost;
-        private String name;
-        private Property properties[];
+        private final int houseCost;
+        private final String description;
+        private final Property properties[];
+        
+        public Group(String description, int houseCost, Property... properties)
+        {
+            if(description == null) {
+                throw new IllegalArgumentException(
+                    "description should not be null.");
+            }
+            
+            if(description.isEmpty()) {
+                throw new IllegalArgumentException(
+                    "description should not be empty.");
+            }
+            
+            if(houseCost < 1) {
+                throw new IllegalArgumentException(
+                    "houseCost should be positive");
+            }
+            
+            if(properties == null) {
+                throw new IllegalArgumentException(
+                    "properties should not be null.");
+            }
+            
+            if(properties.length == 0) {
+                throw new IllegalArgumentException(
+                    "properties should not be empty.");
+            }
+            
+            // Check properties elements aren't null
+            int i = 0;
+            while(i < properties.length && properties[i] != null) {
+                i++;
+            }
+
+            if(i != properties.length) {
+                throw new IllegalArgumentException(
+                    String.format("properties should not contain null elements.\n"
+                        + "One or more elements in properties is null;\n"
+                        + "the first occurence of a null element is at index %d.",
+                    i));
+            }
+            
+            // Check properties don't already have a group
+            i = 0;
+            while(i < properties.length && !properties[i].hasGroup()) {
+                i++;
+            }
+            
+            if(i != properties.length) {
+                throw new IllegalArgumentException(
+                    String.format("properties should not contain elements that already have a group.\n"
+                        + "One or more elements in properties already has a group;\n"
+                        + "the first occurence of an element with a group is at index %d.",
+                    i));
+            }
+            
+            this.description = description;
+            this.houseCost = houseCost;
+            this.properties = properties;
+            
+            // Set this group for all properties
+            for(Property p : properties) {
+                p.setGroup(this);
+            }
+        }
 
         public String getDescription()
         {
-            return name;
+            return description;
         }
 
         public Level getHighestLevel()
         {
             Level max = properties[0].getLevel();
             for(int i = 1; i < properties.length; i++) {
-                if(properties[i].getLevel().getValue() > max.getValue()) {
+                if(properties[i].getLevel().compareTo(max) > 0) {
                     max = properties[i].getLevel();
                 }
             }
@@ -276,7 +361,7 @@ public abstract class Property
         {
             Level min = properties[0].getLevel();
             for(int i = 1; i < properties.length; i++) {
-                if(properties[i].getLevel().getValue() < min.getValue()) {
+                if(properties[i].getLevel().compareTo(min) < 0) {
                     min = properties[i].getLevel();
                 }
             }
@@ -287,7 +372,7 @@ public abstract class Property
         public Player getOwner()
         {
             if(!hasOwner()) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Group has no owner.");
             }
 
             return properties[0].getOwner();
@@ -309,18 +394,28 @@ public abstract class Property
 
             return i == properties.length;
         }
+
+        @Override
+        public String toString()
+        {
+            return String.format(
+                "Group{description=%s, properties=%s, houseCost=%d}",
+                getDescription(),
+                Arrays.toString(properties),
+                getHouseCost());
+        }
     }
 
     public static final class Level implements Comparable<Level>
     {
         public static final int LEVEL_COUNT = 6;
 
-        public static final Level UNIMPROVED = new Level();
-        public static final Level ONE_HOUSE = new Level();
-        public static final Level TWO_HOUSES = new Level();
-        public static final Level THREE_HOUSES = new Level();
-        public static final Level FOUR_HOUSES = new Level();
-        public static final Level ONE_HOTEL = new Level();
+        public static final Level UNIMPROVED;
+        public static final Level ONE_HOUSE;
+        public static final Level TWO_HOUSES;
+        public static final Level THREE_HOUSES;
+        public static final Level FOUR_HOUSES;
+        public static final Level ONE_HOTEL;
 
         private static final Level[] LEVELS;
 
@@ -328,15 +423,18 @@ public abstract class Property
         // Used to assert that LEVELS is instantiated correctly.
         static {
             LEVELS = new Level[] {
-                UNIMPROVED,
-                ONE_HOUSE,
-                TWO_HOUSES,
-                THREE_HOUSES,
-                FOUR_HOUSES,
-                ONE_HOTEL
+                UNIMPROVED = new Level("UNIMPROVED"),
+                ONE_HOUSE = new Level("ONE_HOUSE"),
+                TWO_HOUSES = new Level("TWO_HOUSES"),
+                THREE_HOUSES = new Level("THREE_HOUSES"),
+                FOUR_HOUSES = new Level("FOUR_HOUSES"),
+                ONE_HOTEL = new Level("ONE_HOTEL")
             };
 
-            assert LEVELS.length == LEVEL_COUNT;
+            assert LEVELS.length == LEVEL_COUNT : String.format(
+                "Level.LEVELS should contain %d (Level.LEVEL_COUNT) elements not %d.",
+                LEVEL_COUNT, 
+                LEVELS.length);
         }
 
         private static int indexOf(Level level)
@@ -348,9 +446,17 @@ public abstract class Property
 
             return i;
         }
-
-        private Level()
+        
+        private final String description;
+        
+        private Level(String description)
         {
+            // Check argument
+            assert description != null : "description should not be null.";
+            assert !description.isEmpty() : "description should not be empty.";
+            
+            // Assign field
+            this.description = description;
         }
 
         @Override
@@ -363,7 +469,9 @@ public abstract class Property
         {
             if(isMax()) {
                 throw new IllegalStateException(
-                    "ONE_HOTEL is the highest level.");
+                    String.format(
+                        "%s is the highest level.", 
+                        getDescription()));
             }
 
             return LEVELS[indexOf(this) + 1];
@@ -373,7 +481,9 @@ public abstract class Property
         {
             if(isMin()) {
                 throw new IllegalStateException(
-                    "UNIMPROVED is the lowest level.");
+                    String.format(
+                        "%s is the lowest level.", 
+                        getDescription()));
             }
 
             return LEVELS[indexOf(this) - 1];
@@ -382,6 +492,11 @@ public abstract class Property
         public int getValue()
         {
             return indexOf(this);
+        }
+        
+        public String getDescription()
+        {
+            return description;
         }
 
         public boolean isMax()
@@ -392,6 +507,12 @@ public abstract class Property
         public boolean isMin()
         {
             return indexOf(this) == 0;
+        }
+
+        @Override
+        public String toString()
+        {
+            return String.format("Level.%s", description);
         }
     }
 }

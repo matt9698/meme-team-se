@@ -103,8 +103,8 @@ class CardImpl extends Card
     public void setGroup(Group g)
     {
         if(group != null) {
-            throw new IllegalStateException("Card already has a group."
-                + " A Card can only be assigned a group once.");
+            throw new IllegalStateException("Card is already in a group.\n"
+                + "A Card can only be assigned a group once.");
         }
         
         if(g == null) {

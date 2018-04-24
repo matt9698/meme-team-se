@@ -107,7 +107,7 @@ public abstract class Card
                 String.format(
                     "choices should not contain null elements."
                         + " One or more elements in choices is null;"
-                        + " the first occurence of null is at index %0$td.",
+                        + " the first occurence of null is at index %d.",
                     i));
         }
 
@@ -126,6 +126,7 @@ public abstract class Card
         // If the card is immediate use then check at least
         // one of its actions is always executable.
         if(isImmediate) {
+            i = 0;
             while(i < choices.length && !choices[i].isAlwaysExecutable()) {
                 i++;
             }
@@ -391,7 +392,7 @@ public abstract class Card
             if(i != cards.length) {
                 throw new IllegalArgumentException(
                     String.format(
-                    "cards should not contain elements that already have an owner."
+                    "cards should not contain elements that already have a group."
                         + " One or more elements in cards already has an owner;"
                         + " the first occurence of a card with an owner is at index %0$td.",
                     i));

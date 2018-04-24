@@ -30,7 +30,11 @@ class PropertyImpl extends Property
         assert value > 0 : "value should be positive.";
 
         assert rent != null : "rent should not be null.";
-        assert rent.length == 6 : "rent should contain exactly 6 elements.";
+        assert rent.length == Level.LEVEL_COUNT : 
+            String.format(
+                "rent should contain %d (Level.LEVEL_COUNT) elements not %d.", 
+                Level.LEVEL_COUNT, 
+                rent.length);
 
         // Check rent elements are positive
         int i = 0;
@@ -108,7 +112,8 @@ class PropertyImpl extends Property
     public void setGroup(Group g)
     {
         if(hasGroup()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Property is already in a group.\n"
+                + "A Property can only be assigned a group once.");
         }
 
         if(g == null) {
@@ -233,7 +238,7 @@ class PropertyImpl extends Property
     @Override
     public Property trade(Player buyer, Player seller)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
