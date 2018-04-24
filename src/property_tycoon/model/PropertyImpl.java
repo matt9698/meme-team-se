@@ -62,7 +62,7 @@ class PropertyImpl extends Property
     @Override
     public Property buy(Player buyer)
     {
-        if(hasOwner()) {
+        if(isOwned()) {
             throw new IllegalStateException("Property already has an owner."
                 + " It must be sold before being rebought.");
         }
@@ -101,7 +101,7 @@ class PropertyImpl extends Property
     @Override
     public Group getGroup()
     {
-        if(!hasGroup()) {
+        if(!isGrouped()) {
             throw new IllegalStateException();
         }
 
@@ -111,7 +111,7 @@ class PropertyImpl extends Property
     @Override
     public void setGroup(Group g)
     {
-        if(hasGroup()) {
+        if(isGrouped()) {
             throw new IllegalStateException("Property is already in a group.\n"
                 + "A Property can only be assigned a group once.");
         }
@@ -132,7 +132,7 @@ class PropertyImpl extends Property
     @Override
     public Player getOwner()
     {
-        if(!hasOwner()) {
+        if(!isOwned()) {
             throw new IllegalStateException("Property does not have an owner.");
         }
 
@@ -158,13 +158,13 @@ class PropertyImpl extends Property
     }
 
     @Override
-    public boolean hasGroup()
+    public boolean isGrouped()
     {
         return group != null;
     }
 
     @Override
-    public boolean hasOwner()
+    public boolean isOwned()
     {
         return owner != null;
     }
@@ -202,7 +202,7 @@ class PropertyImpl extends Property
     @Override
     public int mortgage()
     {
-        if(!hasOwner()) {
+        if(!isOwned()) {
             throw new IllegalStateException(
                 "Property has no owner so cannot be morgaged.");
         }
@@ -220,7 +220,7 @@ class PropertyImpl extends Property
     @Override
     public int sell()
     {
-        if(!hasOwner()) {
+        if(!isOwned()) {
             throw new IllegalStateException("Property has no owner.");
         }
 

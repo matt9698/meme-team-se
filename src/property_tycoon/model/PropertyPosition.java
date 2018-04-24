@@ -16,7 +16,7 @@ class PropertyPosition extends Property implements Board.Position
     {
         // Check arguments
         assert realProperty != null : "realProperty should not be null";
-        assert realProperty.hasGroup() : "realProperty should have a group.";
+        assert realProperty.isGrouped() : "realProperty should have a group.";
 
         // Assign fields
         this.realProperty = realProperty;
@@ -78,15 +78,15 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public boolean hasGroup()
+    public boolean isGrouped()
     {
-        return realProperty.hasGroup();
+        return realProperty.isGrouped();
     }
 
     @Override
-    public boolean hasOwner()
+    public boolean isOwned()
     {
-        return realProperty.hasOwner();
+        return realProperty.isOwned();
     }
 
     @Override

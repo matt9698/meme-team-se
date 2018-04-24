@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.Double?>
 <?import java.net.URL?>
+<?import javafx.scene.layout.Background?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.Label?>
-<?import property_tycoon.view.PropertyPosition?>
-<?import property_tycoon.model.Property?>
 
 <fx:root fx:id="root" type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="border">
-    <stylesheets>
-        <URL value="@PropertyPosition.css" />
-    </stylesheets>
     <top>
-        <Region fx:id="banner" /> 
+        <Region fx:id="banner" />
     </top>          
     <center>
         <VBox alignment="CENTER">
-            <Label text="${root}" />
-            <Label fx:id="owner" style="-fx-font-weight: normal; -fx-text-alignment: center;" />
-            <Label fx:id="value" />
+            <Label text="${root.description}" />
+            <Label text="${'£' + root.value}" />
         </VBox>
     </center>
+    <stylesheets>
+        <URL value="@PropertyPosition.css" />
+    </stylesheets>
 </fx:root>
 
 
