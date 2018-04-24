@@ -114,7 +114,7 @@ class CardImpl extends Card
         group = g;
     }
     @Override
-    public boolean hasGroup()
+    public boolean isGrouped()
     {
         return group != null;
     }

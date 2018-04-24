@@ -50,10 +50,10 @@ public class GameView extends Application
             throw e;
         }
         
-        Property p = Property.create("Sophie's Shack", 10, new int[] {1,1,1,1,1,1});
+        Property p = Property.create("Ollie's Bin", 1, new int[] {1,1,1,1,1,1});
         Property.Group g = new PropertyPosition.Group(
             "Yellow", 
-            Color.web("ffff00"),
+            Color.web("ff0000"),
             150, 
             p);
         

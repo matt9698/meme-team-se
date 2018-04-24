@@ -200,7 +200,7 @@ public abstract class Card
      *
      * @return true if this card has an owner, false otherwise.
      */
-    public abstract boolean hasGroup();
+    public abstract boolean isGrouped();
 
     /**
      * Indicates if this card offers a choice of action.
@@ -385,7 +385,7 @@ public abstract class Card
             }
 
             i = 0;
-            while(i < cards.length && !cards[i].hasGroup()) {
+            while(i < cards.length && !cards[i].isGrouped()) {
                 i++;
             }
 
@@ -454,7 +454,7 @@ public abstract class Card
                 awaitingReplace = null;
             }
 
-            if(!c.hasGroup() || c.getGroup() != this) {
+            if(!c.isGrouped() || c.getGroup() != this) {
                 throw new IllegalArgumentException(
                     "card must be owned by this group.");
             }

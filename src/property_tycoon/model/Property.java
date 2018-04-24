@@ -152,7 +152,7 @@ public abstract class Property
      */
     public int getImprovementCost(Level to)
     {
-        if(!hasGroup()) {
+        if(!isGrouped()) {
             throw new IllegalStateException(
                 "Property has no group, house cost is derived from Group.getHouseCost(). ");
         }
@@ -215,7 +215,7 @@ public abstract class Property
      */
     public int getHouseCost()
     {
-        if(!hasGroup()) {
+        if(!isGrouped()) {
             throw new IllegalStateException(
                 "Property has no group, house cost is defined by Group.getHouseCost().");
         }
@@ -230,9 +230,9 @@ public abstract class Property
      */
     public abstract int getValue();
 
-    public abstract boolean hasGroup();
+    public abstract boolean isGrouped();
 
-    public abstract boolean hasOwner();
+    public abstract boolean isOwned();
 
     public boolean isImproved()
     {
@@ -250,12 +250,11 @@ public abstract class Property
     @Override
     public String toString()
     {
-        return String.format(
-            "Property{description=%s, group=%s, value=%d, owner=%s}",
+        return String.format("Property{description=%s, group=%s, value=%d, owner=%s}",
             getDescription(),
-            hasGroup() ? getGroup().getDescription() : "<none>",
+            isGrouped() ? getGroup().getDescription() : "<none>",
             getValue(),
-            hasOwner() ? getOwner().getDescription() : "<none>");
+            isOwned() ? getOwner().getDescription() : "<none>");
     }
 
     public abstract Property trade(Player buyer, Player seller);
@@ -313,7 +312,7 @@ public abstract class Property
             
             // Check properties don't already have a group
             i = 0;
-            while(i < properties.length && !properties[i].hasGroup()) {
+            while(i < properties.length && !properties[i].isGrouped()) {
                 i++;
             }
             
@@ -380,14 +379,14 @@ public abstract class Property
 
         public boolean hasOwner()
         {
-            if(!properties[0].hasOwner()) {
+            if(!properties[0].isOwned()) {
                 return false;
             }
 
             Player expectedOwner = properties[0].getOwner();
             int i = 1;
             while(i < properties.length
-                && properties[i].hasOwner()
+                && properties[i].isOwned()
                 && properties[i].getOwner() == expectedOwner) {
                 i++;
             }

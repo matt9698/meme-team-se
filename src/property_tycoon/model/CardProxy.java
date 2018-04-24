@@ -17,7 +17,7 @@ class CardProxy extends Card
     {
         // Check arguments
         assert realCard != null : "realCard should not be null.";
-        assert realCard.hasGroup() : "realCard should have a group.";
+        assert realCard.isGrouped() : "realCard should have a group.";
 
         // Assign fields
         this.realCard = realCard;
@@ -52,9 +52,9 @@ class CardProxy extends Card
             "setGroup() is not supported by proxy cards.");
     }
     @Override
-    public boolean hasGroup()
+    public boolean isGrouped()
     {
-        return realCard.hasGroup();
+        return realCard.isGrouped();
     }
     @Override
     public boolean isImmediate()
