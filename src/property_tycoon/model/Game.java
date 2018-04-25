@@ -13,7 +13,7 @@ public class Game
 
     private GameType gameType;
     private Board board;
-    private Player[] players;
+    public static Player[] players;
     private Property[] properties;
 
     public Game(Player[] players, GameType gameType)

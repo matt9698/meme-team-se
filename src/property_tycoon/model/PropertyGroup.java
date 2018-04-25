@@ -8,47 +8,79 @@ import java.util.List;
  *
  * @author mm933
  */
-
-
 public class PropertyGroup
 {
-    private Property[] properties;    
-    
+    private Property[] properties;
+    private String description;
+    private int houseCost, hotelCost;
+    private PropertyType type;
+
+    public PropertyGroup(String description, int houseCost, int hotelCost,
+        PropertyType type)
+    {
+        this.description = description;
+        this.houseCost = houseCost;
+        this.hotelCost = hotelCost;
+        this.type = type;
+    }
+
     public String getDescription()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        return description;
     }
-    
+
     public int getHouseCost()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        return houseCost;
     }
-    
+
+    public int getHotelCost()
+    {
+
+        return hotelCost;
+    }
+
     public boolean isOwned()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        if(!properties[0].isOwned()) {
+            return false;
+        }
+
+        Player expectedOwner = properties[0].getOwner();
+        int i = 1;
+        while(i < properties.length
+            && properties[i].isOwned()
+            && properties[i].getOwner() == expectedOwner) {
+            i++;
+        }
+
+        return i == properties.length;
     }
-    
+
     public Player getOwner()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        if(!isOwned()) {
+            throw new IllegalStateException("Group has no owner.");
+        }
+
+        return properties[0].getOwner();
     }
-    
+
     public PropertyLevel getHighestLevel()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        return properties[properties.length].getLevel();
     }
-    
+
     public PropertyLevel getLowestLevel()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        return properties[0].getLevel();
     }
-    
+
     public PropertyType getType()
     {
-        throw new UnsupportedOperationException("Not yet supported.");
+        return type;
     }
-    
+
     public List<Property> getProperties()
     {
         return Collections.unmodifiableList(Arrays.asList(properties));

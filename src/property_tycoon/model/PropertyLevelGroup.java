@@ -14,6 +14,7 @@ public class PropertyLevelGroup
         
         for(int i = 0; i < levels.length; i++) {
             levels[i].setGroup(this);
+            levels[i].setIndex(i);
             
             if(i > 0) {
                 levels[i].setPrevious(levels[i - 1]);
@@ -22,5 +23,15 @@ public class PropertyLevelGroup
                 levels[i].setNext(levels[i + 1]);
             }        
         }
+    }
+    
+    public PropertyLevel getMax()
+    {
+        return levels[levels.length - 1];
+    }
+    
+    public PropertyLevel getMin()
+    {
+        return levels[0];
     }
 }

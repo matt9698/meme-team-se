@@ -8,52 +8,81 @@ package property_tycoon.model;
 
 public abstract class PropertyImpl extends Property
 {
+    
+    private String description;
+    private int price;
+    private PropertyGroup group;
+    private PropertyLevel level;
+    private boolean mortgaged;
+    private Player owner;
+    
+    public PropertyImpl(String description, int price, PropertyLevel level){
+        
+        
+        assert description != null : "description should not be null.";
+        assert !description.isEmpty() : "description should not be empty.";
+        assert price > 0 : "price should be positive.";
+        assert level != null : "level should not be null.";
+        this.description = description;
+        this.price = price;
+        this.level = level;
+        mortgaged = false;
+    }
+    
     @Override
     public String getDescription()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return description;
     }
     
     @Override
     public PropertyGroup getGroup()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (!isGrouped()){
+            throw new IllegalStateException("Property has no group");
+        }
+        
+        return group;
     }
     
     @Override
     public PropertyLevel getLevel()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return level;
     }
     
     @Override
     public Player getOwner()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (!isOwned()){
+            throw new IllegalStateException("Property has no owner");
+        }
+        
+        return owner;
     }
     
     @Override
     public int getPrice()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return price;
     }
     
     @Override 
     public boolean isGrouped()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return group != null;
     }
     
     @Override 
     public boolean isMortgaged()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mortgaged;
     }
     
     @Override
     public boolean isOwned()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return owner != null;
     }
     
     @Override
@@ -65,30 +94,34 @@ public abstract class PropertyImpl extends Property
     @Override
     public int mortgage()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        mortgaged = true;
+        return getMortgagedPrice();
     }
     
     @Override
     public int unmortgage()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        mortgaged = false;
+        return getPrice() - getMortgagedPrice();
     }
     
     @Override
     public Property buy(Player buyer)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.owner = buyer;
+        return this;
     }
     
     @Override
     public int sell()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        owner = null;
+        return getPrice();
     }
     
     @Override
-    public void setGroup(PropertyGroup g)
+    public void setGroup(PropertyGroup group)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.group = group;
     }
 }

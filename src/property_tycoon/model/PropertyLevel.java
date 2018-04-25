@@ -6,59 +6,103 @@ package property_tycoon.model;
  */
 public class PropertyLevel implements Comparable<PropertyLevel>
 {
+
+    private PropertyLevelGroup group;
+    private String description;
+    private int index = -1;
+    private PropertyLevel next, previous;
+
+    public PropertyLevel(String description)
+    {
+        this.description = description;
+    }
+
     @Override
     public int compareTo(PropertyLevel level)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return Integer.compare(this.index, level.index);
+    }
+
+    public void setNext(PropertyLevel level)
+    {
+        if(isMax()) {
+            throw new IllegalStateException("This level is the highest level");
+        }
+        
+        next = level;
     }
     
     public PropertyLevel getNext()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(isMax()) {
+            throw new IllegalStateException("This level is the highest level");
+        }
+        return next;
     }
-    
-    public void setNext(PropertyLevel level)
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    public PropertyLevel getPrevious()
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
+
     public void setPrevious(PropertyLevel level)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(isMin()) {
+            throw new IllegalStateException("This level is the lowest level");
+        }
+        previous = level;
+    }
+
+    public PropertyLevel getPrevious()
+    {
+        if(isMin()) {
+            throw new IllegalStateException("This level is the lowest level");
+        }
+        return previous;
     }
     
     public PropertyLevelGroup getGroup()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (!isGrouped()){
+            throw new IllegalStateException("PropertyLevel does not have a group");
+        }
+        return group;
     }
-    
-    public void setGroup(PropertyLevelGroup g)
+
+    public void setGroup(PropertyLevelGroup group)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(isGrouped()) {
+            throw new IllegalStateException("PropertyLevel already has a group.");
+        }
+        
+        this.group = group;
     }
     
+    public void setIndex(int i)
+    {
+        if (index != -1) {
+            throw new IllegalStateException("PropertyLevel already has an index.");
+        }
+        
+        if(index < 0) {
+            throw new IllegalArgumentException("index should not be negative.");
+        }
+        
+        index = i;
+    }
+
     public boolean isGrouped()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return group != null;
     }
-    
+
     public String getDescription()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return description;
     }
-    
+
     public boolean isMax()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return this == group.getMax();
     }
-    
+
     public boolean isMin()
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return this == group.getMin();
     }
 }
