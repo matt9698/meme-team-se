@@ -11,31 +11,22 @@ package property_tycoon.model;
 public class Game
 {
 
+    private GameType gameType;
     private Board board;
     private Player[] players;
     private Property[] properties;
 
-    public Game()
+    public Game(Player[] players, GameType gameType)
     {
-
+        this.players = players;
+        this.gameType = gameType;
         init();
     }
 
     private void init()
     {
-
-        initPlayers();
         initProperties();
         initBoard();
-    }
-
-    private void initPlayers()
-    {
-
-        int numOfPlayers = 2; //set this variable to the amount of players specified before the game is created 
-        players = new Player[numOfPlayers];
-        players[0] = new Player("Player one");
-        players[1] = new Player("Player two");
     }
 
     private void initProperties()
