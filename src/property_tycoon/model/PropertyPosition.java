@@ -29,7 +29,7 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public void downgrade()
+    public int downgrade()
     {
         throw new UnsupportedOperationException();
     }
@@ -126,9 +126,8 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public void upgrade()
+    public int upgrade()
     {
         throw new UnsupportedOperationException();
     }
-
 }

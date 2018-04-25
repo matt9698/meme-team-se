@@ -50,14 +50,16 @@ public class GameView extends Application
             throw e;
         }
         
-        Property p = Property.create("Ollie's Bin", 1, new int[] {1,1,1,1,1,1});
+        Property p1 = Property.create("Ollie's Bin", 1, new int[] {1,1,1,1,1,1});
+        Property p2 = Property.create("T's House", 10, new int[] {1,1,1,1,1,1});
         Property.Group g = new PropertyPosition.Group(
             "Yellow", 
             Color.web("ff0000"),
             150, 
-            p);
+            p1, p2);
         
-        ((GridPane)root).add(PropertyPosition.create(p), 0, 0);
+        ((GridPane)root).add(PropertyPosition.create(p1), 0, 0);
+        ((GridPane)root).add(PropertyPosition.create(p2), 1, 0);
         
         Scene scene = new Scene(root);
         

@@ -3,26 +3,30 @@ Meme Team Software Engineering Project
 Property Tycoon
 */
 
+#root {
+    -fx-pref-width: 96; /* unit - 2 * border*/
+    -fx-pref-height: 146; /* unit * 1.5 - 2 * border*/
+
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-width: 4 2 4 2; /* border */
+
+    -fx-background-color: #bfdbae;
+}
+
 #banner {
-    -fx-pref-width: 192; /* unit - 2 * border */
-    -fx-pref-height: 67; /* unit * 0.375 - 2 * border */
-    
+    -fx-pref-width: 96; /* unit - 2 * border */
+    -fx-pref-height: 33.5; /* unit * 0.375 - 2 * border */
+
     -fx-border-style: solid;
     -fx-border-color: black;
     -fx-border-width: 0 0 4 0; /* border */
 }
 
-#root {
-    -fx-pref-width: 192; /* unit - 2 * border*/
-    -fx-pref-height: 292; /* unit * 1.5 - 2 * border*/
-    
-    -fx-border-style: solid;
-    -fx-border-color: black;
-    -fx-border-width: 4; /* border */
-    
+#text {
     -fx-font-weight: bold;
     -fx-font-family: 'Helvetica';
-    -fx-font-size: 16;
-    
-    -fx-background-color: #bfdbae;
+    -fx-font-size: 12;
+
+    -fx-text-alignment: center;
 }

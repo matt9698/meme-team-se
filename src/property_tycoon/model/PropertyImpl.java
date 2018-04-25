@@ -76,8 +76,12 @@ class PropertyImpl extends Property
     }
 
     @Override
-    public void downgrade()
+    public int downgrade()
     {
+        if(!isGrouped()) {
+            throw new IllegalStateException("Property is not grouped.");
+        }
+        
         if(getLevel().compareTo(getGroup().getHighestLevel()) < 0) {
             throw new IllegalStateException("Property cannot be downgraded."
                 + " Doing so would cause improvment levels"
@@ -90,6 +94,8 @@ class PropertyImpl extends Property
         }
 
         level = getLevel().getPrevious();
+        
+        return getHouseCost();
     }
 
     @Override
@@ -170,8 +176,12 @@ class PropertyImpl extends Property
     }
 
     @Override
-    public void upgrade()
+    public int upgrade()
     {
+        if(!isGrouped()) {
+            throw new IllegalStateException("Property is not grouped.");
+        }
+        
         if(getLevel().compareTo(getGroup().getLowestLevel()) > 0) {
             throw new IllegalStateException("Property cannot be upgraded."
                 + " Doing so would cause improvment levels"
@@ -184,6 +194,8 @@ class PropertyImpl extends Property
         }
 
         level = getLevel().getNext();
+        
+        return getHouseCost();
     }
 
     @Override

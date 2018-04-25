@@ -19,6 +19,7 @@ import java.util.List;
  * or to extend this class (not recommended).
  *
  * @author Matt
+ * @version 25/04/2018
  */
 public abstract class Card
 {

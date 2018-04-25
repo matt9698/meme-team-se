@@ -33,13 +33,13 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public void downgrade()
+    public int downgrade()
     {
         if(!isValid()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Proxy property is not valid.");
         }
 
-        realProperty.downgrade();
+        return realProperty.downgrade();
     }
 
     @Override
@@ -150,13 +150,13 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public void upgrade()
+    public int upgrade()
     {
         if(!isValid()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Proxy property is not valid.");
         }
 
-        realProperty.upgrade();
+        return realProperty.upgrade();
     }
 
 }
