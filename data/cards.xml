@@ -1,15 +1,165 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<gameData>
-    <cardGroups>
-        <cardGroup id="1" name="Pot Luck" />
-        <cardGroup id="2" name="Opportunity Knocks" />
-    </cardGroups>
-    <cards>
-        <card group="1" action="transaction(bank, currentPlayer, cash(100))" 
-              description="You inherit {currency}100" />
-        <card group="1" action="transaction(bank, currentPlayer, cash(20))" 
-              description="You have won 2nd prize in a beauty contest, collect {currency}20" />
-        <card group="1" action="moveBack(currentPlayer, 2)"
-              description="Go back to {tile(2)}" />
-    </cards>
-</gameData>
+<?xml version="1.0" encoding="UTF-8"?>
+<Game.Data>
+    <Game.Data.cardGroups>
+        <Card.Group id="1" name="Pot Luck" />
+        <Card.Group id="2" name="Opportunity Knocks" />
+    </Game.Data.cardGroups>
+    <Game.Data.cards>
+        <!--Pot Luck cards-->
+        <Card group="1" id="1">
+            <Transaction from="bank" to="player" 
+                         description="You inherit {currency}100.">
+                <Cash value="100" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="2">
+            <Transaction from="bank" to="player" 
+                         description="You have won 2nd prize in a beauty contest, collect {currency}20.">
+                <Cash value="20" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="3">
+            <Move type="direct" to="2" description="Go back to {tile(2)}." />
+        </Card>
+        <Card group="1" id="4">
+            <Transaction from="bank" to="player" description="Student load refund. Collect {currency}20.">
+                <Cash value="20" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="5">
+            <Transaction from="bank" to="player" 
+                         description="Bank error in your favour. Collect {currency}200.">
+                <Cash value="200" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="6">
+            <Transaction from="player" to="bank" 
+                         description="Pay bill for text books of {currency}100.">
+                <Cash value="100" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="7">
+            <Transaction from="player" to="bank" 
+                         description="Mega late night taxi bill pay {currency}50.">
+                <Cash value="50" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="8">
+            <Move type="sequential" to="0" description="Advance to Go" />
+        </Card>
+        <Card group="1" id="9">
+            <Transaction from="bank" to="player" 
+                         description="From sale of Bitcoin you get {currency}50.">
+                <Cash value="50" />
+            </Transaction>
+        </Card>        
+        <Card group="1" id="10">
+            <Choice description="Pay a {currency}10 fine or take {cardGroup(2)}">
+                <Transaction from="player" to="freeParking" description="Pay Fine">
+                    <Cash value="10" />
+                </Transaction>
+                <DrawCard from="2" description="{cardGroup(2)}" />
+            </Choice>
+        </Card>
+        <Card group="1" id="11">
+            <Transaction from="player" to="freeParking" 
+                         description="Pay insurance fee of {currency}50.">
+                <Cash value="50" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="12">
+            <Transaction from="bank" to="player" 
+                         description="Savings bond matures, collect {currency}100.">
+                <Cash value="100" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="13">
+            <Move type="direct" to="41" 
+                  description="Go to Jail. Don not pass Go, do not collect {currency}{goBonus}." />
+        </Card>
+        <Card group="1" id="14">
+            <Transaction from="bank" to="player" 
+                         description="Received interest of shares of {currency}25">
+                <Cash value="50" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="15">
+            <Transaction from="allPlayers" to="player" description="It's your birthday. Collect {currency}10 from each player.">
+                <Cash value="10" />
+            </Transaction>
+        </Card>
+        <Card group="1" id="16">
+            <GetOutOfJail description="Get out of Jail free." />
+        </Card>
+        
+        <!--Opportunity Knocks cards-->
+        <Card group="2" id="1">
+            <Transaction from="bank" to="player" 
+                         description="Bank pays you divided of {currency}50.">
+                <Cash value="50" />
+            </Transaction>
+        </Card>
+        <Card group="2" id="2">
+            <Transaction from="bank" to="player" 
+                         description="You have won a lip sync battle. Collect {currency}100.">
+                <Cash value="100" />
+            </Transaction>
+        </Card>
+        <Card group="2" id="3">
+            <Move type="sequential" to="40" description="Advance to {tile(40)}." />
+        </Card>
+        <Card group="2" id="4">
+            <Move type="sequential" to="25" description="Advance to {tile(25)}. If you pass GO, collect {currency}{goBonus}." />
+        </Card>
+        <Card group="2" id="5">
+            <Transaction from="player" to="freeParking" 
+                         description="Fined {currency} 15 for speeding.">
+                <Cash value="15" />
+            </Transaction>
+        </Card>
+        <Card group="2" id="6">
+            <Transaction from="player" to="bank" 
+                         description="Pay university fees of {currency}150.">
+                <Cash value="150" />
+            </Transaction>
+        </Card>
+        <Card group="2" id="7">
+            <Move type="sequential" to="16" description="Take a trip to {tile(16)}. If you pass GO, collect {currency}{goBonus}." />
+        </Card>
+        <Card group="2" id="8">
+            <Transaction from="bank" to="player" 
+                         description="Loan matures, collect {currency}150.">
+                <Cash value="150" />
+            </Transaction>
+        </Card>
+        <Card group="2" id="9">
+            <RepairTransaction house="40" hotel="115" description="You are assessed for repairs, {currency}40/house, {currency}115/hotel." />
+        </Card>        
+        <Card group="2" id="10">
+            <Move type="sequential" to="1" descritption="Advance to GO." />
+        </Card>
+        <Card group="2" id="11">
+            <RepairTransaction house="25" hotel="100" description="You are assessed for repairs, {currency}25/house, {currency}100/hotel." />
+        </Card>
+        <Card group="2" id="12">
+            <Move type="relative" to="-3" 
+                  description="Go back 3 spaces." />
+        </Card>
+        <Card group="2" id="13">
+            <Move type="sequential" to="12" description="Advance to {tile(12)}. If you pass GO, collect {currency}{goBonus}." />
+        </Card>
+        <Card group="1" id="14">
+            <Move type="direct" to="41" 
+                  description="Go to Jail. Don not pass Go, do not collect {currency}{goBonus}." />
+        </Card>
+        <Card group="2" id="15">
+            <Transaction from="player" to="freeParking" 
+                         description="Drunk in charge of a skateboard. Fine {currency}20." >
+                <Cash value="20" />
+            </Transaction>
+        </Card>
+        <Card group="2" id="16">
+            <GetOutOfJail description="Get out of Jail free." />
+        </Card>
+    </Game.Data.cards>
+</Game.Data>
