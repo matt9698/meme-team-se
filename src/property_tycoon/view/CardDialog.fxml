@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import property_tycoon.view.CardDialog?>
+
+<fx:root fx:id="card" type="CardDialog" xmlns:fx="http://javafx.com/fxml">
+    <stylesheets>
+        <URL value="@Card.css" />
+    </stylesheets>
+    <center>
+        <Label fx:id="text" text="${card.text}" />
+    </center>
+    <bottom>
+
+    </bottom>
+</fx:root>

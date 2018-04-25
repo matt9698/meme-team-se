@@ -13,7 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import property_tycoon.model.Card;
 import property_tycoon.model.Property;
+import property_tycoon.model.StubAction;
 
 /**
  *
@@ -52,14 +54,18 @@ public class GameView extends Application
         
         Property p1 = Property.create("Ollie's Bin", 1, new int[] {1,1,1,1,1,1});
         Property p2 = Property.create("T's House", 10, new int[] {1,1,1,1,1,1});
-        Property.Group g = new PropertyPosition.Group(
+        Property.Group pg = new PropertyPosition.Group(
             "Yellow", 
             Color.web("ff0000"),
             150, 
             p1, p2);
         
+        Card c1 = Card.create(new StubAction(), true);
+        Card.Group cg = new Card.Group("Test", c1);
+        
         ((GridPane)root).add(PropertyPosition.create(p1), 0, 0);
         ((GridPane)root).add(PropertyPosition.create(p2), 1, 0);
+        ((GridPane)root).add(CardDialog.create(c1), 0, 1);
         
         Scene scene = new Scene(root);
         

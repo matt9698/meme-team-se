@@ -19,7 +19,7 @@ import property_tycoon.model.Property;
 
 /**
  * Control representing a property position on the game board.
- * 
+ *
  * @author Matt
  * @version 25/04/2018
  */
@@ -30,23 +30,23 @@ public class PropertyPosition extends BorderPane
     /**
      * Creates and returns an instance of a <code>PropertyPosition</code>
      * with the specified underlying property model. The property model should already
-     * be a member of a property group that is an instance of 
+     * be a member of a property group that is an instance of
      * or an instance of a subclass of <code>PropertyPosition$Group</code>
-     * 
+     *
      * @param model the underlying property model.
-     * 
+     *
      * @return A new <code>PropertyPosition</code> instance.
-     * 
+     *
      * @throws IllegalArgumentException if model is null, does not have a group
      * or its group is not an instance of or an instance of a subclass of PropertyPosition$Group/
      */
     public static PropertyPosition create(Property model)
     {
-        // Check arguments
+        // Check argument
         if(model == null) {
             throw new IllegalArgumentException("model should not be null.");
         }
-        
+
         if(!model.isGrouped()) {
             throw new IllegalArgumentException("model should have a group.");
         }
@@ -94,7 +94,7 @@ public class PropertyPosition extends BorderPane
     }
 
     private final Property model;
-    
+
     private final Background bannerBackground;
 
     private PropertyPosition(Property model)
@@ -109,7 +109,7 @@ public class PropertyPosition extends BorderPane
 
     /**
      * Gets the text to be displayed by this property position.
-     * 
+     *
      * @return The text to be displayed by this property position.
      */
     public String getText()
@@ -133,10 +133,10 @@ public class PropertyPosition extends BorderPane
 
         return sb.toString();
     }
-    
+
     /**
      * Gets the banner background to be displayed by this property position.
-     * 
+     *
      * @return The banner background to be displayed by this property position.
      */
     public Background getBannerBackground()
@@ -148,9 +148,9 @@ public class PropertyPosition extends BorderPane
      * Represents a group of properties with an associated colour.
      * This class extends <code>model.Property$Group</code>
      * simply to add an associated colour to the group.
-     * Any properties used with the enclosing class 
-     * <code>PropertyPosition</code> must use an instance of 
-     * or an instance of a subclass of this class 
+     * Any properties used with the enclosing class
+     * <code>PropertyPosition</code> must use an instance of
+     * or an instance of a subclass of this class
      * in order for the necessary colour data to be accessible.
      */
     public static class Group extends Property.Group
@@ -161,16 +161,16 @@ public class PropertyPosition extends BorderPane
          * Creates a new instance of PropertyPosition$Group with the specified
          * description (name), colour, houseCost and properties.
          * The properties should not already be a member of another group.
-         * 
+         *
          * @param description The name of the group.
          * @param color The colour of the group.
          * @param houseCost The house cost of this group.
          * @param properties The properties to be placed in this group.
-         * 
-         * @throws IllegalArgumentException if description, color 
-         * or properties is null, if description or properties is empty, 
-         * if properties contains null elements 
-         * or elements that are already in a group, 
+         *
+         * @throws IllegalArgumentException if description, color
+         * or properties is null, if description or properties is empty,
+         * if properties contains null elements
+         * or elements that are already in a group,
          * or if houseCost is not positive.
          */
         public Group(String description, Color color, int houseCost,
@@ -189,7 +189,7 @@ public class PropertyPosition extends BorderPane
 
         /**
          * Gets the colour of this group.
-         * 
+         *
          * @return the colour of this group.
          */
         public Color getColor()

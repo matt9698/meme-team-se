@@ -347,7 +347,7 @@ public abstract class Card
          *                                  if any of the cards already
          *                                  belong to another group.
          */
-        public Group(String description, Card[] cards)
+        public Group(String description, Card... cards)
         {
             // Check arguments
             if(description == null) {
@@ -404,6 +404,11 @@ public abstract class Card
 
             // Create cards list
             this.cards = new ArrayList(Arrays.asList(cards));
+            
+            // Set this group for all cards
+            for(Card c : cards) {
+                c.setGroup(this);
+            }
 
             awaitingReplace = null;
         }

@@ -3,7 +3,7 @@ Meme Team Software Engineering Project
 Property Tycoon
 */
 
-#root {
+#propertyPosition {
     -fx-pref-width: 96; /* unit - 2 * border*/
     -fx-pref-height: 146; /* unit * 1.5 - 2 * border*/
 

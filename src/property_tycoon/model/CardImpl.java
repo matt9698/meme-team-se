@@ -31,7 +31,7 @@ class CardImpl extends Card
 
         assert i == choices.length : "choices should not contain null elements.";
 
-        if(choices.length == 1) {
+        if(choices.length > 1) {
             assert description != null :
                 "description cannot be null for a choice card.";
             assert !description.isEmpty() :
@@ -41,6 +41,7 @@ class CardImpl extends Card
         // If the card is immediate use then check at least
         // one of its actions is always executable.
         if(isImmediate) {
+            i = 0;
             while(i < choices.length && !choices[i].isAlwaysExecutable()) {
                 i++;
             }
