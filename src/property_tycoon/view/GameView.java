@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import property_tycoon.model.Card;
 import property_tycoon.model.Property;
-import property_tycoon.model.StubAction;
 
 /**
  *
@@ -60,12 +59,8 @@ public class GameView extends Application
             150, 
             p1, p2);
         
-        Card c1 = Card.create(new StubAction(), true);
-        Card.Group cg = new Card.Group("Test", c1);
-        
         ((GridPane)root).add(PropertyPosition.create(p1), 0, 0);
         ((GridPane)root).add(PropertyPosition.create(p2), 1, 0);
-        ((GridPane)root).add(CardDialog.create(c1), 0, 1);
         
         Scene scene = new Scene(root);
         
