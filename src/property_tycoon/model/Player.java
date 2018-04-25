@@ -28,7 +28,7 @@ public class Player
     public void buy(Property p)
     {
         properties.add(p.buy(this));
-        cash -= p.getValue();
+        cash -= p.getPrice();
     }
 
     public int getCash()

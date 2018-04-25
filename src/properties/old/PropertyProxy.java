@@ -2,7 +2,9 @@
  * Meme Team Software Engineering Project
  * Property Tycoon
  */
-package property_tycoon.model;
+package properties.old;
+
+import property_tycoon.model.Player;
 
 /**
  *

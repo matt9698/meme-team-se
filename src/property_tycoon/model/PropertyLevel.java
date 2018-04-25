@@ -4,90 +4,60 @@ package property_tycoon.model;
  *
  * @author mm933
  */
-
-
-public abstract class PropertyImpl extends Property
+public class PropertyLevel implements Comparable<PropertyLevel>
 {
     @Override
-    public String getDescription()
+    public int compareTo(PropertyLevel level)
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override
-    public PropertyGroup getGroup()
+    public PropertyLevel getNext()
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override
-    public PropertyLevel getLevel()
+    public void setNext(PropertyLevel level)
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override
-    public Player getOwner()
+    public PropertyLevel getPrevious()
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override
-    public int getPrice()
+    public void setPrevious(PropertyLevel level)
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override 
+    public PropertyLevelGroup getGroup()
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    public void setGroup(PropertyLevelGroup g)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
     public boolean isGrouped()
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override 
-    public boolean isMortgaged()
+    public String getDescription()
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override
-    public boolean isOwned()
+    public boolean isMax()
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    @Override
-    public boolean isValid()
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    @Override
-    public int mortgage()
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    @Override
-    public int unmortgage()
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    @Override
-    public Property buy(Player buyer)
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    @Override
-    public int sell()
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    @Override
-    public void setGroup(PropertyGroup g)
+    public boolean isMin()
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
