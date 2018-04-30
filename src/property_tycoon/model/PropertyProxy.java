@@ -4,11 +4,11 @@ package property_tycoon.model;
  * @author Matt
  * @version 25/04/2018
  */
-class PropertyProxy extends Property 
+final class PropertyProxy extends Property 
 {
     private boolean isValid;
     private final Property realProperty;
-    
+
     public PropertyProxy(Property realProperty)
     {
         assert realProperty != null : "realProperty should not be null";
@@ -16,8 +16,10 @@ class PropertyProxy extends Property
         this.realProperty = realProperty;
 
         isValid = true;
+        
+        // TODO: Listen for events on realProperty and forward them to listeners of this property
     }
-    
+
     @Override
     public Property buy(Player buyer)
     {
@@ -85,12 +87,6 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public boolean isImprovable()
-    {
-        return realProperty.isImprovable();
-    }
-
-    @Override
     public boolean isMortgaged()
     {
         return realProperty.isMortgaged();
@@ -147,5 +143,5 @@ class PropertyProxy extends Property
         }
 
         return realProperty.upgrade();
-    }    
+    }
 }
