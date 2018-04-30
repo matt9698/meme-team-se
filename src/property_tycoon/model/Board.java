@@ -4,117 +4,102 @@
  */
 package property_tycoon.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- *
  * @author Matt
+ * @version 29/04/2018
  */
 public class Board
 {
-
-    private final Position[] positions;
-    private Map<Player, Position> playerPositions;
+    private BoardPosition[] positions;
     private Player[] players;
-    private Property[] properties;
+    private int[] playerPositionMap;
 
-    public Board(Player[] players, Property[] properties)
+    public void moveForward(Player player, BoardPosition to)
     {
-        positions = new Position[41];
-        playerPositions = new HashMap<>();
-        this.players = players;
-        this.properties = properties;
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
 
-        for(Player p : players) {
-            playerPositions.put(p, positions[0]);
+    public void moveBackward(Player player, BoardPosition to)
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    public void moveSequential(Player player, int by)
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    public void moveDirect(Player player, BoardPosition to)
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    public BoardPosition getStart()
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    public BoardPosition getNext(BoardPosition position)
+    {
+        return getPosition((getIndex(position) + 1) % getPositionCount());
+    }
+
+    public BoardPosition getPrevious(BoardPosition position)
+    {
+        return getPosition((getIndex(position) - 1) % getPositionCount());
+    }
+
+    public int getIndex(BoardPosition position)
+    {
+        if(psotion == null) {
+            throw new IllegalArgumentException("position should not be null.");
         }
-        placePropertiesOnBoard();
 
-    }
-
-    private void placePropertiesOnBoard()
-    {
-        for (int i = 0; i < properties.length; i++) {
-            //Place the properties onto the board
-            //maybe have a method in the Position class called setProperty(property)
-            //board.getPositions()[i].setProperty(properties[i]);
+        // Search the positions array to find index of position
+        int i = 0;
+        while(i < positions.length && !position.equals(positions[i])) {
+            i++;
         }
-    }
 
-    public void moveForward(Player p, int steps)
-    {
-        //Get players position on the board in terms of the position array
-        int currentPosition = getIndexOfPlayer(p);
-        if (currentPosition == -1){
-            System.err.println("Cannot find player on this board");
-            return;
+        if(i == positions.length) {
+            // We reached the end of the positions array without finding postion
+            throw new IllegalArgumentException("postion is not on this board.");
         }
-        
-        //Calculate the destination position
-        int destination = currentPosition + steps;
-        if (destination > 40){
-            destination -= 40;
+
+        return i;
+    }
+
+    public BoardPosition getPosition(int index)
+    {
+        if(index < 0 || index >= positions.length) {
+            throw new IndexOutOfBoundsException(
+                "position index is out of bounds.");
         }
-        
-        //Move the player
-        playerPositions.remove(p);
-        playerPositions.put(p, positions[destination]);       
+
+        return positions[index];
     }
 
-    public void moveForward(Player p, Position to)
+    public BoardPosition getPosition(Player of)
     {
-        playerPositions.remove(p);
-        playerPositions.put(p, to);
-    }
-
-    public void moveDirect(Player p, Position to)
-    {
-        playerPositions.remove(p);
-        playerPositions.put(p, to);
-    }
-    
-    private int getIndexOfPlayer(Player p){
-        
-        Position startPosition = playerPositions.get(p);
-        int current = -1;
-        for (int i = 0; i < positions.length; i++){
-            if (positions[i] == startPosition){
-                current = i;
-                break;
-            }
+        if(of == null) {
+            throw new IllegalArgumentException("of should not be null.");
         }
-        return current;
-    }
 
-    public int getIndex(Position position)
-    {
-        int index = 0;
-        for (int i = 0; i < positions.length; i++){
-            if (positions[i] == position){
-                index = i;
-                break;
-            }
+        // Search the players array to find index of player
+        int i = 0;
+        while(i < players.length && !of.equals(players[i])) {
+            i++;
         }
-        return index;
+
+        if(i == players.length) {
+            // We reached the end of the players array without finding the player
+            throw new IllegalArgumentException("of is not on this board.");
+        }
+
+        return positions[playerPositionMap[i]];
     }
 
-    public Position getPositionOfPlayer(Player player)
-    {
-        return playerPositions.get(player);
-    }
-
-    public static interface Position
-    {
-        String getDescription();
-    }
-    
-    public Position[] getPositions()
-    {
-        return positions;
-    }
-
-    public int getBoardSize()
+    public int getPositionCount()
     {
         return positions.length;
     }

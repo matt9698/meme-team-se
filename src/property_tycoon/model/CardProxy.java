@@ -5,25 +5,23 @@
 package property_tycoon.model;
 
 /**
- *
  * @author Matt
+ * @version 29/04/2018
  */
 class CardProxy extends Card
 {
-    private boolean isValid;
     private final Card realCard;
+    private boolean isValid;
 
     public CardProxy(Card realCard)
     {
-        // Check arguments
         assert realCard != null : "realCard should not be null.";
         assert realCard.isGrouped() : "realCard should have a group.";
-
-        // Assign fields
         this.realCard = realCard;
 
         isValid = true;
     }
+
     @Override
     public int getActionCount()
     {
@@ -31,35 +29,51 @@ class CardProxy extends Card
     }
 
     @Override
-    public String getActionDescritpion(int action)
+    public String getActionDescription(int action)
     {
-        return realCard.getActionDescritpion(action);
+        return realCard.getActionDescription(action);
     }
+
     @Override
     public String getDescription()
     {
         return realCard.getDescription();
     }
+
     @Override
     public Group getGroup()
     {
         return realCard.getGroup();
     }
+
     @Override
-    public void setGroup(Group g)
+    public Player getOwner()
     {
-        throw new UnsupportedOperationException(
-            "setGroup() is not supported by proxy cards.");
+        return realCard.getOwner();
     }
+
+    @Override
+    protected void setOwner(Player owner)
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
     @Override
     public boolean isGrouped()
     {
         return realCard.isGrouped();
     }
+
     @Override
     public boolean isImmediate()
     {
         return realCard.isImmediate();
+    }
+
+    @Override
+    public boolean isOwned()
+    {
+        return realCard.isOwned();
     }
 
     @Override
@@ -73,6 +87,7 @@ class CardProxy extends Card
     {
         return realCard.isUseable(action);
     }
+
     @Override
     public boolean isValid()
     {
@@ -83,11 +98,17 @@ class CardProxy extends Card
     public void use(int action)
     {
         if(!isValid()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Proxy card is not valid.");
         }
 
         realCard.use(action);
         isValid = false;
+    }
+
+    @Override
+    protected void setGroup(Group group)
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
     }
 
 }

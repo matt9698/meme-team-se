@@ -1,66 +1,59 @@
 package property_tycoon.model;
 
 /**
- *
- * @author mm933
+ * @author Matt
+ * @version 27/04/2018
  */
 public class PropertyLevel implements Comparable<PropertyLevel>
 {
-
-    private PropertyLevelGroup group;
     private String description;
-    private int index = -1;
-    private PropertyLevel next, previous;
+    private PropertyLevelGroup group;
 
     public PropertyLevel(String description)
     {
+        // Check argument
+        if(description == null) {
+            throw new IllegalArgumentException(
+                "description should not be null.");
+        }
+
+        if(description.isEmpty()) {
+            throw new IllegalArgumentException(
+                "description should not be empty.");
+        }
+
+        // Assign fields
         this.description = description;
+        group = null;
     }
 
     @Override
     public int compareTo(PropertyLevel level)
     {
-        return Integer.compare(this.index, level.index);
+        if(!getGroup().contains(level)) {
+            throw new IllegalArgumentException(
+                "level is not in the same group.");
+        }
+
+        return Integer.compare(this.getIndex(), level.getIndex());
     }
 
-    public void setNext(PropertyLevel level)
-    {
-        if(isMax()) {
-            throw new IllegalStateException("This level is the highest level");
-        }
-        
-        next = level;
-    }
-    
     public PropertyLevel getNext()
     {
-        if(isMax()) {
-            throw new IllegalStateException("This level is the highest level");
-        }
-        return next;
-    }
-
-    public void setPrevious(PropertyLevel level)
-    {
-        if(isMin()) {
-            throw new IllegalStateException("This level is the lowest level");
-        }
-        previous = level;
+        return getGroup().getNext(this);
     }
 
     public PropertyLevel getPrevious()
     {
-        if(isMin()) {
-            throw new IllegalStateException("This level is the lowest level");
-        }
-        return previous;
+        return getGroup().getPrevious(this);
     }
-    
+
     public PropertyLevelGroup getGroup()
     {
-        if (!isGrouped()){
-            throw new IllegalStateException("PropertyLevel does not have a group");
+        if (!isGrouped()) {
+            throw new IllegalStateException("PropertyLevel has no group.");
         }
+
         return group;
     }
 
@@ -69,21 +62,8 @@ public class PropertyLevel implements Comparable<PropertyLevel>
         if(isGrouped()) {
             throw new IllegalStateException("PropertyLevel already has a group.");
         }
-        
+
         this.group = group;
-    }
-    
-    public void setIndex(int i)
-    {
-        if (index != -1) {
-            throw new IllegalStateException("PropertyLevel already has an index.");
-        }
-        
-        if(index < 0) {
-            throw new IllegalArgumentException("index should not be negative.");
-        }
-        
-        index = i;
     }
 
     public boolean isGrouped()
@@ -96,13 +76,18 @@ public class PropertyLevel implements Comparable<PropertyLevel>
         return description;
     }
 
+    public int getIndex()
+    {
+        return getGroup().getIndex(this);
+    }
+
     public boolean isMax()
     {
-        return this == group.getMax();
+        return getGroup().isMax(this);
     }
 
     public boolean isMin()
     {
-        return this == group.getMin();
+        return getGroup().isMin(this);
     }
 }

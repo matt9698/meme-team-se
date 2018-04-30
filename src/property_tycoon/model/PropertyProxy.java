@@ -11,11 +11,8 @@ class PropertyProxy extends Property
     
     public PropertyProxy(Property realProperty)
     {
-        // Check arguments
         assert realProperty != null : "realProperty should not be null";
         assert realProperty.isGrouped() : "realProperty should have a group.";
-        
-        // Assign fields
         this.realProperty = realProperty;
 
         isValid = true;
@@ -45,13 +42,13 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public PropertyGroup getGroup()
+    public Group getGroup()
     {
         return realProperty.getGroup();
     }
 
     @Override
-    public void setGroup(PropertyGroup g)
+    public void setGroup(Group g)
     {
         throw new UnsupportedOperationException(
             "setGroup() is not supported by proxy properties.");
@@ -76,21 +73,9 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public int getRentCost(PropertyLevel level)
+    public int getRentPrice(PropertyLevel level, int diceValue)
     {
-        return realProperty.getRentCost(level);
-    }
-
-    @Override
-    public int getRentCost(PropertyLevel level, int diceValue)
-    {
-        return realProperty.getRentCost(level, diceValue);
-    }
-
-    @Override
-    public PropertyType getType()
-    {
-        return realProperty.getType();
+        return realProperty.getRentPrice(level, diceValue);
     }
 
     @Override
