@@ -4,6 +4,8 @@
  */
 package property_tycoon.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,20 +19,39 @@ public abstract class Card
     public static Card create()
     {
         // TODO: Implement
+        throw new UnsupportedOperationException();
     }
 
     private PropertyChangeSupport pcs;
 
+    /**
+     * Returns the <code>PropertyChangeSupport</code>
+     * associated with this <code>Card</code> object that is
+     * used to manage Java Bean property change event handlers.
+     * Any time the value of a property in this class changes
+     * this object should be used to notify observers.
+     *
+     * @return The <code>PropertyChangeSupport</code>
+     *         associated with this <code>Card</code>.
+     */
     protected PropertyChangeSupport getPropertyChangeSupport()
     {
         return pcs;
     }
 
+    /**
+     * Registers the specified property change listener
+     * with this <code>Card</code> object.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener)
     {
         pcs.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Unregisters the specified property change listener
+     * with this <code>Card</code> object.
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener)
     {
         pcs.removePropertyChangeListener(listener);

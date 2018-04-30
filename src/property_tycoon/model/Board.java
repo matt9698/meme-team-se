@@ -51,7 +51,7 @@ public class Board
 
     public int getIndex(BoardPosition position)
     {
-        if(psotion == null) {
+        if(position == null) {
             throw new IllegalArgumentException("position should not be null.");
         }
 

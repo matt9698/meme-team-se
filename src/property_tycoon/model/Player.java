@@ -4,6 +4,7 @@
  */
 package property_tycoon.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class Player
     public Player()
     {
         // TODO: Implement
+        cash = 1000;
+        description = "ollmor";
+        properties = new ArrayList<>();
     }
 
     public int getCash()
@@ -112,7 +116,7 @@ public class Player
                 "property should be owned by this player.");
         }
 
-        if(getCash() < property.getHousePrice()) {
+        if(getCash() < property.getImprovementCost()) {
             throw new IllegalStateException(
                 "Player does not have enough cash to upgrade property.");
         }
