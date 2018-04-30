@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javafx.scene.paint.Color;
 
 /**
  * Represents a property.
@@ -46,6 +47,11 @@ public abstract class Property
     }
 
     private PropertyChangeSupport pcs;
+
+    public Property()
+    {
+        pcs = new PropertyChangeSupport(this);
+    }
 
     /**
      * Registers the specified property change listener
@@ -338,15 +344,16 @@ public abstract class Property
         return pcs;
     }
 
-    public static class Group
+    public static final class Group
     {
         public static Group create(
             String description,
+            Color color,
             PropertyLevel.Group levels,
             int houseCost,
             Property... properties)
         {
-            Group group = new Group(description, levels, houseCost, properties);
+            Group group = new Group(description, color, levels, houseCost, properties);
             for(Property property : properties) {
                 property.setGroup(group);
             }
@@ -355,6 +362,7 @@ public abstract class Property
 
         }
 
+        private final Color color;
         private final String description;
         private final int improvementCost;
         private final PropertyLevel.Group levels;
@@ -362,6 +370,7 @@ public abstract class Property
 
         private Group(
             String description,
+            Color color,
             PropertyLevel.Group levels,
             int houseCost,
             Property... properties)
@@ -375,6 +384,12 @@ public abstract class Property
                     "description should not be empty.");
             }
             this.description = description;
+
+            if(color == null) {
+                throw new IllegalArgumentException(
+                    "color should not be null.");
+            }
+            this.color = color;
 
             if(levels == null) {
                 throw new IllegalArgumentException(
@@ -412,6 +427,16 @@ public abstract class Property
             // Copy the array so that elements cannot
             // be subsequently modified by external code.
             this.properties = Arrays.copyOf(properties, properties.length);
+        }
+
+        /**
+         * Gets the color of this group.
+         *
+         * @return The color of this group.
+         */
+        public Color getColor()
+        {
+            return color;
         }
 
         /**

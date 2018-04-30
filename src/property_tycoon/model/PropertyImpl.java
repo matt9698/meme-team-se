@@ -8,33 +8,6 @@ import java.util.Arrays;
  */
 final class PropertyImpl extends Property
 {
-    public static final PropertyLevel.Group REGULAR_LEVELS =
-        PropertyLevel.Group.create(
-            true,
-            new PropertyLevel("Unimproved"),
-            new PropertyLevel("One House"),
-            new PropertyLevel("Two Houses"),
-            new PropertyLevel("Three Houses"),
-            new PropertyLevel("Four Houses"),
-            new PropertyLevel("One Hotel")
-        );
-
-    public static final PropertyLevel.Group STATION_LEVELS =
-        PropertyLevel.Group.create(
-            false,
-            new PropertyLevel("One Station"),
-            new PropertyLevel("Two Stations"),
-            new PropertyLevel("Three Stations"),
-            new PropertyLevel("Four Stations")
-        );
-
-    public static final PropertyLevel.Group UTILITY_LEVELS =
-        PropertyLevel.Group.create(
-            false,
-            new PropertyLevel("One Utility"),
-            new PropertyLevel("Two Utility")
-        );
-
     private static final int STATION_BASE_RENT = 25;
     private static final int UTILITY_HIGH_RENT = 10;
     private static final int UTILITY_LOW_RENT = 4;
@@ -75,7 +48,9 @@ final class PropertyImpl extends Property
             // be subsequently modified by external code.
             this.rents = Arrays.copyOf(rents, rents.length);
         }
-        else { this.rents = null; }
+        else {
+            this.rents = null;
+        }
 
         level = null;
         isMortgaged = false;
@@ -160,13 +135,13 @@ final class PropertyImpl extends Property
                 "level is not valid for this property.");
         }
 
-        if(levels.equals(REGULAR_LEVELS)) {
+        if(levels.equals(PropertyLevel.Group.REGULAR_LEVELS)) {
             return rents[level.getIndex()];
         }
-        else if(levels.equals(STATION_LEVELS)) {
+        else if(levels.equals(PropertyLevel.Group.STATION_LEVELS)) {
             return STATION_BASE_RENT * (int)Math.pow(2, level.getIndex());
         }
-        else if(levels.equals(UTILITY_LEVELS)) {
+        else if(levels.equals(PropertyLevel.Group.UTILITY_LEVELS)) {
             switch(level.getIndex()) {
                 case 0:
                     return UTILITY_LOW_RENT * diceValue;
@@ -221,7 +196,6 @@ final class PropertyImpl extends Property
 
         // TODO: Check levels
         // TODO: Check rents
-
         this.level = group.getLevels().getMin();
         getPropertyChangeSupport().firePropertyChange("level", null, level);
 
@@ -306,15 +280,14 @@ final class PropertyImpl extends Property
                 + "It must be at its lowest improvement level before being sold.");
         }
 
+        if(isMortgaged()) {
+            unmortgage();
+        }
+
         Player old = owner;
         owner = null;
         getPropertyChangeSupport().firePropertyChange("owner", old, null);
         getPropertyChangeSupport().firePropertyChange("owned", true, false);
-
-        if(isMortgaged()) {
-            unmortgage();
-            return getMortgagedPrice();
-        }
 
         return getPrice();
     }

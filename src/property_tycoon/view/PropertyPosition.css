@@ -23,8 +23,7 @@ Property Tycoon
     -fx-border-width: 0 0 4 0; /* border */
 }
 
-#text {
-    -fx-font-weight: bold;
+.label {
     -fx-font-family: 'Helvetica';
     -fx-font-size: 12;
 

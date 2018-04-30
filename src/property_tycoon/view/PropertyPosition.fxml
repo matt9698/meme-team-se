@@ -15,7 +15,19 @@
     </top>
     <center>
         <VBox style="-fx-alignment: center;">
-            <Label fx:id="text" text="${propertyPosition.text}" />
+            <Label text="${propertyPosition.description}"
+                style="-fx-font-weight: bold;"/>
+            <Label text="(Mortgaged)"
+                visible="${propertyPosition.mortgaged}"
+                managed="${propertyPosition.mortgaged}" />
+            <Label text="${'Owned by:\n' + propertyPosition.owner}"
+                visible="${propertyPosition.owned}"
+                managed="${propertyPosition.owned}"/>
+            <Label text="For Sale"
+                visible="${!propertyPosition.owned}"
+                managed="${!propertyPosition.owned}"/>
+            <Label text="${'£' + propertyPosition.price}"
+                style="-fx-font-weight: bold;"/>
         </VBox>
     </center>
 </fx:root>

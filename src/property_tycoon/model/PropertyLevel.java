@@ -136,6 +136,33 @@ public final class PropertyLevel implements Comparable<PropertyLevel>
 
     public static final class Group
     {
+            public static final Group REGULAR_LEVELS =
+            Group.create(
+                true,
+                new PropertyLevel("Unimproved"),
+                new PropertyLevel("One House"),
+                new PropertyLevel("Two Houses"),
+                new PropertyLevel("Three Houses"),
+                new PropertyLevel("Four Houses"),
+                new PropertyLevel("One Hotel")
+            );
+
+        public static final Group STATION_LEVELS =
+            Group.create(
+                false,
+                new PropertyLevel("One Station"),
+                new PropertyLevel("Two Stations"),
+                new PropertyLevel("Three Stations"),
+                new PropertyLevel("Four Stations")
+            );
+
+        public static final Group UTILITY_LEVELS =
+            Group.create(
+                false,
+                new PropertyLevel("One Utility"),
+                new PropertyLevel("Two Utility")
+            );
+        
         public static Group create(
             boolean isImprovable, PropertyLevel... levels)
         {
