@@ -87,7 +87,5 @@ public class Board extends GridPane
              
           }
       }
-      
-      autosize();
    }
 }
