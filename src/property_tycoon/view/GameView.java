@@ -19,34 +19,86 @@ import property_tycoon.model.PropertyLevel;
  * @author Matt
  */
 public class GameView extends Application
-{   
+{
     public static void main(String[] args)
     {
         Application.launch(args);
     }
-        
+
     @Override
     public void start(Stage stage) throws IOException
-    {   
-        Property p1 = Property.create("Ollie's Bin", 10, new int[] { 0, 0, 0, 0, 0, 0 });
-        Property p2 = Property.create("T's Crib", 100, new int[] { 0, 0, 0, 0, 0, 0 });
-        Property.Group g = Property.Group.create("Red", Color.RED, PropertyLevel.Group.REGULAR_LEVELS,
-            30, p1, p2);
+    {
+        Property[] properties = new Property[] {
+            Property.create("Crapper Street", 60, new int[] {1, 1, 1, 1, 1, 1}),
+            Property.create("Gangsters Paradise", 60, new int[] {1, 1, 1, 1, 1, 1}),
+            Property.create("Weeping Angel", 100, new int[] {1, 1, 1, 1, 1, 1}),
+            Property.create("Potts Avenue", 100, new int[] {1, 1, 1, 1, 1, 1}),
+            Property.create("Nardole Drive", 120, new int[] {1, 1, 1, 1, 1, 1})
+        };
         
+        
+        
+        Property.Group browns = Property.Group.create("Browns", Color.BROWN, PropertyLevel.Group.REGULAR_LEVELS,
+            30, properties[0], properties[1]);
+        
+        Property.Group blues = Property.Group.create("Blues", Color.BLUE, PropertyLevel.Group.REGULAR_LEVELS,
+            30, properties[2], properties[3], properties[4]);
+
         Player p = new Player();
-        
-        property_tycoon.model.BoardPosition[] properties = new property_tycoon.model.PropertyPosition[] { new property_tycoon.model.PropertyPosition(p1), new property_tycoon.model.PropertyPosition(p2) };
+
+        property_tycoon.model.BoardPosition[] positions = new property_tycoon.model.BoardPosition[] {
+            new property_tycoon.model.PropertyPosition(properties[0]),
+            new property_tycoon.model.PropertyPosition(properties[1]),
+            new property_tycoon.model.PropertyPosition(properties[2]),
+            new property_tycoon.model.PropertyPosition(properties[3]),
+            new property_tycoon.model.PropertyPosition(properties[4]),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition(),
+            new property_tycoon.model.FakePosition()
+          };
         Player[] players = new Player[] { p };
-        
-        property_tycoon.model.Board b = new property_tycoon.model.Board(properties, players);
-        
-        Board board = Board.create(b);
-        
+
+        property_tycoon.model.Board b = new property_tycoon.model.Board(positions, players);
+
+        Board board = new Board(b);
+
         Scene scene = new Scene(board);
-        
+
         stage.setTitle("Property Tycoon");
         stage.setScene(scene);
         stage.show();
     }
-    
+
 }

@@ -31,6 +31,6 @@
                 <Label text="${'£' + propertyPosition.price}"
                     style="-fx-font-weight: bold;"/>
             </VBox>
-        </center>
+        </center> 
     </BorderPane>
 </fx:root>
