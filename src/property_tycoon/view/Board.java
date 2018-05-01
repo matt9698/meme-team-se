@@ -4,96 +4,90 @@
  */
 package property_tycoon.view;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URL;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.LoadException;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import property_tycoon.model.Property;
-import property_tycoon.view.builder.PropertyTycoonBuilderFactory;
+import javafx.scene.Group;
 
-/**
- * Control representing a property position on the game board.
- *
- * @author Matt
- * @version 01/05/2018
- */
- public class Board extends GridPane
- {
-    public static final String FXML_PATH = "Board.fxml";
+public class Board extends GridPane
+{
+   private BoardPositionMapping[] BOARD_POS_MAPPINGS =
+      new BoardPositionMapping[] {
+          // Left
+          new BoardPositionMapping(0, 10),
+          new BoardPositionMapping(0, 9, 90d),
+          new BoardPositionMapping(0, 8, 90d),
+          new BoardPositionMapping(0, 7, 90d),
+          new BoardPositionMapping(0, 6, 90d),
+          new BoardPositionMapping(0, 5, 90d),
+          new BoardPositionMapping(0, 4, 90d),
+          new BoardPositionMapping(0, 3, 90d),
+          new BoardPositionMapping(0, 2, 90d),
+          new BoardPositionMapping(0, 1, 90d),
 
-    public static Board create(property_tycoon.model.Board model)
-    {
-        Board board = new Board(model);
+          // Top
+          new BoardPositionMapping(0, 0, 90d),
+          new BoardPositionMapping(1, 0, 180d),
+          new BoardPositionMapping(2, 0, 180d),
+          new BoardPositionMapping(3, 0, 180d),
+          new BoardPositionMapping(4, 0, 180d),
+          new BoardPositionMapping(5, 0, 180d),
+          new BoardPositionMapping(6, 0, 180d),
+          new BoardPositionMapping(7, 0, 180d),
+          new BoardPositionMapping(8, 0, 180d),
+          new BoardPositionMapping(9, 0, 180d),
 
-        // Initialise from FMXL
-        URL fxmlPath = board.getClass().getResource(FXML_PATH);
-        assert fxmlPath != null :
-            String.format(
-                "Board.FXML_PATH resource %s was not found.",
-                FXML_PATH);
+          // Right
+          new BoardPositionMapping(10, 0, 180d),
+          new BoardPositionMapping(10, 1, 270d),
+          new BoardPositionMapping(10, 2, 270d),
+          new BoardPositionMapping(10, 3, 270d),
+          new BoardPositionMapping(10, 4, 270d),
+          new BoardPositionMapping(10, 5, 270d),
+          new BoardPositionMapping(10, 6, 270d),
+          new BoardPositionMapping(10, 7, 270d),
+          new BoardPositionMapping(10, 8, 270d),
+          new BoardPositionMapping(10, 9, 270d),
 
-        FXMLLoader loader = new FXMLLoader(fxmlPath);
-        loader.setBuilderFactory(new PropertyTycoonBuilderFactory());
-        loader.setRoot(board);
-        loader.setController(board);
+          // Bottom
+          new BoardPositionMapping(10, 10, 270d),
+          new BoardPositionMapping(9, 10),
+          new BoardPositionMapping(8, 10),
+          new BoardPositionMapping(7, 10),
+          new BoardPositionMapping(6, 10),
+          new BoardPositionMapping(5, 10),
+          new BoardPositionMapping(4, 10),
+          new BoardPositionMapping(3, 10),
+          new BoardPositionMapping(2, 10),
+          new BoardPositionMapping(1, 10)
+   };
 
-        try {
-            loader.load();
-        }
-        catch(LoadException e) {
-            throw new UncheckedIOException(
-                String.format(
-                    "Board.FXML_PATH resource %s could not be loaded."
-                    + "\nThe file may be corrupt, of an incorrect format or contain syntax errors.",
-                    FXML_PATH),
-                e);
-        }
-        catch(IOException e) {
-            throw new UncheckedIOException(
-                String.format(
-                    "Board.FXML_PATH resource %s could not be loaded.",
-                    FXML_PATH),
-                e);
-        }
+   private property_tycoon.model.Board model;
+   private BoardPosition[] positions;
 
-        return board;
-    }
+   public Board(property_tycoon.model.Board model)
+   {
+     if(model == null) {
+        throw new IllegalArgumentException();
+     }
+     if(model.getPositionCount() != BOARD_POS_MAPPINGS.length) {
+        throw new IllegalArgumentException();
+     }
+      this.model = model;
 
-    private property_tycoon.model.Board model;
-    private BoardPosition[] positions;
-    private ReadOnlyListWrapper<BoardPosition> positions_wrapper;
-
-    public Board(property_tycoon.model.Board model)
-    {
-        if(model == null) {
-            throw new IllegalArgumentException("model should not be null.");
-        }
-        this.model = model;
-
-        positions = new BoardPosition[model.getPositionCount()];
-        for(int i = 0; i < model.getPositionCount(); i++) {
-            if(model.getPosition(i)
-                instanceof Property) {
-                    positions[i] = new PropertyPosition(
-                        (Property)model.getPosition(i));
-                }
-        }
-        
-        positions_wrapper = new ReadOnlyListWrapper<BoardPosition>(FXCollections.observableArrayList(positions));
-    }
-
-    public ReadOnlyListProperty<BoardPosition> positionsProperty()
-    {
-        return positions_wrapper.getReadOnlyProperty();
-    }
-
-    public BoardPosition getPosition(int index)
-    {
-        return positionsProperty().get(index);
-    }
- }
+      positions = new BoardPosition[BOARD_POS_MAPPINGS.length];
+      for(int i = 0; i < positions.length; i++) {
+          property_tycoon.model.BoardPosition pos = model.getPosition(i);
+          if(pos instanceof property_tycoon.model.PropertyPosition) {
+              positions[i] = PropertyPosition.create((Property)pos);
+              positions[i].setRotate(BOARD_POS_MAPPINGS[i].getRotation());
+              add(new Group(positions[i]), BOARD_POS_MAPPINGS[i].getColumn(), BOARD_POS_MAPPINGS[i].getRow());
+             
+          }
+      }
+      
+      autosize();
+   }
+}
