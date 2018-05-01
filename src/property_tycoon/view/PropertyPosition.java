@@ -16,7 +16,6 @@ import javafx.fxml.LoadException;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import property_tycoon.model.Property;
 
@@ -26,7 +25,7 @@ import property_tycoon.model.Property;
  * @author Matt
  * @version 01/05/2018
  */
-public class PropertyPosition extends BorderPane
+public class PropertyPosition extends BoardPosition
 {
     public static final String FXML_PATH = "PropertyPosition.fxml";
 

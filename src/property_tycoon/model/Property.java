@@ -61,6 +61,7 @@ public abstract class Property
      */
     public final void addPropertyChangeListener(PropertyChangeListener listener)
     {
+        // TODO: Investigate using Properties
         // TODO: Investigate using weak references
         pcs.addPropertyChangeListener(listener);
     }
