@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.Label?>
@@ -10,24 +11,26 @@
     <stylesheets>
         <URL value="@PropertyPosition.css" />
     </stylesheets>
-    <top>
+    <BorderPane>
+        <top>
         <Region fx:id="banner" background="${propertyPosition.bannerBackground}" />
-    </top>
-    <center>
-        <VBox style="-fx-alignment: center;">
-            <Label text="${propertyPosition.description}"
-                style="-fx-font-weight: bold;"/>
-            <Label text="(Mortgaged)"
-                visible="${propertyPosition.mortgaged}"
-                managed="${propertyPosition.mortgaged}" />
-            <Label text="${'Owned by:\n' + propertyPosition.owner}"
-                visible="${propertyPosition.owned}"
-                managed="${propertyPosition.owned}"/>
-            <Label text="For Sale"
-                visible="${!propertyPosition.owned}"
-                managed="${!propertyPosition.owned}"/>
-            <Label text="${'£' + propertyPosition.price}"
-                style="-fx-font-weight: bold;"/>
-        </VBox>
-    </center>
+        </top>
+        <center>
+            <VBox style="-fx-alignment: center;">
+                <Label text="${propertyPosition.description}"
+                    style="-fx-font-weight: bold;"/>
+                <Label text="(Mortgaged)"
+                    visible="${propertyPosition.mortgaged}"
+                    managed="${propertyPosition.mortgaged}" />
+                <Label text="${'Owned by:\n' + propertyPosition.owner}"
+                    visible="${propertyPosition.owned}"
+                    managed="${propertyPosition.owned}"/>
+                <Label text="For Sale"
+                    visible="${!propertyPosition.owned}"
+                    managed="${!propertyPosition.owned}"/>
+                <Label text="${'£' + propertyPosition.price}"
+                    style="-fx-font-weight: bold;"/>
+            </VBox>
+        </center>
+    </BorderPane>
 </fx:root>

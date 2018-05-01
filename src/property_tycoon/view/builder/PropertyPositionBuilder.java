@@ -15,6 +15,7 @@ import property_tycoon.view.PropertyPosition;
 public class PropertyPositionBuilder implements Builder<PropertyPosition>
 {
     private Property model;
+    private double rotate;
 
     public Property getModel()
     {
@@ -29,6 +30,18 @@ public class PropertyPositionBuilder implements Builder<PropertyPosition>
     @Override
     public PropertyPosition build()
     {
-        return PropertyPosition.create(model);
+        PropertyPosition position = PropertyPosition.create(model);
+        position.setRotate(rotate);
+        return position;
+    }
+
+    public double getRotate()
+    {
+        return rotate;
+    }
+
+    public void setRotate(double rotate)
+    {
+        this.rotate = rotate;
     }
 }

@@ -5,6 +5,7 @@
 package property_tycoon.view.builder;
 
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 import property_tycoon.view.PropertyPosition;
 
@@ -12,9 +13,9 @@ import property_tycoon.view.PropertyPosition;
  * @author Matt
  * @version 01/05/2018
  */
- public class PropertyTycoonBuilderFactory implements PropertyTycoonBuilderFactory
+ public class PropertyTycoonBuilderFactory implements BuilderFactory
  {
-    private BuilderFactory default = new JavaFXBuilderFactory();
+    private final BuilderFactory defaultBuilder = new JavaFXBuilderFactory();
 
     @Override
     public Builder<?> getBuilder(Class<?> type)
@@ -22,9 +23,7 @@ import property_tycoon.view.PropertyPosition;
         if(type == PropertyPosition.class) {
             return new PropertyPositionBuilder();
         }
-        else {
-            // Type is unrecognised so use default BuilderFactory
-            return default.getBuilder(type);
-        }
+       
+        return null;
     }
  }

@@ -14,5 +14,4 @@ import javafx.scene.layout.StackPane;
  */
  public abstract class BoardPosition extends StackPane
  {
-    public ObjectProperty<property_tycoon.model.BoardPosition> modelProperty()
  }
