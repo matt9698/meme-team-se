@@ -4,7 +4,12 @@
  */
 package property_tycoon.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import javafx.scene.paint.Color;
 
 /**
  * Represents a property.
@@ -16,101 +21,80 @@ import java.util.Arrays;
  * use the static <code>create()</code> methods (recommended)
  * or to extend this class (not recommended).
  *
- * @author Matt
- * @version 25/04/2018
+ * @author Matt and Adam
+ * @version 30/04/2018
  */
 public abstract class Property
 {
     private static final int MORTGAGE_FACTOR = 2;
 
-    /**
-     * Creates and returns an instance of a <code>Property</code>
-     * with the specified description (name), value and rent prices.
-     *
-     * @param description The name of the property.
-     * @param value The value of the property.
-     * @param rent The rent prices of the property.
-     * Should contain six (Level.LEVEL_COUNT) elements,
-     * with each element corresponding to the rent price
-     * at the improvement levels in ascending order:
-     * UNIMPROVED, ONE_HOUSE, TWO_HOUSES,
-     * THREE_HOUSES, FOUR_HOUSES, ONE_HOTEL.
-     *
-     * @return A new <code>Property</code> instance.
-     *
-     * @throws IllegalArgumentException if <code>description</code> or
-     * <code>rent</code> are null,
-     * or if <code>rent</code> does not contain exactly six (Level.LEVEL_COUNT)
-     * positive elements, or if value is not positive.
-     */
-    public static Property create(String description, int value, int[] rent)
+    public static Property create(
+        String description, int price, int[] rents)
     {
-        // Check arguments
-        if(description == null) {
-            throw new IllegalArgumentException(
-                "description should not be null.");
-        }
+        return new PropertyImpl(description, price, rents);
+    }
 
-        if(description.isEmpty()) {
-            throw new IllegalArgumentException(
-                "description should not be empty.");
-        }
+    public static Property createStation(String description, int price)
+    {
+        return new PropertyImpl(
+            description, price, null);
+    }
 
-        if(value < 1) {
-          throw new IllegalArgumentException(
-              "value should be positive.");
-        }
+    public static Property createUtility(String description, int price)
+    {
+        return new PropertyImpl(
+            description, price, null);
+    }
 
-        if(rent == null) {
-            throw new IllegalArgumentException("rent should not be null.");
-        }
+    private PropertyChangeSupport pcs;
 
-        if(rent.length != Level.LEVEL_COUNT) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "rent should contain %d (Level.LEVEL_COUNT) elements not %d.",
-                    Level.LEVEL_COUNT,
-                    rent.length));
-        }
-
-        // Check rent elements are positive
-        int i = 0;
-        while(i < rent.length && rent[i] > 0) {
-            i++;
-        }
-
-        if(i != rent.length) {
-            throw new IllegalArgumentException(
-                String.format("rent should only contain positive elements.\n"
-                    + "One or more elements in rent is not positive;\n"
-                    + "the first occurence of a non-positive element is at index %d.",
-                i));
-        }
-
-        return new PropertyImpl(description, value, rent);
+    public Property()
+    {
+        pcs = new PropertyChangeSupport(this);
     }
 
     /**
-     * Simulates the purchase of this property by returning
-     * a version of itself that is owner interactable
-     * (can be interacted with: improved, mortgaged, traded or sold).
+     * Registers the specified property change listener
+     * with this <code>Property</code> object.
+     *
+     * @param listener the listener to register.
+     */
+    public final void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        // TODO: Investigate using Properties
+        // TODO: Investigate using weak references
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Simulates the purchase of this property by setting the owner
+     * and returning a version of itself that is owner interactable
+     * (can be interacted with: upgraded, downgraded, mortgaged, unmortgaged or sold.)
      *
      * @param buyer The player to set as the owner of this property.
      *
      * @return An owner interactable version of this property.
      *
-     * @throws IllegalStateException if this property already has an owner.
+     * @throws IllegalStateException    if this property has no group
+     *                                  or already has an owner.
      * @throws IllegalArgumentException if buyer is null.
      */
     public abstract Property buy(Player buyer);
 
-     /**
-      * Downgrades this property by one improvement level.
-      *
-      * @return the cash credited for downgrading this property.
-      *
-      * @throws IllegalStateException if this property is a proxy and is not valid, is not grouped, is already the minimum improvement level or if downgrading would cause improvement levels in this property's group to differ by more than one.
-      */
+    /**
+     * Downgrades this property by one improvement level.
+     *
+     * @return the cash to be credited for downgrading this property.
+     *
+     * @throws IllegalStateException if this property is a proxy and is not valid,
+     *                               if this property has no group
+     *                               (meaning it has no level), no owner,
+     *                               is not improvable,
+     *                               is already the minimum improvement level
+     *                               or if downgrading would cause
+     *                               improvement levels in this property's
+     *                               group to differ by more than one.
+     */
     public abstract int downgrade();
 
     /**
@@ -121,248 +105,308 @@ public abstract class Property
     public abstract String getDescription();
 
     /**
-     * Gets the <code>Group</code> to which this property belongs.
+     * Gets the group to which this property belongs.
      *
-     * @return The <code>Group</code> to which this property belongs.
-     *
-     * @throws IllegalStateException if this property has no owner.
+     * @return The group to which this property belongs,
+     *         or null if this property has no group.
      */
     public abstract Group getGroup();
 
     /**
-     * Sets the <code>Group</code> tho which this property belongs.
-     * This method can only be called once, and subsequent attempts to call it
-     * (<code>hasGroup() == true</code>) will raise an IllegalStateException.
+     * Gets the cost of upgrading (debit) or downgrading (credit) this property.
      *
-     * @param g The group to set.
+     * @return the cost of upgrading or downgrading this property.
      *
-     * @throws IllegalArgumentException if g is null.
-     * @throws IllegalStateException if this property already has a group.
+     * @throws UnsupportedOperationException if this property is not improvable.
      */
-    public abstract void setGroup(Group g);
-
-    /**
-     * Gets the cost to improve this property from its current level
-     * to the specified level. If the specified level is lower than
-     * the current level a negative value will be returned,
-     * indicating it as credit rather than debit.
-     *
-     * @param to The improvement level of interest.
-     *
-     * @throws IllegalStateException if this property has no group.
-     * This method depends on the group house cost.
-     */
-    public int getImprovementCost(Level to)
+    public final int getImprovementCost()
     {
-        if(!isGrouped()) {
-            throw new IllegalStateException(
-                "Property has no group, house cost is derived from Group.getHouseCost(). ");
+        if(!isImprovable()) {
+            throw new UnsupportedOperationException(
+                "Property is not improvable.");
         }
 
-        return getHouseCost() * (to.getValue() - getLevel().getValue());
+        if(!isGrouped()) {
+            throw new IllegalStateException(
+                "Property has no group, improvement cost is defined by Property$Group.getImprovementCost().");
+        }
+
+        return getGroup().getImprovementCost();
     }
+
+    /**
+     * Gets the mortgaged value of this property.
+     *
+     * @return the mortgaged value of this property.
+     */
+    public final int getMortgagedPrice()
+    {
+        return getPrice() / MORTGAGE_FACTOR;
+    }
+
+    /**
+     * Gets the cost of renting this property at its current
+     * improvement level with the specified value shown on the dice.
+     *
+     * @return the cost of renting this property at its current improvement level.
+     *
+     * @param diceValue The value shown on the dice.
+     *
+     * @throws IllegalArgumentException if this property has no group
+     *                                  (meaning it has no level).
+     */
+    public final int getRentPrice(int diceValue)
+    {
+        return getRentPrice(getLevel(), diceValue);
+    }
+
+    /**
+     * Gets the cost of renting this property at the specified
+     * improvement level with the specified value shown on the dice.
+     *
+     * @return the cost of renting this property at the specified improvement level.
+     *
+     * @param level     the level of interest.
+     * @param diceValue The value shown on the dice.
+     *
+     * @throws IllegalArgumentException if this property has no group
+     *                                  (meaning it has no level),
+     *                                  if dice value is not positive,
+     *                                  or if level is not in the level
+     *                                  group for this property.
+     */
+    public abstract int getRentPrice(PropertyLevel level, int diceValue);
+
+    /**
+     * Simulates the sale of this property by unsetting the owner.
+     *
+     * @return the cash to be credited for selling this property.
+     *
+     * @throws IllegalStateException if this property is a proxy and is not valid,
+     *                               if this property has no owner,
+     *                               or is improvable and is not the minimum level.
+     */
+    public abstract int sell();
+
+    /**
+     * Upgrades this property by one improvement level.
+     *
+     * @return the cash to be debited for upgrading this property.
+     *
+     * @throws IllegalStateException if this property is a proxy and is not valid,
+     *                               if this property has no group
+     *                               (meaning it has no level), no owner,
+     *                               is not improvable,
+     *                               is already the maximum improvement level
+     *                               or if upgrading would cause
+     *                               improvement levels in this property's
+     *                               group to differ by more than one.
+     */
+    public abstract int upgrade();
+
+    /**
+     * Sets the group to which this property belongs.
+     * This method should only be called by <code>Property$Group</code>.
+     * Subclasses should provide an implementation of this method,
+     * but should never call it themselves.
+     * When group is set, level should also be set
+     * to <code>group.getLevels().getMin()</code>.
+     *
+     * @param group The group to set.
+     *
+     * @throws IllegalStateException if this property already has a group.
+     * @throws IllegalArgumentException if group is null.
+     */
+    protected abstract void setGroup(Group group);
 
     /**
      * Gets the current improvement level of this property.
      *
-     * @return The current improvement level of this property.
+     * @return The current improvement level of this property,
+     *         or null if this property has no level (because it has not group).
      */
-    public abstract Level getLevel();
+    public abstract PropertyLevel getLevel();
 
     /**
-     * Gets the value of this property whilst it is mortgaged.
+     * Gets the player that currently owns this property.
      *
-     * @return The value of this property whilst it is mortgaged.
-     */
-    public int getMortgagedValue()
-    {
-        return getValue() / MORTGAGE_FACTOR;
-    }
-
-    /**
-     * Gets the <code>Player</code> that owns this property.
-     *
-     * @return The <code>Player</code> that owns this property.
-     *
-     * @throws IllegalStateException if this property has no owner.
+     * @return The player that currently owns this property,
+     *         or null if this property has no owner.
      */
     public abstract Player getOwner();
 
     /**
-     * Gets the cost of rent of this property at its current improvement level
+     * Gets the unmortgaged value of this property.
      *
-     * @return The cost of rent of this property at its current improvement level.
+     * @return the unmortgaged value of this property.
      */
-    public int getRentCost()
-    {
-        return getRentCost(getLevel());
-    }
+    public abstract int getPrice();
 
     /**
-     * Gets the cost of rent of this property at the specified improvement level.
+     * Indicates if this property is a member of a group.
      *
-     * @param level The level of interest.
-     *
-     * @return The cost of rent of this property at the specified improvement level
-     */
-    public abstract int getRentCost(Level level);
-
-    /**
-     * Gets the cost of buying a house or hotel for this property.
-     *
-     * @return The cost of buying a house or hotel for this property.
-     *
-     * @throws IllegalStateException if this property has no group.
-     * This method depends on the group house cost.
-     */
-    public int getHouseCost()
-    {
-        if(!isGrouped()) {
-            throw new IllegalStateException(
-                "Property has no group, house cost is defined by Group.getHouseCost().");
-        }
-
-        return getGroup().getHouseCost();
-    }
-
-    /**
-     * Gets the value of this property.
-     *
-     * @return The value of this property.
-     */
-    public abstract int getValue();
-
-    /**
-     * Indicates if this property has been assigned a group.
-     *
-     * @return true if this property has been assigned a group; false otherwise.
+     * @return true if this property is a member of a group; false otherwise.
      */
     public abstract boolean isGrouped();
 
     /**
-     * Indicates if this property currently has an owner.
+     * Indicates if this property can be upgraded and downgraded.
+     * This method only indicates that a property is genrally improvable.
+     * If a property is maximum <code>(getLevel().isMax())</code>
+     * or minimum <code>(getLevel().isMin())</code> level
+     * calls to <code>upgrade</code> and <code>downgrade()</code>,
+     * respectively, will still fail.
      *
-     * @return true if this property  has an owner; false otherwise.
-     */
-    public abstract boolean isOwned();
-
-    /**
-     * Indicates if this property is currently improved.
-     * A property is improved when (getLevel() != Level.UNIMPROVED).
+     * @return true if this property can be upgraded and downgraded; false otherwise.
      *
-     * @return true if this property is improved; false otherwise.
+     * @throws IllegalStateException if this property has no group.
      */
-    public boolean isImproved()
+    public final boolean isImprovable()
     {
-        return getLevel() != Level.UNIMPROVED;
+        if(!isGrouped()) {
+            throw new IllegalStateException(
+                "Property has no group, improvable is defined by Property$Group.isImprovable().");
+        }
+
+        return getGroup().isImprovable();
     }
 
     /**
      * Indicates if this property is currently mortgaged.
      *
-     * @return true if this property is mortgaged; false otherwise.
+     * @return true if this property is currently mortgaged; false otherwise.
      */
     public abstract boolean isMortgaged();
 
     /**
+     * Indicates if this property is currently owned.
+     *
+     * @return true if this property is currently owned; false otherwise.
+     */
+    public abstract boolean isOwned();
+
+    /**
      * Indicates if this property is a valid proxy that can
-     * be used access mutator methods of a real property.
-     * This method doesn't make sense and is unsupported by real properties.
-     * Any mutator methods on a proxy property will raise
-     * an exception if this method returns false.
+     * be used access mutator methods of an underlying real property.
+     * This method always returns true for real properties.
+     * Any attempt to call a mutator method on a proxy property
+     * will raise an exception is this method returns false.
      *
-     * @return true if this property is a valid proxy, false otherwise
-     *
-     * @throws UnsupportedOperationException if this is a real property.
+     * @return true if this property is a valid proxy; false otherwise.
      */
     public abstract boolean isValid();
 
     /**
      * Mortgages this property.
      *
-     * @return the cash credited for mortgaging this property.
+     * @return the cash to be credited for mortgaging this property.
      *
-     * @throws IllegalStateException if this property a proxy and is not valid or if this property is already mortgaged.
+     * @throws IllegalStateException if this property a proxy and is not valid,
+     *                               has no owner, is already mortgaged or
+     *                               is improvable and is not the minimum level.
      */
     public abstract int mortgage();
 
     /**
-     *  Sells this property. Calling this method on a proxy property will invalidate it.
+     * Unregisters the specified property change listener
+     * with this <code>Property</code> object.
      *
-     *  @return the cash credited for selling this property.
-     *
-     * @throws IllegalStateException if this property is a proxy and is not valid or if this property has no owner.
+     * @param listener the listener to unregister.
      */
-    public abstract int sell();
-
-    @Override
-    public String toString()
+    public final void removePropertyChangeListener(
+        PropertyChangeListener listener)
     {
-        return String.format("Property{description=%s, group=%s, value=%d, owner=%s}",
-            getDescription(),
-            isGrouped() ? getGroup().getDescription() : "<none>",
-            getValue(),
-            isOwned() ? getOwner().getDescription() : "<none>");
+        pcs.removePropertyChangeListener(listener);
     }
-
-    public abstract Property trade(Player buyer, Player seller);
 
     /**
      * Unmortgages this property.
      *
-     * @return the cash debited for unmortgaging this property.
+     * @return the cash to be debited for unmortgaging this property.
      *
-     * @throws IllegalStateException if this property a proxy and is not valid or if this property is not mortgaged.
+     * @throws IllegalStateException if this property a proxy and is not valid,
+     *                               if this property is not mortgaged,
+     *                               or has no owner.
      */
     public abstract int unmortgage();
 
     /**
-     * Upgrades this property by one improvement level.
+     * Returns the <code>PropertyChangeSupport</code>
+     * associated with this <code>Property</code> object that is
+     * used to manage Java Bean property change event handlers.
+     * Any time the value of a property in this class changes
+     * this object should be used to notify observers.
      *
-     * @return the cash debited for downgrading this property.
-     *
-     * @throws IllegalStateException if this property a proxy and is not valid, is not grouped, is already the maximum improvement level or if upgrading would cause improvement levels in this property's group to differ by more than one.
+     * @return The <code>PropertyChangeSupport</code>
+     *         associated with this <code>Property</code>.
      */
-    public abstract int upgrade();
-
-    /**
-     * Represents a group of properties.
-     */
-    public static class Group
+    protected final PropertyChangeSupport getPropertyChangeSupport()
     {
-        private final int houseCost;
-        private final String description;
-        private final Property properties[];
+        return pcs;
+    }
 
-        /**
-         * Creates a new instance of Property$Group with the specified
-         * description (name), houseCost and properties.
-         * The properties should not already be a member of another group.
-         * 
-         * @param description The name of the group.
-         * @param houseCost The house cost of this group.
-         * @param properties The properties to be placed in this group.
-         * 
-         * @throws IllegalArgumentException if description or properties 
-         * are null or empty, if properties contains null elements
-         * or elements that are already in a group,
-         * or if houseCost is not positive.
-         */
-        public Group(String description, int houseCost, Property... properties)
+    public static final class Group
+    {
+        public static Group create(
+            String description,
+            Color color,
+            PropertyLevel.Group levels,
+            int houseCost,
+            Property... properties)
+        {
+            Group group = new Group(description, color, levels, houseCost, properties);
+            for(Property property : properties) {
+                property.setGroup(group);
+            }
+
+            return group;
+
+        }
+
+        private final Color color;
+        private final String description;
+        private final int improvementCost;
+        private final PropertyLevel.Group levels;
+        private final Property[] properties;
+
+        private Group(
+            String description,
+            Color color,
+            PropertyLevel.Group levels,
+            int houseCost,
+            Property... properties)
         {
             if(description == null) {
                 throw new IllegalArgumentException(
                     "description should not be null.");
             }
-
             if(description.isEmpty()) {
                 throw new IllegalArgumentException(
                     "description should not be empty.");
             }
+            this.description = description;
 
-            if(houseCost < 1) {
+            if(color == null) {
                 throw new IllegalArgumentException(
-                    "houseCost should be positive");
+                    "color should not be null.");
+            }
+            this.color = color;
+
+            if(levels == null) {
+                throw new IllegalArgumentException(
+                    "levels should not be null.");
+            }
+            this.levels = levels;
+
+            if(levels.isImprovable()) {
+                if(houseCost < 1) {
+                    throw new IllegalArgumentException(
+                        "houseCost should be positive");
+                }
+                this.improvementCost = houseCost;
+            }
+            else {
+                this.improvementCost = 0;
             }
 
             if(properties == null) {
@@ -370,52 +414,35 @@ public abstract class Property
                     "properties should not be null.");
             }
 
-            if(properties.length == 0) {
-                throw new IllegalArgumentException(
-                    "properties should not be empty.");
+            for(Property property : properties) {
+                if(property == null) {
+                    throw new IllegalArgumentException(
+                        "properties should not contain null elements.");
+                }
+                if(property.isGrouped()) {
+                    throw new IllegalArgumentException(
+                        "properties should not contain elements that are already in a group.");
+                }
             }
 
-            // Check properties elements aren't null
-            int i = 0;
-            while(i < properties.length && properties[i] != null) {
-                i++;
-            }
+            // Copy the array so that elements cannot
+            // be subsequently modified by external code.
+            this.properties = Arrays.copyOf(properties, properties.length);
+        }
 
-            if(i != properties.length) {
-                throw new IllegalArgumentException(
-                    String.format("properties should not contain null elements.\n"
-                        + "One or more elements in properties is null;\n"
-                        + "the first occurence of a null element is at index %d.",
-                    i));
-            }
-
-            // Check properties don't already have a group
-            i = 0;
-            while(i < properties.length && !properties[i].isGrouped()) {
-                i++;
-            }
-
-            if(i != properties.length) {
-                throw new IllegalArgumentException(
-                    String.format("properties should not contain elements that already have a group.\n"
-                        + "One or more elements in properties already has a group;\n"
-                        + "the first occurence of an element with a group is at index %d.",
-                    i));
-            }
-
-            this.description = description;
-            this.houseCost = houseCost;
-            this.properties = properties;
-
-            // Set this group for all properties
-            for(Property p : properties) {
-                p.setGroup(this);
-            }
+        /**
+         * Gets the color of this group.
+         *
+         * @return The color of this group.
+         */
+        public Color getColor()
+        {
+            return color;
         }
 
         /**
          * Gets the name of this group.
-         * 
+         *
          * @return The name of this group.
          */
         public String getDescription()
@@ -425,12 +452,12 @@ public abstract class Property
 
         /**
          * Gets the highest improvement level of any property in this group.
-         * 
+         *
          * @return The highest improvement level of any property in this group.
          */
-        public Level getHighestLevel()
+        public PropertyLevel getHighestLevel()
         {
-            Level max = properties[0].getLevel();
+            PropertyLevel max = properties[0].getLevel();
             for(int i = 1; i < properties.length; i++) {
                 if(properties[i].getLevel().compareTo(max) > 0) {
                     max = properties[i].getLevel();
@@ -441,23 +468,40 @@ public abstract class Property
         }
 
         /**
-         * Gets the cost of buying houses (improving) for properties in this group.
-         * 
-         * @return the cost of buying houses in this group.
+         * Gets the cost of improving properties in this group.
+         *
+         * @return the cost of improving properties in this group.
+         *
+         * @throws UnsupportedOperationException if this group is not improvable.
          */
-        public int getHouseCost()
+        public int getImprovementCost()
         {
-            return houseCost;
+            if(!isImprovable()) {
+                throw new UnsupportedOperationException(
+                    "Property group is not improvable.");
+            }
+
+            return improvementCost;
+        }
+
+        /**
+         * Gets the level group associated with this property group.
+         *
+         * @return The level group associated with this property group
+         */
+        public PropertyLevel.Group getLevels()
+        {
+            return levels;
         }
 
         /**
          * Gets the lowest improvement level of any property in this group.
-         * 
+         *
          * @return The lowest improvement level of any property in this group.
          */
-        public Level getLowestLevel()
+        public PropertyLevel getLowestLevel()
         {
-            Level min = properties[0].getLevel();
+            PropertyLevel min = properties[0].getLevel();
             for(int i = 1; i < properties.length; i++) {
                 if(properties[i].getLevel().compareTo(min) < 0) {
                     min = properties[i].getLevel();
@@ -468,26 +512,45 @@ public abstract class Property
         }
 
         /**
-         * Gets the owner of this group.
-         * The owner is the player who owns all the properties in thsi group.
-         * 
-         * @return the owner of this group.
+         * Gets the player that currently owns all properties in this group.
+         *
+         * @return The player that currently owns all properties in this group
+         *         or null if there is no such player.
          */
         public Player getOwner()
         {
             if(!isOwned()) {
-                throw new IllegalStateException("Group has no owner.");
+                return null;
             }
 
             return properties[0].getOwner();
         }
 
         /**
-         * Indicates if this group currently has an owner.
-         * This group has an owner if and only if all the properties
-         * in this group have the same owner.
-         * 
-         * @return true if this group has an owner; false otherwise.
+         * Gets a read-only list of the properties in this group.
+         *
+         * @return A read-only list of properties in this group.
+         */
+        public List<Property> getProperties()
+        {
+            return Collections.unmodifiableList(Arrays.asList(properties));
+        }
+
+        /**
+         * Indicates if properties in this group can be upgraded and downgraded.
+         *
+         * @return true if properties in this group can be upgraded and downgraded;
+         *         false otherwise.
+         */
+        public boolean isImprovable()
+        {
+            return getLevels().isImprovable();
+        }
+
+        /**
+         * Indicates if the same player currently owns all properties in this group.
+         *
+         * @return true if the same player currently owns all properties in this group; false otherwise.
          */
         public boolean isOwned()
         {
@@ -504,153 +567,6 @@ public abstract class Property
             }
 
             return i == properties.length;
-        }
-
-        @Override
-        public String toString()
-        {
-            return String.format(
-                "Group{description=%s, properties=%s, houseCost=%d}",
-                getDescription(),
-                Arrays.toString(properties),
-                getHouseCost());
-        }
-    }
-
-    /**
-     * Represents the improvement level of a property.
-     */
-    public static final class Level implements Comparable<Level>
-    {
-        public static final int LEVEL_COUNT = 6;
-
-        public static final Level UNIMPROVED;
-        public static final Level ONE_HOUSE;
-        public static final Level TWO_HOUSES;
-        public static final Level THREE_HOUSES;
-        public static final Level FOUR_HOUSES;
-        public static final Level ONE_HOTEL;
-
-        private static final Level[] LEVELS;
-
-        // Static initialiser
-        // Used to assert that LEVELS is instantiated correctly.
-        static {
-            LEVELS = new Level[] {
-                UNIMPROVED = new Level("UNIMPROVED"),
-                ONE_HOUSE = new Level("ONE_HOUSE"),
-                TWO_HOUSES = new Level("TWO_HOUSES"),
-                THREE_HOUSES = new Level("THREE_HOUSES"),
-                FOUR_HOUSES = new Level("FOUR_HOUSES"),
-                ONE_HOTEL = new Level("ONE_HOTEL")
-            };
-
-            assert LEVELS.length == LEVEL_COUNT : String.format(
-                "Level.LEVELS should contain %d (Level.LEVEL_COUNT) elements not %d.",
-                LEVEL_COUNT,
-                LEVELS.length);
-        }
-
-        private static int indexOf(Level level)
-        {
-            int i = 0;
-            while(LEVELS[i] != level) {
-                i++;
-            }
-
-            return i;
-        }
-
-        private final String description;
-
-        private Level(String description)
-        {
-            // Check argument
-            assert description != null : "description should not be null.";
-            assert !description.isEmpty() : "description should not be empty.";
-
-            // Assign field
-            this.description = description;
-        }
-
-        @Override
-        public int compareTo(Level other)
-        {
-            return Integer.compare(getValue(), other.getValue());
-        }
-
-        /**
-         * Gets the improvement level directly above this level.
-         * 
-         * @return the improvement level directly above this level.
-         * 
-         * @throws IllegalStateException if this level is the highest level.
-         */
-        public Level getNext()
-        {
-            if(isMax()) {
-                throw new IllegalStateException(
-                    String.format(
-                        "%s is the highest level.",
-                        toString()));
-            }
-
-            return LEVELS[indexOf(this) + 1];
-        }
-
-        /**
-         * Gets the improvement level directly below this level.
-         * 
-         * @return the improvement level directly below this level.
-         * 
-         * @throws IllegalStateException if this level is the lowest level.
-         */
-        public Level getPrevious()
-        {
-            if(isMin()) {
-                throw new IllegalStateException(
-                    String.format(
-                        "%s is the lowest level.",
-                        toString()));
-            }
-
-            return LEVELS[indexOf(this) - 1];
-        }
-
-        /**
-         * Gets the integer value associated with this level.
-         * 
-         * @return the integer value associated with this level.
-         */
-        public int getValue()
-        {
-            return indexOf(this);
-        }
-
-        /**
-         * Indicates if this level is the highest level.
-         * 
-         * @return true if this level is the highest level; false otherwise.
-         */
-        public boolean isMax()
-        {
-            return indexOf(this) == LEVELS.length - 1;
-        }
-
-        /**
-         * Indicates if this level is the lowest level.
-         * 
-         * @return true if this level is the lowest level; false otherwise.
-         */
-        public boolean isMin()
-        {
-            return indexOf(this) == 0;
-        }
-
-        @Override
-        public String toString()
-        {
-            return String.format("Level.%s", description);
         }
     }
 }

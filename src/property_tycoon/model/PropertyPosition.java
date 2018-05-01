@@ -1,25 +1,20 @@
- /*
- * Meme Team Software Engineering Project
- * Property Tycoon
- */
 package property_tycoon.model;
 
 /**
- *
  * @author Matt
+ * @version 01/05/2018
  */
-class PropertyPosition extends Property implements Board.Position
+public final class PropertyPosition extends Property implements BoardPosition
 {
     private final Property realProperty;
 
     public PropertyPosition(Property realProperty)
     {
-        // Check arguments
         assert realProperty != null : "realProperty should not be null";
         assert realProperty.isGrouped() : "realProperty should have a group.";
-
-        // Assign fields
         this.realProperty = realProperty;
+
+        // TODO: Listen for events on realProperty and forward them to listeners of this property
     }
 
     @Override
@@ -31,7 +26,25 @@ class PropertyPosition extends Property implements Board.Position
     @Override
     public int downgrade()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "downgrade() is not supported by property positions.");
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(this == o) {
+            return true;
+        }
+        if(o == null) {
+            return false;
+        }
+        if(!(o instanceof Property)) {
+            return false;
+        }
+
+        Property position = (Property)o;
+        return position.equals(realProperty);
     }
 
     @Override
@@ -50,11 +63,11 @@ class PropertyPosition extends Property implements Board.Position
     public void setGroup(Group g)
     {
         throw new UnsupportedOperationException(
-            "setGroup() is not supported by proxy properties.");
+            "setGroup() is not supported by property positions.");
     }
 
     @Override
-    public Level getLevel()
+    public PropertyLevel getLevel()
     {
         return realProperty.getLevel();
     }
@@ -66,15 +79,21 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public int getRentCost(Level l)
+    public int getPrice()
     {
-        return realProperty.getRentCost();
+        return realProperty.getPrice();
     }
 
     @Override
-    public int getValue()
+    public int getRentPrice(PropertyLevel level, int diceValue)
     {
-        return realProperty.getValue();
+        return realProperty.getRentPrice(level, diceValue);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return realProperty.hashCode();
     }
 
     @Override
@@ -84,50 +103,64 @@ class PropertyPosition extends Property implements Board.Position
     }
 
     @Override
-    public boolean isOwned()
-    {
-        return realProperty.isOwned();
-    }
-
-    @Override
     public boolean isMortgaged()
     {
         return realProperty.isMortgaged();
     }
 
     @Override
+    public boolean isOwned()
+    {
+        return realProperty.isOwned();
+    }
+
+    @Override
     public boolean isValid()
     {
-        throw new UnsupportedOperationException();
+        return true;
+    }
+
+    @Override
+    public void land(Player player)
+    {
+        if(isOwned() && !getOwner().equals(this)) {
+            player.payRent(this, 0); // TODO: get dice value somehow
+        }
+
+        // TODO: Deal with unowned properties
     }
 
     @Override
     public int mortgage()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "mortgage() is not supported by property positions.");
     }
 
     @Override
     public int sell()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "sell() is not supported by property positions.");
     }
 
     @Override
-    public Property trade(Player buyer, Player seller)
+    public void step(Player player)
     {
-        throw new UnsupportedOperationException();
+        // TODO: Implement
     }
 
     @Override
     public int unmortgage()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "unmortgage() is not supported by property positions.");
     }
 
     @Override
     public int upgrade()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "upgrade() is not supported by property positions.");
     }
 }

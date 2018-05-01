@@ -1,70 +1,72 @@
-/*
- * Meme Team Software Engineering Project
- * Property Tycoon
- */
 package property_tycoon.model;
 
 import java.util.Arrays;
 
 /**
- *
- * @author Matt
+ * @author Matt and Adam
+ * @version 30/04/2018
  */
-
-
-class PropertyImpl extends Property
+final class PropertyImpl extends Property
 {
+    private static final int STATION_BASE_RENT = 25;
+    private static final int UTILITY_HIGH_RENT = 10;
+    private static final int UTILITY_LOW_RENT = 4;
+
     private final String description;
     private Group group;
     private boolean isMortgaged;
-    private Level level;
+    private PropertyLevel level;
     private Player owner;
-    private final int[] rent;
-    private final int value;
+    private final int price;
+    private final int[] rents;
 
-    public PropertyImpl(String description, int value, int[] rent)
+    public PropertyImpl(String description, int price, int[] rents)
     {
         // Check arguments
-        assert description != null : "description should not be null.";
-        assert !description.isEmpty() : "description should not be empty.";
-        assert value > 0 : "value should be positive.";
+        if(description == null) {
+            throw new IllegalArgumentException(
+                "description should not be null.");
+        }
+        if(description.isEmpty()) {
+            throw new IllegalArgumentException(
+                "description should not be empty.");
+        }
+        this.description = description;
 
-        assert rent != null : "rent should not be null.";
-        assert rent.length == Level.LEVEL_COUNT : 
-            String.format(
-                "rent should contain %d (Level.LEVEL_COUNT) elements not %d.", 
-                Level.LEVEL_COUNT, 
-                rent.length);
+        if(price < 1) {
+            throw new IllegalArgumentException(
+                "price should be positive.");
+        }
+        this.price = price;
 
-        // Check rent elements are positive
-        int i = 0;
-        while(i < rent.length && rent[i] > 0) {
-            i++;
+        if(rents != null) {
+            if(rents.length == 0) {
+                throw new IllegalArgumentException("rents should not be empty.");
+            }
+
+            // Copy the array so that elements cannot
+            // be subsequently modified by external code.
+            this.rents = Arrays.copyOf(rents, rents.length);
+        }
+        else {
+            this.rents = null;
         }
 
-        assert i == rent.length :
-            "rent should only contain positive elements.";
-
-        // Assign fields
-        this.description = description;
-        this.value = value;
-
-        // Copy the array so that elements cannot
-        // be subsequently modified by external code.
-        this.rent = Arrays.copyOf(rent, rent.length);
-
+        level = null;
+        isMortgaged = false;
         group = null;
         owner = null;
-        level = Level.UNIMPROVED;
-        isMortgaged = false;
     }
 
     @Override
     public Property buy(Player buyer)
     {
+        if(!isGrouped()) {
+            throw new IllegalStateException("Property does not have a group.");
+        }
+
         if(isOwned()) {
-            throw new IllegalStateException("Property already has an owner."
-                + " It must be sold before being rebought.");
+            throw new IllegalStateException("Property has an owner");
         }
 
         if(buyer == null) {
@@ -72,6 +74,9 @@ class PropertyImpl extends Property
         }
 
         owner = buyer;
+        getPropertyChangeSupport().firePropertyChange("owner", null, owner);
+        getPropertyChangeSupport().firePropertyChange("owned", false, true);
+
         return new PropertyProxy(this);
     }
 
@@ -79,23 +84,30 @@ class PropertyImpl extends Property
     public int downgrade()
     {
         if(!isGrouped()) {
-            throw new IllegalStateException("Property is not grouped.");
+            throw new IllegalArgumentException("Property has no group.");
         }
-        
+        if(!isImprovable()) {
+            throw new UnsupportedOperationException(
+                "Property is not improvable.");
+        }
+        if(!isOwned()) {
+            throw new IllegalStateException("Property has no owner.");
+        }
+        if(getLevel().isMin()) {
+            throw new IllegalStateException("Property cannot be downgraded.\n"
+                + "It is already at the minimum improvment level.");
+        }
         if(getLevel().compareTo(getGroup().getHighestLevel()) < 0) {
-            throw new IllegalStateException("Property cannot be downgraded."
-                + " Doing so would cause improvment levels"
+            throw new IllegalStateException("Property cannot be downgraded.\n"
+                + "Doing so would cause improvment levels"
                 + " in this group to differ by more than one.");
         }
 
-        if(getLevel().isMin()) {
-            throw new IllegalStateException("Property cannot be downgraded."
-                + " It is already at the minimum improvment level.");
-        }
+        PropertyLevel old = getLevel();
+        level = old.getPrevious();
+        getPropertyChangeSupport().firePropertyChange("level", old, level);
 
-        level = getLevel().getPrevious();
-        
-        return getHouseCost();
+        return getImprovementCost();
     }
 
     @Override
@@ -107,30 +119,92 @@ class PropertyImpl extends Property
     @Override
     public Group getGroup()
     {
-        if(!isGrouped()) {
-            throw new IllegalStateException();
-        }
-
         return group;
     }
 
     @Override
-    public void setGroup(Group g)
+    public int getRentPrice(PropertyLevel level, int diceValue)
     {
-        if(isGrouped()) {
-            throw new IllegalStateException("Property is already in a group.\n"
-                + "A Property can only be assigned a group once.");
+        if(!isGrouped()) {
+            throw new IllegalStateException("Property has no group.");
         }
 
-        if(g == null) {
-            throw new IllegalArgumentException();
+        PropertyLevel.Group levels = getGroup().getLevels();
+        if(!levels.contains(level)) {
+            throw new IllegalArgumentException(
+                "level is not valid for this property.");
         }
 
-        group = g;
+        if(levels.equals(PropertyLevel.Group.REGULAR_LEVELS)) {
+            return rents[level.getIndex()];
+        }
+        else if(levels.equals(PropertyLevel.Group.STATION_LEVELS)) {
+            return STATION_BASE_RENT * (int)Math.pow(2, level.getIndex());
+        }
+        else if(levels.equals(PropertyLevel.Group.UTILITY_LEVELS)) {
+            switch(level.getIndex()) {
+                case 0:
+                    return UTILITY_LOW_RENT * diceValue;
+                case 1:
+                    return UTILITY_HIGH_RENT * diceValue;
+            }
+        }
+
+        throw new AssertionError("levels has an invalid value.");
     }
 
     @Override
-    public Level getLevel()
+    public int upgrade()
+    {
+        if(!isGrouped()) {
+            throw new IllegalArgumentException("Property has no group.");
+        }
+        if(!isImprovable()) {
+            throw new UnsupportedOperationException(
+                "Property is not improvable.");
+        }
+        if(!isOwned()) {
+            throw new IllegalStateException("Property has no owner.");
+        }
+        if(getLevel().isMax()) {
+            throw new IllegalStateException("Property cannot be upgraded.\n"
+                + "It is already at the maximum improvment level.");
+        }
+        if(getLevel().compareTo(getGroup().getLowestLevel()) > 0) {
+            throw new IllegalStateException("Property cannot be upgraded.\n"
+                + "Doing so would cause improvment levels"
+                + " in this group to differ by more than one.");
+        }
+
+        PropertyLevel old = getLevel();
+        level = old.getNext();
+        getPropertyChangeSupport().firePropertyChange("level", old, level);
+
+        return getImprovementCost();
+    }
+
+    @Override
+    protected void setGroup(Group group)
+    {
+        if(isGrouped()) {
+            throw new IllegalStateException("Property already has a group.");
+        }
+
+        if(group == null) {
+            throw new IllegalArgumentException("group should not be null.");
+        }
+
+        // TODO: Check levels
+        // TODO: Check rents
+        this.level = group.getLevels().getMin();
+        getPropertyChangeSupport().firePropertyChange("level", null, level);
+
+        this.group = group;
+        getPropertyChangeSupport().firePropertyChange("group", null, group);
+    }
+
+    @Override
+    public PropertyLevel getLevel()
     {
         return level;
     }
@@ -138,29 +212,13 @@ class PropertyImpl extends Property
     @Override
     public Player getOwner()
     {
-        if(!isOwned()) {
-            throw new IllegalStateException("Property does not have an owner.");
-        }
-
         return owner;
     }
 
     @Override
-    public int getRentCost()
+    public int getPrice()
     {
-        return rent[getLevel().getValue()];
-    }
-
-    @Override
-    public int getRentCost(Level l)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int getValue()
-    {
-        return value;
+        return price;
     }
 
     @Override
@@ -170,100 +228,84 @@ class PropertyImpl extends Property
     }
 
     @Override
-    public boolean isOwned()
-    {
-        return owner != null;
-    }
-
-    @Override
-    public int upgrade()
-    {
-        if(!isGrouped()) {
-            throw new IllegalStateException("Property is not grouped.");
-        }
-        
-        if(getLevel().compareTo(getGroup().getLowestLevel()) > 0) {
-            throw new IllegalStateException("Property cannot be upgraded."
-                + " Doing so would cause improvment levels"
-                + " in this group to differ by more than one.");
-        }
-
-        if(getLevel().isMax()) {
-            throw new IllegalStateException("Property cannot be upgraded."
-                + " It is already at the maximum improvment level.");
-        }
-
-        level = getLevel().getNext();
-        
-        return getHouseCost();
-    }
-
-    @Override
     public boolean isMortgaged()
     {
         return isMortgaged;
     }
 
     @Override
+    public boolean isOwned()
+    {
+        return owner != null;
+    }
+
+    @Override
     public boolean isValid()
     {
         throw new UnsupportedOperationException(
-            "isValid() is not supported by real properties.");
+            "Real properties do not support isValid().");
     }
 
     @Override
     public int mortgage()
     {
         if(!isOwned()) {
-            throw new IllegalStateException(
-                "Property has no owner so cannot be morgaged.");
+            throw new IllegalStateException("Property is not owned.\n"
+                + "It must be owned to be mortgaged.");
         }
 
         if(isMortgaged()) {
-            throw new IllegalStateException(
-                "Property is already mortgaged.");
+            throw new IllegalStateException("Property is already mortgaged.");
+        }
+
+        if(isImprovable() && !getLevel().isMin()) {
+            throw new IllegalStateException("Property is improved.\n"
+                + "It must be at its lowest improvement level before being mortgaged.");
         }
 
         isMortgaged = true;
-        
-        return getValue() - getMortgagedValue();
+        getPropertyChangeSupport().firePropertyChange("mortgaged", false, true);
+        return getPrice() - getMortgagedPrice();
     }
 
     @Override
     public int sell()
     {
         if(!isOwned()) {
-            throw new IllegalStateException("Property has no owner.");
+            throw new IllegalStateException("Property is not owned.");
         }
 
-        owner = null;
+        if(isImprovable() && !getLevel().isMin()) {
+            throw new IllegalStateException("Property is improved.\n"
+                + "It must be at its lowest improvement level before being sold.");
+        }
 
         if(isMortgaged()) {
-            isMortgaged = false;
-            return getMortgagedValue();
+            unmortgage();
         }
-        else {
-            return getValue();
-        }
-    }
 
-    @Override
-    public Property trade(Player buyer, Player seller)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Player old = owner;
+        owner = null;
+        getPropertyChangeSupport().firePropertyChange("owner", old, null);
+        getPropertyChangeSupport().firePropertyChange("owned", true, false);
+
+        return getPrice();
     }
 
     @Override
     public int unmortgage()
     {
-        if(isMortgaged()) {
-            throw new IllegalStateException(
-                "Property is not mortgaged.");
+        if(!isOwned()) {
+            throw new IllegalStateException("Property is not owned.");
+        }
+
+        if(!isMortgaged()) {
+            throw new IllegalStateException("Property is not mortgaged.");
         }
 
         isMortgaged = false;
-        
-        return getValue() - getMortgagedValue();
+        getPropertyChangeSupport().firePropertyChange("mortgaged", true, false);
+        return getPrice() - getMortgagedPrice();
     }
 
 }

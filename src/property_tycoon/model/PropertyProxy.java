@@ -1,28 +1,23 @@
-/*
- * Meme Team Software Engineering Project
- * Property Tycoon
- */
 package property_tycoon.model;
 
 /**
- *
  * @author Matt
+ * @version 25/04/2018
  */
-class PropertyProxy extends Property
+final class PropertyProxy extends Property
 {
     private boolean isValid;
     private final Property realProperty;
 
     public PropertyProxy(Property realProperty)
     {
-        // Check arguments
         assert realProperty != null : "realProperty should not be null";
         assert realProperty.isGrouped() : "realProperty should have a group.";
-
-        // Assign fields
         this.realProperty = realProperty;
 
         isValid = true;
+
+        // TODO: Listen for events on realProperty and forward them to listeners of this property
     }
 
     @Override
@@ -43,6 +38,23 @@ class PropertyProxy extends Property
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        if(this == o) {
+            return true;
+        }
+        if(o == null) {
+            return false;
+        }
+        if(!(o instanceof Property)) {
+            return false;
+        }
+
+        Property position = (Property)o;
+        return position.equals(realProperty);
+    }
+
+    @Override
     public String getDescription()
     {
         return realProperty.getDescription();
@@ -57,12 +69,12 @@ class PropertyProxy extends Property
     @Override
     public void setGroup(Group g)
     {
-          throw new UnsupportedOperationException(
-              "setGroup() is not supported by proxy properties.");
+        throw new UnsupportedOperationException(
+            "setGroup() is not supported by proxy properties.");
     }
 
     @Override
-    public Level getLevel()
+    public PropertyLevel getLevel()
     {
         return realProperty.getLevel();
     }
@@ -74,15 +86,21 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public int getRentCost(Level l)
+    public int getPrice()
     {
-        return realProperty.getRentCost();
+        return realProperty.getPrice();
     }
 
     @Override
-    public int getValue()
+    public int getRentPrice(PropertyLevel level, int diceValue)
     {
-        return realProperty.getValue();
+        return realProperty.getRentPrice(level, diceValue);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return realProperty.hashCode();
     }
 
     @Override
@@ -92,15 +110,15 @@ class PropertyProxy extends Property
     }
 
     @Override
-    public boolean isOwned()
-    {
-        return realProperty.isOwned();
-    }
-
-    @Override
     public boolean isMortgaged()
     {
         return realProperty.isMortgaged();
+    }
+
+    @Override
+    public boolean isOwned()
+    {
+        return realProperty.isOwned();
     }
 
     @Override
@@ -113,7 +131,7 @@ class PropertyProxy extends Property
     public int mortgage()
     {
         if(!isValid()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Proxy property is not valid.");
         }
 
         return realProperty.mortgage();
@@ -123,27 +141,18 @@ class PropertyProxy extends Property
     public int sell()
     {
         if(!isValid()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Proxy property is not valid.");
         }
 
-        int value = realProperty.sell();
-
         isValid = false;
-
-        return value;
-    }
-
-    @Override
-    public Property trade(Player buyer, Player seller)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return realProperty.sell();
     }
 
     @Override
     public int unmortgage()
     {
         if(!isValid()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Proxy property is not valid.");
         }
 
         return realProperty.unmortgage();
@@ -158,5 +167,4 @@ class PropertyProxy extends Property
 
         return realProperty.upgrade();
     }
-
 }

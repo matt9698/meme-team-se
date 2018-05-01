@@ -6,3 +6,4 @@ ${licensePrefix}Property Tycoon
 <#if licenseLast??>
 ${licenseLast}
 </#if>
+
