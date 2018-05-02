@@ -2,7 +2,7 @@ package property_tycoon.model;
 
 /**
  * @author Matt
- * @version 25/04/2018
+ * @version 02/05/2018
  */
 final class PropertyProxy extends Property
 {
@@ -17,7 +17,9 @@ final class PropertyProxy extends Property
 
         isValid = true;
 
-        // TODO: Listen for events on realProperty and forward them to listeners of this property
+        // Forward events from realProperty to listeners
+        realProperty.addPropertyChangeListener(
+            e -> this.getPropertyChangeSupport().firePropertyChange(e));
     }
 
     @Override

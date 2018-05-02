@@ -4,28 +4,28 @@ Property Tycoon
 */
 
 #propertyPosition {
-    -fx-pref-width: 78; /* unit - 2 * border*/
-    -fx-pref-height: 118; /* unit * 1.5 - 2 * border*/
+    -fx-pref-width: 96; /* unit - 2 * border*/
+    -fx-pref-height: 146; /* unit * 1.5 - 2 * border*/
 
     -fx-border-style: solid;
     -fx-border-color: black;
-    -fx-border-width: 3 1.5 3 1.5; /* border */
+    -fx-border-width: 4 2 4 2; /* border */
 
     -fx-background-color: #bfdbae;
 }
 
 #banner {
-    -fx-pref-width: 78; /* unit - 2 * border */
-    -fx-pref-height: 28; /* unit * 0.375 - 2 * border */
+    -fx-pref-width: 96; /* unit - 2 * border */
+    -fx-pref-height: 33.5; /* unit * 0.375 - 2 * border */
 
     -fx-border-style: solid;
     -fx-border-color: black;
-    -fx-border-width: 0 0 3 0; /* border */
+    -fx-border-width: 0 0 4 0; /* border */
 }
 
 .label {
     -fx-font-family: 'Helvetica';
-    -fx-font-size: 10;
+    -fx-font-size: 12;
 
     -fx-text-alignment: center;
 }

@@ -20,6 +20,10 @@ class CardProxy extends Card
         this.realCard = realCard;
 
         isValid = true;
+
+        // Forward events from realCard to listeners
+        realCard.addPropertyChangeListener(
+            e -> this.getPropertyChangeSupport().firePropertyChange(e));
     }
 
     @Override
