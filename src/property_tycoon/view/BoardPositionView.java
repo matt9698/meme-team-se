@@ -5,6 +5,7 @@
 package property_tycoon.view;
 
 import javafx.scene.layout.StackPane;
+import property_tycoon.model.BoardPosition;
 
 /**
  * Control representing a position on the game board.
@@ -12,6 +13,7 @@ import javafx.scene.layout.StackPane;
  * @author Matt
  * @version 01/05/2018
  */
- public abstract class BoardPosition extends StackPane
+ public abstract class BoardPositionView extends StackPane
  {
+    public abstract BoardPosition getModel();
  }

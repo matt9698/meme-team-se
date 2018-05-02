@@ -4,16 +4,13 @@
  */
 package property_tycoon.view;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import property_tycoon.model.Property;
 import javafx.scene.Group;
+import property_tycoon.model.PropertyPosition;
 
 public class Board extends GridPane
 {
-   private BoardPositionMapping[] BOARD_POS_MAPPINGS =
+   private final BoardPositionMapping[] BOARD_POS_MAPPINGS =
       new BoardPositionMapping[] {
           // Left
           new BoardPositionMapping(0, 10),
@@ -65,7 +62,8 @@ public class Board extends GridPane
    };
 
    private property_tycoon.model.Board model;
-   private BoardPosition[] positions;
+   private BoardPositionView[] positions;
+   private BoardPositionView selected;
 
    public Board(property_tycoon.model.Board model)
    {
@@ -77,15 +75,21 @@ public class Board extends GridPane
      }
       this.model = model;
 
-      positions = new BoardPosition[BOARD_POS_MAPPINGS.length];
+      positions = new BoardPositionView[BOARD_POS_MAPPINGS.length];
       for(int i = 0; i < positions.length; i++) {
           property_tycoon.model.BoardPosition pos = model.getPosition(i);
           if(pos instanceof property_tycoon.model.PropertyPosition) {
-              positions[i] = PropertyPosition.create((Property)pos);
+              positions[i] = new PropertyPositionView((PropertyPosition)pos);
               positions[i].setRotate(BOARD_POS_MAPPINGS[i].getRotation());
+              positions[i].setOnMouseClicked(e -> selected = (BoardPositionView)e.getSource());
               add(new Group(positions[i]), BOARD_POS_MAPPINGS[i].getColumn(), BOARD_POS_MAPPINGS[i].getRow());
              
           }
       }
+   }
+   
+   public BoardPositionView getSelectedPosition()
+   {
+       return selected;
    }
 }

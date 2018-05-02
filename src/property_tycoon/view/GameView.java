@@ -7,7 +7,11 @@ package property_tycoon.view;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import property_tycoon.model.Player;
@@ -24,6 +28,8 @@ public class GameView extends Application
     {
         Application.launch(args);
     }
+    
+    private Board board;
 
     @Override
     public void start(Stage stage) throws IOException
@@ -127,13 +133,31 @@ public class GameView extends Application
 
         property_tycoon.model.Board b = new property_tycoon.model.Board(positions, players);
 
-        Board board = new Board(b);
+        Label selected = new Label("No property selected");
+        
+        board = new Board(b);
+        board.setOnMouseClicked(e -> selected.setText(
+            board.getSelectedPosition() instanceof PropertyPositionView 
+                ? ((PropertyPositionView)board.getSelectedPosition()).getModel().getDescription() + " selected" : "No property selected" ));
+        
+        BorderPane bp = new BorderPane(board);
+        
+        Button buy = new Button("Buy");
+        buy.setOnAction(e ->  { if(board.getSelectedPosition() instanceof PropertyPositionView) { p.buy(((PropertyPositionView)board.getSelectedPosition()).getModel()); }});
+        
+        Button sell = new Button("Sell");
+        sell.setOnAction(e ->  { if(board.getSelectedPosition() instanceof PropertyPositionView) { p.sell(((PropertyPositionView)board.getSelectedPosition()).getModel()); }});
+        
+        HBox buttonBar = new HBox(selected, buy, sell);
+        bp.setBottom(buttonBar);
+        
+        ScrollPane sp = new ScrollPane(bp);
+        
 
-        Scene scene = new Scene(board);
+        Scene scene = new Scene(sp);
 
         stage.setTitle("Property Tycoon");
         stage.setScene(scene);
         stage.show();
     }
-
 }

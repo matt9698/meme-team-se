@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.Label?>
-<?import property_tycoon.view.PropertyPosition?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import property_tycoon.view.PropertyPositionView?>
 
-<fx:root fx:id="propertyPosition" type="PropertyPosition" xmlns:fx="http://javafx.com/fxml">
+<fx:root fx:id="propertyPosition" type="PropertyPositionView" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@PropertyPosition.css" />
     </stylesheets>
