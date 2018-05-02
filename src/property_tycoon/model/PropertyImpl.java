@@ -194,9 +194,30 @@ final class PropertyImpl extends Property
             throw new IllegalArgumentException("group should not be null.");
         }
 
-        // TODO: Check levels
-        // TODO: Check rents
-        this.level = group.getLevels().getMin();
+        levels = group.getLevels();
+        if(levels != PropertyLevel.Group.REGULAR_LEVELS
+            && levels != PropertyLevel.Group.STATION_LEVELS
+            && levels != PropertyLevel.Group.UTILITY_LEVELS) {
+                throw new IllegalArgumentException(
+                    "group.getLevels() should be one of:\n"
+                        + "PropertyLevel.Group.REGULAR_LEVELS\n"
+                        + "PropertyLevel.Group.STATION_LEVELS\n"
+                        + "PropertyLevel.Group.UTILITY_LEVELS\n"
+                        + "for the default property (implementation).");
+        }
+
+        if(levels == PropertyLevel.Group.REGULAR_LEVELS) {
+            if(rents == null) {
+                throw new IllegalArgumentException(
+                    "group should not be PropertyLevel.Group.REGULAR_LEVELS"
+                        + " for a default property created with no rents array.");
+            }
+            if(rents.length != level.getLevelCount()) {
+                throw new IllegalStateException(
+                    "Property rents array does not contain the corret number of elements");
+            }
+        }
+        this.level = levels.getMin();
         getPropertyChangeSupport().firePropertyChange("level", null, level);
 
         this.group = group;
