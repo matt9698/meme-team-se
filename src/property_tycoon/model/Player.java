@@ -4,6 +4,8 @@
  */
 package property_tycoon.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,9 +16,9 @@ import java.util.List;
  */
 public class Player
 {
-    private String description;
+    private final String description;
     private int cash;
-    private List<Property> properties;
+    private final List<Property> properties;
     private List<Card> cards;
     private Board board;
 
@@ -26,6 +28,33 @@ public class Player
         cash = 1000;
         description = "ollmor";
         properties = new ArrayList<>();
+    }
+    
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
+    /**
+     * Registers the specified property change listener
+     * with this <code>Property</code> object.
+     *
+     * @param listener the listener to register.
+     */
+    public final void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        // TODO: Investigate using Properties
+        // TODO: Investigate using weak references
+        pcs.addPropertyChangeListener(listener);
+    }
+    
+    /**
+     * Unregisters the specified property change listener
+     * with this <code>Property</code> object.
+     *
+     * @param listener the listener to unregister.
+     */
+    public final void removePropertyChangeListener(
+        PropertyChangeListener listener)
+    {
+        pcs.removePropertyChangeListener(listener);
     }
 
     public int getCash()
@@ -42,6 +71,11 @@ public class Player
     {
         return Collections.unmodifiableList(properties);
     }
+    
+    public Property getProperty(int index)
+    {
+        return properties.get(index);
+    }
 
     public List<Card> getCards()
     {
@@ -51,7 +85,9 @@ public class Player
     private void setCash(int amount)
     {
         assert amount >= 0 : "amount should not be negative.";
+        int old = cash;
         cash = amount;
+        pcs.firePropertyChange("cash", old, getCash());
     }
 
     public void buy(Property property)
@@ -65,8 +101,12 @@ public class Player
                 "Player does not have enough cash to buy property.");
         }
 
-        properties.add(property.buy(this));
+        Property newProp = property.buy(this);
+        properties.add(newProp);
+        pcs.firePropertyChange("property", null, newProp);
         setCash(getCash() - property.getPrice());
+        
+        
     }
 
     public void sell(Property property)
@@ -81,6 +121,7 @@ public class Player
         }
 
         properties.remove(property);
+        pcs.firePropertyChange("property", property, null);
         setCash(getCash() + property.sell());
     }
 

@@ -47,6 +47,12 @@ public abstract class Property
     }
 
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    
+    @Override
+    public String toString()
+    {
+        return getDescription();
+    }
 
     /**
      * Registers the specified property change listener
