@@ -46,12 +46,7 @@ public abstract class Property
             description, price, null);
     }
 
-    private PropertyChangeSupport pcs;
-
-    public Property()
-    {
-        pcs = new PropertyChangeSupport(this);
-    }
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     /**
      * Registers the specified property change listener
@@ -347,6 +342,7 @@ public abstract class Property
 
     public static final class Group
     {
+        // TODO: change to create method for each different property type.
         public static Group create(
             String description,
             Color color,
@@ -360,7 +356,6 @@ public abstract class Property
             }
 
             return group;
-
         }
 
         private final Color color;
