@@ -121,6 +121,7 @@ final class CardImpl extends Card
         }
 
         this.group = group;
+        getPropertyChangeSupport().firePropertyChange("group", null, group);
     }
 
     @Override
@@ -198,6 +199,8 @@ final class CardImpl extends Card
     @Override
     protected void setOwner(Player owner)
     {
+        Player old = getOwner();
         this.owner = owner;
+        getPropertyChangeSupport().firePropertyChange("owner", old, owner);
     }
 }
