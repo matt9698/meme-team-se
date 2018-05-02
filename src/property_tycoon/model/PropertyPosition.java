@@ -2,7 +2,7 @@ package property_tycoon.model;
 
 /**
  * @author Matt
- * @version 01/05/2018
+ * @version 02/05/2018
  */
 public final class PropertyPosition extends Property implements BoardPosition
 {
@@ -14,7 +14,9 @@ public final class PropertyPosition extends Property implements BoardPosition
         assert realProperty.isGrouped() : "realProperty should have a group.";
         this.realProperty = realProperty;
 
-        // TODO: Listen for events on realProperty and forward them to listeners of this property
+        // Forward events from realProperty to listeners
+        realProperty.addPropertyChangeListener(
+            e -> this.getPropertyChangeSupport().firePropertyChange(e));
     }
 
     @Override
@@ -123,7 +125,7 @@ public final class PropertyPosition extends Property implements BoardPosition
     @Override
     public void land(Player player)
     {
-        if(isOwned() && !getOwner().equals(this)) {
+        if(isOwned() && !getOwner().equals(this.getOwner())) {
             player.payRent(this, 0); // TODO: get dice value somehow
         }
 
