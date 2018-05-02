@@ -194,7 +194,7 @@ final class PropertyImpl extends Property
             throw new IllegalArgumentException("group should not be null.");
         }
 
-        levels = group.getLevels();
+        PropertyLevel.Group levels = group.getLevels();
         if(levels != PropertyLevel.Group.REGULAR_LEVELS
             && levels != PropertyLevel.Group.STATION_LEVELS
             && levels != PropertyLevel.Group.UTILITY_LEVELS) {
@@ -212,7 +212,7 @@ final class PropertyImpl extends Property
                     "group should not be PropertyLevel.Group.REGULAR_LEVELS"
                         + " for a default property created with no rents array.");
             }
-            if(rents.length != level.getLevelCount()) {
+            if(rents.length != levels.getLevelCount()) {
                 throw new IllegalStateException(
                     "Property rents array does not contain the corret number of elements");
             }
