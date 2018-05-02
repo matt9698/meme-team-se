@@ -20,7 +20,7 @@ import java.util.List;
  * use the static <code>create()</code> methods (recommended)
  * or to extend this class (not recommended).
  *
- * @author Matt
+ * @author meme-team
  * @version 02/05/2018
  */
 public abstract class Card
@@ -289,12 +289,28 @@ public abstract class Card
             // be subsequently modified by external code.
             this.cards = new ArrayList<Card>(Arrays.asList(cards));
         }
-
+        
+        /**
+         * Gets the description of this group.
+         *
+         * @return The description of this group.
+         */
         public String getDescription()
         {
             return description;
         }
 
+        /**
+         * Removes a card from this group and sets the specified player as its
+         * new owner.
+         * 
+         * @param drawer The player to which a card from this group now belongs 
+         *        to.
+         *
+         * @return The card that was drawn and removed from the deck.
+         * 
+         * @throws IllegalArgumentException if the drawer is null.
+         */
         public Card draw(Player drawer)
         {
             if(drawer == null) {
@@ -308,6 +324,16 @@ public abstract class Card
             return new CardProxy(card);
         }
 
+        /**
+         * Removes ownership of the passed in card and places it in this
+         * group of cards.
+         * 
+         * @param card The card getting added back to this group.
+         * 
+         * @throws IllegalArgumentException if the card is null.
+         * @throws IllegalArgumentException if the card isn't supposed to be a
+         *         member of this group.
+         */
         protected void replace(Card card)
         {
             if(card == null) {

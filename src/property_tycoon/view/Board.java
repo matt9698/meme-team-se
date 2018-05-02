@@ -11,6 +11,11 @@ import javafx.scene.layout.StackPane;
 import property_tycoon.model.Property;
 import javafx.scene.Group;
 
+
+/**
+ * @author meme-team
+ * @version 29/04/2018
+ */
 public class Board extends GridPane
 {
    private BoardPositionMapping[] BOARD_POS_MAPPINGS =

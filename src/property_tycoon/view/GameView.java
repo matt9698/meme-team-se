@@ -16,7 +16,7 @@ import property_tycoon.model.PropertyLevel;
 
 /**
  *
- * @author Matt
+ * @author meme-team
  */
 public class GameView extends Application
 {

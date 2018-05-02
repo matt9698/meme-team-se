@@ -21,7 +21,7 @@ import javafx.scene.paint.Color;
  * use the static <code>create()</code> methods (recommended)
  * or to extend this class (not recommended).
  *
- * @author Matt and Adam
+ * @author meme-team
  * @version 30/04/2018
  */
 public abstract class Property

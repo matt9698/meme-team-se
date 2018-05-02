@@ -9,7 +9,7 @@ import javafx.scene.layout.StackPane;
 /**
  * Control representing a position on the game board.
  *
- * @author Matt
+ * @author meme-team
  * @version 01/05/2018
  */
  public abstract class BoardPosition extends StackPane

@@ -1,7 +1,7 @@
 package property_tycoon.model;
 
 /**
- * @author Matt
+ * @author meme-team
  * @version 02/05/2018
  */
 final class PropertyProxy extends Property

@@ -3,7 +3,7 @@ package property_tycoon.model;
 import java.util.Arrays;
 
 /**
- * @author Matt and Adam
+ * @author meme-team
  * @version 30/04/2018
  */
 final class PropertyImpl extends Property

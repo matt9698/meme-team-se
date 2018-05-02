@@ -8,7 +8,7 @@ import java.util.Random;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class Dice
 {

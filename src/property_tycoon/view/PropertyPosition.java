@@ -22,7 +22,7 @@ import property_tycoon.model.Property;
 /**
  * Control representing a property position on the game board.
  *
- * @author Matt
+ * @author meme-team
  * @version 01/05/2018
  */
 public class PropertyPosition extends BoardPosition
