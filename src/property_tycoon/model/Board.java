@@ -6,13 +6,48 @@ package property_tycoon.model;
 
 /**
  * @author Matt
- * @version 29/04/2018
+ * @version 01/05/2018
  */
 public class Board
 {
     private BoardPosition[] positions;
     private Player[] players;
     private int[] playerPositionMap;
+
+    public Board(BoardPosition[] positions, Player[] players)
+    {
+        if(positions == null) {
+            throw new IllegalArgumentException("positions should not be null.");
+        }
+        if(positions.length == 0) {
+            throw new IllegalArgumentException("positions should not be empty.");
+        }
+
+        for(BoardPosition position : positions) {
+            if(position == null) {
+                throw new IllegalArgumentException(
+                    "positions should not contain null elements.");
+            }
+        }
+
+        this.positions = positions;
+
+        if(players == null) {
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(players.length == 0) {
+            throw new IllegalArgumentException("players should not be empty.");
+        }
+
+        for(Player player : players) {
+            if(players == null) {
+                throw new IllegalArgumentException(
+                    "players should not contain null elements.");
+            }
+        }
+
+        this.players = players;
+    }
 
     public void moveForward(Player player, BoardPosition to)
     {

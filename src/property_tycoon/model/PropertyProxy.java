@@ -40,6 +40,23 @@ final class PropertyProxy extends Property
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        if(this == o) {
+            return true;
+        }
+        if(o == null) {
+            return false;
+        }
+        if(!(o instanceof Property)) {
+            return false;
+        }
+
+        Property position = (Property)o;
+        return position.equals(realProperty);
+    }
+
+    @Override
     public String getDescription()
     {
         return realProperty.getDescription();
@@ -80,6 +97,12 @@ final class PropertyProxy extends Property
     public int getRentPrice(PropertyLevel level, int diceValue)
     {
         return realProperty.getRentPrice(level, diceValue);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return realProperty.hashCode();
     }
 
     @Override
