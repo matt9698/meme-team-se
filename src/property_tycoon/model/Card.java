@@ -238,7 +238,7 @@ public abstract class Card
     /**
      * Represents a deck of cards.
      */
-    public static final class Group
+    public static final class Group implements BoardPosition
     {
         public static Group create(String description, Card... cards)
         {
@@ -306,6 +306,16 @@ public abstract class Card
             Card card = cards.remove(0);
             card.setOwner(drawer);
             return new CardProxy(card);
+        }
+
+        @Override
+        public void land(Player player)
+        {
+        }
+
+        @Override
+        public void step(Player player)
+        {
         }
 
         protected void replace(Card card)
