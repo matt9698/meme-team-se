@@ -138,4 +138,8 @@ public class Board
     {
         return positions.length;
     }
+    
+    public Player[] getPlayers(){
+        return players;
+    }
 }
