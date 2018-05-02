@@ -342,6 +342,7 @@ public abstract class Property
 
     public static final class Group
     {
+        // TODO: change to create method for each different property type.
         public static Group create(
             String description,
             Color color,
@@ -355,7 +356,6 @@ public abstract class Property
             }
 
             return group;
-
         }
 
         private final Color color;
