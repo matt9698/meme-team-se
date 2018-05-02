@@ -25,10 +25,14 @@ import java.util.List;
  */
 public abstract class Card
 {
-    public static Card create()
+    public static Card create(String description, boolean isImmediate, CardAction... choices)
     {
-        // TODO: Implement
-        throw new UnsupportedOperationException();
+        return new CardImpl(description, isImmediate, choices);
+    }
+
+    public static Card create(CardAction action, boolean isImmediate)
+    {
+        return new CardImpl(null, isImmediate, action);
     }
 
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);

@@ -20,27 +20,48 @@ final class CardImpl extends Card
 
     public CardImpl(String description, boolean isImmediate, CardAction... choices)
     {
-        assert choices != null : "choices should not be null.";
-        assert choices.length != 0 : "choices should not be empty.";
-
-        // TODO: Convert into lambda based foreach in order to  avoid loop exceution when assertions are disabled.
-        for(CardAction action : choices) {
-            assert action != null : "choices should not contain null elements.";
+        if(choices == null) {
+            throw new IllegalArgumentException("choices should not be null.");
+        }
+        if(choices.length == 0) {
+            throw new IllegalArgumentException("choices should not be empty.");
         }
 
-        // TODO: If the card is immediate use then check at least
+        for(CardAction action : choices) {
+            if(action == null) {
+                throw new IllegalArgumentException(
+                    "choices should not contain null elements.");
+            }
+        }
+
+        // If the card is immediate use then check at least
         // one of its actions is always executable.
+        if(isImmediate) {
+            int i = 0;
+            while(i < choices.length && !choices[i].isAlwaysExecutable()) {
+                i++;
+            }
+
+            if(i == choices.length) {
+                throw new IllegalArgumentException(
+                    "choices should contain at least one always"
+                        + " executable action for an immediate use card.");
+            }
+        }
 
         // Copy the array so that elements cannot
         // be subsequently modified by external code.
         this.choices = Arrays.copyOf(choices, choices.length);
 
         if(choices.length > 1) {
-            assert description != null :
-                "description should not be null for a choice card.";
-            assert !description.isEmpty() :
-                "description should not be empty for a choice card.";
-
+            if(description == null) {
+                throw new IllegalArgumentException(
+                    "description should not be null for a choice card.");
+            }
+            if(description.isEmpty()) {
+                throw new IllegalArgumentException(
+                    "description should not be empty for a choice card.");
+            }
             this.description = description;
         }
         else {
@@ -117,6 +138,7 @@ final class CardImpl extends Card
     @Override
     public boolean isUseable()
     {
+        // TODO: Implement
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
