@@ -116,7 +116,7 @@ public class PropertyPositionView extends BoardPositionView
     {
         return owner.get();
     }
-    
+
     public int getPrice()
     {
         return model.getPrice();

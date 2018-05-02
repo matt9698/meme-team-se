@@ -25,7 +25,7 @@ import property_tycoon.model.PropertyLevel.Group;
 
 /**
  *
- * @author Matt
+ * @author meme-team
  */
 public class GameView extends Application
 {

@@ -4,6 +4,10 @@
  */
 package property_tycoon.view;
 
+/**
+ * @author meme-team
+ * @version 29/04/2018
+ */
 public class BoardPositionMapping
 {
     private int row;

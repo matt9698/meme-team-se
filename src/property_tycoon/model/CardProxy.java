@@ -5,7 +5,7 @@
 package property_tycoon.model;
 
 /**
- * @author Matt
+ * @author meme-team
  * @version 29/04/2018
  */
 class CardProxy extends Card

@@ -1,7 +1,12 @@
 package property_tycoon.model;
 
 /**
- * @author Matt
+ * Represents a property position.
+ * This class instantiates a board position object specifically with a property position.
+ * This class is also a child of the Property class, hence the extension.
+ * This object must be constructed using a 'real' property.
+ * 
+ * @author meme-team
  * @version 02/05/2018
  */
 public final class PropertyPosition extends Property implements BoardPosition
