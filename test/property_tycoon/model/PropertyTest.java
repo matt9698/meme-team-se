@@ -200,11 +200,10 @@ public class PropertyTest
     {
 //        Player buyer = new Player();
         Property instance = Property.create("shop", 40, new int[]{1,1,1,1,1,1});
-        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         //instance.buy(buyer);
-        instance.getImprovementCost();
-        
-        
+        int improve = instance.getImprovementCost();
+        assertEquals(group.getImprovementCost(),improve);        
     }
 
     /**
