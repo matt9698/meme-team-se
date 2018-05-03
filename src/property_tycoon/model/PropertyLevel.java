@@ -339,7 +339,7 @@ public final class PropertyLevel implements Comparable<PropertyLevel>
                 return null;
             }
 
-            return levels[getIndex(level) + 1];
+            return levels[getIndex(level) - 1];
         }
 
         /**
