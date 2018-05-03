@@ -21,7 +21,7 @@ import javafx.scene.paint.Color;
  * use the static <code>create()</code> methods (recommended)
  * or to extend this class (not recommended).
  *
- * @author Matt and Adam
+ * @author meme-team
  * @version 30/04/2018
  */
 public abstract class Property
@@ -47,6 +47,12 @@ public abstract class Property
     }
 
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    
+    @Override
+    public String toString()
+    {
+        return getDescription();
+    }
 
     /**
      * Registers the specified property change listener

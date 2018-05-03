@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class TurnManager
 {

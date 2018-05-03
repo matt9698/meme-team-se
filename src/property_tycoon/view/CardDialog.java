@@ -12,6 +12,10 @@ import javafx.fxml.LoadException;
 import javafx.scene.layout.BorderPane;
 import property_tycoon.model.Card;
 
+/**
+ * @author meme-team
+ * @version 29/04/2018
+ */
 public class CardDialog extends BorderPane
 {
     private static final String FXML_PATH = "CardDialog.fxml";

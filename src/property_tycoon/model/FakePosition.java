@@ -1,7 +1,9 @@
 package property_tycoon.model;
 
 /**
- * @author Matt
+ * Testing class.
+ * 
+ * @author meme-team
  * @version 01/05/2018
  */
  public class FakePosition implements BoardPosition
