@@ -212,76 +212,92 @@ public class PropertyTest
     @Test
     public void testGetMortgagedPrice()
     {
-        System.out.println("getMortgagedPrice");
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.getMortgagedPrice();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Property instance = Property.create("shop", 40, new int[]{1,1,1,1,1,1});
+        int mortgaged = instance.getMortgagedPrice();
+        assertEquals(instance.getPrice()/2,mortgaged);
+        
     }
 
     /**
      * Test of getRentPrice method, of class Property.
      */
     @Test
-    public void testGetRentPrice_int()
+    public void testGetRentPrice_Regular()
     {
-        System.out.println("getRentPrice");
-        int diceValue = 0;
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.getRentPrice(diceValue);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("shop", 40, new int[]{1,5,10,15,20,30});
+        Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        assertEquals(1, instance.getRentPrice(group.getLevels().getLevel(0), 0));
+        instance.upgrade();
+        assertEquals(5, instance.getRentPrice(group.getLevels().getLevel(1), 0));
     }
-
-    /**
+    
+        /**
      * Test of getRentPrice method, of class Property.
      */
     @Test
-    public void testGetRentPrice_PropertyLevel_int()
+    public void testGetRentPrice_Station()
     {
-        System.out.println("getRentPrice");
-        PropertyLevel level = null;
-        int diceValue = 0;
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.getRentPrice(level, diceValue);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property station1 = Property.createStation("station", 50);
+        Property station2 = Property.createStation("station2", 50);
+        Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.STATION_LEVELS,60, station1,station2);
+        station1.buy(buyer);
+        assertEquals(25, station1.getRentPrice(group.getLevels().getLevel(0), 0));
+        station2.buy(buyer);
+        assertEquals(50, station2.getRentPrice(group.getLevels().getLevel(1), 0));
+
     }
+    
+        /**
+     * Test of getRentPrice method, of class Property.
+     */
+    @Test
+    public void testGetRentPrice_Utility()
+    {
+        Player buyer = new Player();
+        Property utility1 = Property.createUtility("util 1", 30);
+        Property utility2 = Property.createUtility("util 2", 30);
+        Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.UTILITY_LEVELS,60, utility1,utility2);
+        utility1.buy(buyer);
+        assertEquals(24, utility1.getRentPrice(group.getLevels().getLevel(0), 6));
+        utility2.buy(buyer);
+        assertEquals(70, utility1.getRentPrice(group.getLevels().getLevel(1),7));
+    }
+    
+    
+    
 
     /**
      * Test of sell method, of class Property.
+     *    
      */
     @Test
     public void testSell()
     {
-        System.out.println("sell");
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.sell();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("shop", 40, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        int sellPrice = instance.sell();
+        assertEquals(instance.getPrice(),sellPrice);
+        assertFalse(instance.isOwned());
     }
-
+    
+    
     /**
      * Test of upgrade method, of class Property.
      */
     @Test
     public void testUpgrade()
     {
-        System.out.println("upgrade");
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.upgrade();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        instance.upgrade();
+        assertEquals(PropertyLevel.Group.REGULAR_LEVELS.getLevel(1),instance.getLevel());
     }
 
     /**
@@ -290,12 +306,10 @@ public class PropertyTest
     @Test
     public void testSetGroup()
     {
-        System.out.println("setGroup");
-        Group group = null;
-        Property instance = new PropertyImpl();
-        instance.setGroup(group);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        assertEquals(PropertyLevel.Group.REGULAR_LEVELS.getLevel(0),instance.getLevel());
+        assertEquals(instance.getGroup(),group);
     }
 
     /**
@@ -304,13 +318,12 @@ public class PropertyTest
     @Test
     public void testGetLevel()
     {
-        System.out.println("getLevel");
-        Property instance = new PropertyImpl();
-        PropertyLevel expResult = null;
-        PropertyLevel result = instance.getLevel();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property utility = Property.createUtility("Waters", 50);
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        Property.Group.create("utility Group", Color.BLUE,PropertyLevel.Group.UTILITY_LEVELS,60, utility);
+        assertEquals(PropertyLevel.Group.REGULAR_LEVELS.getLevel(0),instance.getLevel());
+        assertEquals(PropertyLevel.Group.UTILITY_LEVELS.getLevel(0),utility.getLevel());
     }
 
     /**
@@ -319,13 +332,12 @@ public class PropertyTest
     @Test
     public void testGetOwner()
     {
-        System.out.println("getOwner");
-        Property instance = new PropertyImpl();
-        Player expResult = null;
-        Player result = instance.getOwner();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        assertEquals(instance.getOwner(),buyer);
+        assertTrue(instance.isOwned());
     }
 
     /**
@@ -334,13 +346,9 @@ public class PropertyTest
     @Test
     public void testGetPrice()
     {
-        System.out.println("getPrice");
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.getPrice();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        assertEquals(instance.getPrice(),50);
+        assertFalse(instance.isMortgaged());
     }
 
     /**
@@ -349,13 +357,15 @@ public class PropertyTest
     @Test
     public void testIsGrouped()
     {
-        System.out.println("isGrouped");
-        Property instance = new PropertyImpl();
-        boolean expResult = false;
-        boolean result = instance.isGrouped();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        Property utility = Property.createUtility("water", 50);
+        Property.Group.create("util Group", Color.BLUE,PropertyLevel.Group.UTILITY_LEVELS,60, utility);
+        Property station = Property.createStation("rail", 70);
+        Property.Group.create("station Group", Color.RED,PropertyLevel.Group.STATION_LEVELS,60, station);
+        assertTrue(instance.isGrouped());
+        assertTrue(utility.isGrouped());
+        assertTrue(station.isGrouped());
     }
 
     /**
@@ -364,43 +374,49 @@ public class PropertyTest
     @Test
     public void testIsImprovable()
     {
-        System.out.println("isImprovable");
-        Property instance = new PropertyImpl();
-        boolean expResult = false;
-        boolean result = instance.isImprovable();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        Property utility = Property.createUtility("water", 50);
+        Property.Group.create("util Group", Color.BLUE,PropertyLevel.Group.UTILITY_LEVELS,60, utility);
+        Property station = Property.createStation("rail", 70);
+        Property.Group.create("station Group", Color.RED,PropertyLevel.Group.STATION_LEVELS,60, station);
+        
+        assertTrue(instance.isImprovable());
+        assertFalse(utility.isImprovable());
+        assertFalse(station.isImprovable());
     }
 
     /**
      * Test of isMortgaged method, of class Property.
+     * return true if this property is currently mortgaged; false otherwise.
      */
     @Test
     public void testIsMortgaged()
     {
-        System.out.println("isMortgaged");
-        Property instance = new PropertyImpl();
-        boolean expResult = false;
-        boolean result = instance.isMortgaged();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        assertFalse(instance.isMortgaged());
+        instance.mortgage();
+        assertTrue(instance.isMortgaged());
     }
 
     /**
      * Test of isOwned method, of class Property.
+     * return true if this property is currently owned; false otherwise.
      */
     @Test
     public void testIsOwned()
     {
-        System.out.println("isOwned");
-        Property instance = new PropertyImpl();
-        boolean expResult = false;
-        boolean result = instance.isOwned();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        assertFalse(instance.isOwned());
+        instance.buy(buyer);
+        assertTrue(instance.isOwned());
+        instance.sell();
+        assertFalse(instance.isOwned());
     }
 
     /**
@@ -409,13 +425,13 @@ public class PropertyTest
     @Test
     public void testIsValid()
     {
-        System.out.println("isValid");
-        Property instance = new PropertyImpl();
-        boolean expResult = false;
-        boolean result = instance.isValid();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance = instance.buy(buyer);
+        assertTrue(instance.isValid());
+        instance.sell();
+        assertFalse(instance.isValid());
     }
 
     /**
@@ -424,27 +440,13 @@ public class PropertyTest
     @Test
     public void testMortgage()
     {
-        System.out.println("mortgage");
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.mortgage();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of removePropertyChangeListener method, of class Property.
-     */
-    @Test
-    public void testRemovePropertyChangeListener()
-    {
-        System.out.println("removePropertyChangeListener");
-        PropertyChangeListener listener = null;
-        Property instance = new PropertyImpl();
-        instance.removePropertyChangeListener(listener);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        instance.mortgage();
+        assertEquals(instance.getMortgagedPrice(),instance.getPrice()/2);
+        assertTrue(instance.isMortgaged());
     }
 
     /**
@@ -453,29 +455,17 @@ public class PropertyTest
     @Test
     public void testUnmortgage()
     {
-        System.out.println("unmortgage");
-        Property instance = new PropertyImpl();
-        int expResult = 0;
-        int result = instance.unmortgage();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player buyer = new Player();
+        Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
+        Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
+        instance.buy(buyer);
+        instance.mortgage();
+        instance.unmortgage();
+        assertEquals(instance.getPrice(),50);
+        assertFalse(instance.isMortgaged());
     }
 
-    /**
-     * Test of getPropertyChangeSupport method, of class Property.
-     */
-    @Test
-    public void testGetPropertyChangeSupport()
-    {
-        System.out.println("getPropertyChangeSupport");
-        Property instance = new PropertyImpl();
-        PropertyChangeSupport expResult = null;
-        PropertyChangeSupport result = instance.getPropertyChangeSupport();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+
 
     public class PropertyImpl extends Property
     {
