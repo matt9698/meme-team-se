@@ -14,9 +14,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import property_tycoon.model.Board;
 import property_tycoon.model.BoardPosition;
 import property_tycoon.model.Card;
-import property_tycoon.model.CardAction;
 import property_tycoon.model.CornerPosition.CornerType;
 import property_tycoon.model.FakeAction;
 import property_tycoon.model.Player;
@@ -25,8 +25,7 @@ import property_tycoon.model.PropertyLevel;
 import property_tycoon.model.PropertyLevel.Group;
 
 /**
- *
- * @author Matt
+ * @author meme-team
  */
 public class GameView extends Application
 {
@@ -34,12 +33,12 @@ public class GameView extends Application
     {
         Application.launch(args);
     }
-    
+
     private BoardView board;
     private Property[] properties;
     private Card[] cards;
     private Card.Group potLuck, opportunityKnocks;
-    private property_tycoon.model.BoardPosition[] positions;
+    private BoardPosition[] positions;
     private int propertyIndex = 0, utilityIndex = 22, stationIndex = 24;
     private Player[] players;
 
@@ -52,39 +51,34 @@ public class GameView extends Application
         createCards();
         createCardGroups();
         createBoardPositions();
-        
-         
-        
 
-        property_tycoon.model.Board b = new property_tycoon.model.Board(positions, players);
-
+        Board b = new Board(positions, players);
         Label selected = new Label("No property selected");
-        
         board = new BoardView(b);
         board.setRotate(270);
         board.setOnMouseClicked(e -> selected.setText(
-            board.getSelectedPosition() instanceof PropertyPositionView 
+            board.getSelectedPosition() instanceof PropertyPositionView
                 ? ((PropertyPositionView)board.getSelectedPosition()).getModel().getDescription() + " selected" : "No property selected" ));
-        
+
         BorderPane bp = new BorderPane(board);
-        
+
         Button buy = new Button("Buy");
         buy.setOnAction(e ->  { if(board.getSelectedPosition() instanceof PropertyPositionView) { players[0].buy(((PropertyPositionView)board.getSelectedPosition()).getModel()); }});
-        
-        Button sell = new Button("Sell");
-        sell.setOnAction(e ->  { if(board.getSelectedPosition() instanceof PropertyPositionView) { players[0].sell(((PropertyPositionView)board.getSelectedPosition()).getModel()); }});
-        
-        HBox buttonBar = new HBox(selected, buy, sell);
-        bp.setBottom(buttonBar);
-        
-        ScrollPane sp = new ScrollPane(bp);
-        
 
+        HBox buttonBar = new HBox(selected, buy);
+        bp.setBottom(buttonBar);
+
+        PlayerView pv = new PlayerView(players[0]);
+        bp.setRight(pv);
+
+        ScrollPane sp = new ScrollPane(bp);
         Scene scene = new Scene(sp);
 
         stage.setTitle("Property Tycoon");
+        stage.setFullScreen(true);
         stage.setScene(scene);
         stage.show();
+        stage.setMaximized(true);
     }
 
     private property_tycoon.model.PropertyPosition addnextProperty()
@@ -93,14 +87,14 @@ public class GameView extends Application
         propertyIndex++;
         return nextProperty;
     }
-    
+
     private property_tycoon.model.PropertyPosition addnextStation()
     {
         property_tycoon.model.PropertyPosition nextSation = new property_tycoon.model.PropertyPosition(properties[stationIndex]);
         stationIndex++;
         return nextSation;
     }
-    
+
     private property_tycoon.model.PropertyPosition addnextUtility()
     {
         property_tycoon.model.PropertyPosition nextUtility = new property_tycoon.model.PropertyPosition(properties[utilityIndex]);
@@ -114,27 +108,27 @@ public class GameView extends Application
         property_tycoon.model.CornerPosition jail = new property_tycoon.model.CornerPosition(CornerType.JAIL);
         property_tycoon.model.CornerPosition freeParking = new property_tycoon.model.CornerPosition(CornerType.FREE_PARKING);
         property_tycoon.model.CornerPosition goToJail = new property_tycoon.model.CornerPosition(CornerType.GO_TO_JAIL);
-        
-        
+
+
         positions = new property_tycoon.model.BoardPosition[] {
-            
-            
+
+
             //Row one
             go, addnextProperty(), potLuck, addnextProperty(), new property_tycoon.model.TaxPosition(),
             addnextStation(), addnextProperty(), opportunityKnocks, addnextProperty(), addnextProperty(),
-            
+
             //Row two
             jail, addnextProperty(), addnextUtility(), addnextProperty(), addnextProperty(),
             addnextStation(), addnextProperty(), potLuck, addnextProperty(), addnextProperty(),
-            
+
             //Row three
             freeParking, addnextProperty(), opportunityKnocks, addnextProperty(), addnextProperty(),
             addnextStation(), addnextProperty(), addnextProperty(), addnextUtility(), addnextProperty(),
-            
+
             //Row four
             goToJail, addnextProperty(), addnextProperty(), potLuck, addnextProperty(),
             addnextStation(), opportunityKnocks, addnextProperty(), new property_tycoon.model.TaxPosition(), addnextProperty(),
-            
+
           };
     }
 
@@ -151,7 +145,7 @@ public class GameView extends Application
             Card.create(new FakeAction(), true),
             Card.create(new FakeAction(), true)
         };
-        
+
     }
 
     private void createPlayers()
@@ -187,11 +181,11 @@ public class GameView extends Application
             Property.create("Ibis Cresent", 320, new int[] {1, 1, 1, 1, 1, 1}),
             Property.create("Hawking Way", 350, new int[] {1, 1, 1, 1, 1, 1}),
             Property.create("Turing Heights", 400, new int[] {1, 1, 1, 1, 1, 1}),
-            
+
             //Utilities
             Property.createUtility("Tesla Power Co", 150),
             Property.createUtility("Edison Water", 150),
-            
+
             //Stations
             Property.createStation("Brighton Station", 200),
             Property.createStation("Hove Station", 200),
@@ -202,34 +196,34 @@ public class GameView extends Application
 
     private void createPropertyGroups()
     {
-        Property.Group browns = Property.Group.create("Browns", Color.BROWN, PropertyLevel.Group.REGULAR_LEVELS,
+        Property.Group browns = Property.Group.create("Browns", Color.SIENNA, PropertyLevel.Group.REGULAR_LEVELS,
             30, properties[0], properties[1]);
-        
-        Property.Group blues = Property.Group.create("Blues", Color.BLUE, PropertyLevel.Group.REGULAR_LEVELS,
+
+        Property.Group blues = Property.Group.create("Blues", Color.LIGHTSTEELBLUE, PropertyLevel.Group.REGULAR_LEVELS,
             30, properties[2], properties[3], properties[4]);
-        
-        Property.Group purples = Property.Group.create("Purples", Color.PURPLE,
+
+        Property.Group purples = Property.Group.create("Purples", Color.PALEVIOLETRED,
            PropertyLevel.Group.REGULAR_LEVELS, 30, properties[5], properties[6], properties[7]);
 
-         Property.Group oranges = Property.Group.create("Oranges", Color.ORANGE,
+         Property.Group oranges = Property.Group.create("Oranges", Color.CORAL,
            PropertyLevel.Group.REGULAR_LEVELS, 30, properties[8], properties[9], properties[10]);
-         
-         Property.Group yellows = Property.Group.create("Yellows", Color.YELLOW,
+
+         Property.Group yellows = Property.Group.create("Yellows", Color.KHAKI,
            PropertyLevel.Group.REGULAR_LEVELS, 30, properties[11], properties[12], properties[13]);
-         
-         Property.Group reds = Property.Group.create("Reds", Color.RED,
+
+         Property.Group reds = Property.Group.create("Reds", Color.CRIMSON,
            PropertyLevel.Group.REGULAR_LEVELS, 30, properties[14], properties[15], properties[16]);
-         
-         Property.Group greens = Property.Group.create("Greens", Color.GREEN,
+
+         Property.Group greens = Property.Group.create("Greens", Color.SEAGREEN,
            PropertyLevel.Group.REGULAR_LEVELS, 30, properties[17], properties[18], properties[19]);
-         
-         Property.Group deepBlues = Property.Group.create("Deep Blues", Color.NAVY,
+
+         Property.Group deepBlues = Property.Group.create("Deep Blues", Color.DARKSLATEBLUE,
            PropertyLevel.Group.REGULAR_LEVELS, 30, properties[20], properties[21]);
-        
+
          Property.Group utilities = Property.Group.create("Utilities",
-             Color.BLACK, Group.UTILITY_LEVELS, 150, properties[22], properties[23]);
-         
+             Color.web("#bfdbae"), Group.UTILITY_LEVELS, 150, properties[22], properties[23]);
+
           Property.Group stations = Property.Group.create("Stations",
-             Color.BLACK, Group.STATION_LEVELS, 150, properties[24], properties[25], properties[26], properties[27]);
+             Color.web("#bfdbae"), Group.STATION_LEVELS, 150, properties[24], properties[25], properties[26], properties[27]);
     }
 }
