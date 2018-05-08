@@ -5,14 +5,13 @@
 package property_tycoon.view;
 
 import java.beans.PropertyChangeEvent;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -43,7 +42,9 @@ public class PlayerView extends VBox
         }
         this.model = model;
 
-        model.addPropertyChangeListener(e -> update(e));
+        model.cashProperty().addListener(e -> update());
+        model.getProperties().addListener((ListChangeListener)e -> update());
+        model.getCards().addListener((ListChangeListener)e -> update());
 
         Label description = new Label(model.getDescription());
         description.setFont(Font.font("Helvetica", FontWeight.BOLD, 24d));
@@ -84,7 +85,7 @@ public class PlayerView extends VBox
         selectionChange();
     }
 
-    private void update(PropertyChangeEvent e)
+    private void update()
     {
         // TODO: Implement properly        
         cash.setText("£" + model.getCash());
