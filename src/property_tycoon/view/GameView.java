@@ -150,8 +150,8 @@ public class GameView extends Application
 
     private void createPlayers()
     {
-        Player p1 = new Player();
-        Player p2 = new Player();
+        Player p1 = new Player("matt9698", Color.RED);
+        Player p2 = new Player("T", Color.BLUE);
         players = new Player[] { p1, p2 };
     }
 
