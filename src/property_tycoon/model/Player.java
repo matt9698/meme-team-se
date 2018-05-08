@@ -4,12 +4,10 @@
  */
 package property_tycoon.model;
 
-import java.util.Collections;
-import java.util.List;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
 /**
@@ -26,12 +24,12 @@ public class Player
 {
     public static final int STARTING_CASH = 1500;
 
-    private final ReadOnlyListWrapper<Card> cards;
+    private final ObservableList<Card> cards;
     private final ReadOnlyIntegerWrapper cash;
     private final Color color;
     private Controller controller;
     private final String description;
-    private final ReadOnlyListWrapper<Property> properties;
+    private final ObservableList<Property> properties;
 
     public Player(String description, Color color)
     {
@@ -51,10 +49,8 @@ public class Player
 
         cash = new ReadOnlyIntegerWrapper(this, "cash", STARTING_CASH);
 
-        properties = new ReadOnlyListWrapper<Property>(
-            this, "properties", FXCollections.emptyObservableList());
-        cards = new ReadOnlyListWrapper<Card>(
-            this, "cards", FXCollections.emptyObservableList());
+        properties = FXCollections.observableArrayList();
+        cards = FXCollections.observableArrayList();
 
         controller = null;
     }
@@ -124,9 +120,9 @@ public class Player
         cards.add(from.draw(this));
     }
 
-    public List<Card> getCards()
+    public ObservableList<Card> getCards()
     {
-        return Collections.unmodifiableList(cards);
+        return FXCollections.unmodifiableObservableList(cards);
     }
 
     /**
@@ -165,9 +161,9 @@ public class Player
      *
      * @return The list of properties this player owns.
      */
-    public List<Property> getProperties()
+    public ObservableList<Property> getProperties()
     {
-        return Collections.unmodifiableList(properties);
+        return FXCollections.unmodifiableObservableList(properties);
     }
 
     public boolean isControlled()
