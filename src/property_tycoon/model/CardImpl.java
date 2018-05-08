@@ -189,10 +189,6 @@ final class CardImpl extends Card
     @Override
     public Player getOwner()
     {
-        if(!isOwned()) {
-            throw new IllegalStateException("Card has no owner.");
-        }
-
         return owner;
     }
 
