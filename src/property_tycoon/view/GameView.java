@@ -33,8 +33,9 @@ public class GameView extends Stage
         this.model = model;
 
         setTitle("Property Tycoon");
-        setFullScreen(true);
         setScene(buildScene());
+        show();
+        model.nextTurn();
     }
 
     public Game getModel()
