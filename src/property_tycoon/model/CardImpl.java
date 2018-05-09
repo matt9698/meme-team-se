@@ -7,7 +7,7 @@ package property_tycoon.model;
 import java.util.Arrays;
 
 /**
- * @author Matt
+ * @author meme-team
  * @version 29/04/2018
  */
 final class CardImpl extends Card
@@ -189,10 +189,6 @@ final class CardImpl extends Card
     @Override
     public Player getOwner()
     {
-        if(!isOwned()) {
-            throw new IllegalStateException("Card has no owner.");
-        }
-
         return owner;
     }
 

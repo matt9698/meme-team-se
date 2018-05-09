@@ -31,6 +31,6 @@ import property_tycoon.model.BoardPosition;
         setPrefWidth(96);
         setPrefHeight(146);
         setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY, new BorderWidths(2, 2, 2, 2))));
+            CornerRadii.EMPTY, new BorderWidths(4, 2, 4, 2))));
     }
  }

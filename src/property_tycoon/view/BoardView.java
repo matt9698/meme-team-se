@@ -4,8 +4,14 @@
  */
 package property_tycoon.view;
 
+import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Group;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import property_tycoon.model.Card;
 import property_tycoon.model.CornerPosition;
 import property_tycoon.model.PropertyPosition;
@@ -74,6 +80,10 @@ public class BoardView extends GridPane
             throw new IllegalArgumentException();
         }
         this.model = model;
+        
+        Region r = new Region();
+        r.setBackground(new Background(new BackgroundFill(Color.web("#bfdbae"), CornerRadii.EMPTY, Insets.EMPTY)));
+        add(r, 1, 1, 9, 9);
 
         positions = new BoardPositionView[BOARD_POS_MAPPINGS.length];
         for(int i = 0; i < positions.length; i++) {

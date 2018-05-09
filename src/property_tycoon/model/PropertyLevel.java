@@ -3,7 +3,13 @@ package property_tycoon.model;
 import java.util.Arrays;
 
 /**
- * @author Matt
+ * This class represents a property level.
+ * Each property level belongs to a group and has a description.
+ * Property levels must be comparable to ensure integrity of game rules - namely that
+ * property levels of the same group can differ by no more than one at any time.
+ * For that reason, this class implements Comparable.
+ * 
+ * @author meme-team
  * @version 30/04/2018
  */
 public final class PropertyLevel implements Comparable<PropertyLevel>
@@ -339,7 +345,7 @@ public final class PropertyLevel implements Comparable<PropertyLevel>
                 return null;
             }
 
-            return levels[getIndex(level) + 1];
+            return levels[getIndex(level) - 1];
         }
 
         /**
