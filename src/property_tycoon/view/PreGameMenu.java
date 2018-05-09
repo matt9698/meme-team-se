@@ -201,7 +201,6 @@ public class PreGameMenu extends Application
             {
                 stage.hide();
                 GameView gameview = new GameView(new Game(players, new DefaultGameData()));
-                gameview.showAndWait();
             }
             
         });

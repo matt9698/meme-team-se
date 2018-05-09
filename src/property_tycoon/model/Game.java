@@ -14,6 +14,8 @@ public class Game
     private Board board;
     private Player[] players;
     
+    private int currentPlayer;
+    
     public Game(Player[] players, GameData data)
     {
         this(
@@ -67,6 +69,17 @@ public class Game
 
     public Player getCurrentPlayer()
     {
-        return players[0];
+        return players[currentPlayer];
+    }
+    
+    public void incrementPlayerIndex()
+    {
+        currentPlayer = (currentPlayer + 1) % players.length;
+    }
+    
+    public void nextTurn()
+    {
+        getCurrentPlayer().getController().takeTurn();
+        incrementPlayerIndex();
     }
 }

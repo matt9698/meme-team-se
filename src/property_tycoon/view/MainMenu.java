@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -74,17 +75,20 @@ public class MainMenu extends Application
         buttons.add(settingsButton);
         buttons.add(exitButton);
         
-        Background defaultBackground = new Background(new BackgroundFill(Color.web("#3d8af7"),CornerRadii.EMPTY, Insets.EMPTY));
+        Background defaultBackground = new Background(new BackgroundFill(Color.web("#3d8af7"), new CornerRadii(5), Insets.EMPTY));
         for(Button button : buttons) {
             button.setBackground(defaultBackground);
-            button.setMinSize(100, 40);
+            button.setMinSize(200, 80);
+            button.setStyle(String.format("-fx-font-size: %dpx;", (int)(0.25 * button.getMinWidth())));
+            button.setFont(new Font("font.ttf", 40));
             button.setOnMouseEntered((t) -> {
-                newGameButton.setBackground(new Background(new BackgroundFill(Color.web("#91e4fb"), new CornerRadii(10), Insets.EMPTY)));
+                button.setBackground(new Background(new BackgroundFill(Color.web("#91e4fb"), new CornerRadii(5), Insets.EMPTY)));
             });
             button.setOnMouseExited((t) -> {
-                newGameButton.setBackground(defaultBackground);
+                button.setBackground(defaultBackground);
             });
         }
+        
         
         HBox hbox = new HBox(buttons.get(0), buttons.get(1), buttons.get(2));
         hbox.setAlignment(Pos.CENTER);
