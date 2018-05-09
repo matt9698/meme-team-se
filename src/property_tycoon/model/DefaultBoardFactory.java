@@ -77,7 +77,7 @@ public class DefaultBoardFactory implements BoardFactory
         if(utilities == null) {
             throw new IllegalArgumentException("utilities should not be null.");
         }
-        if(utilities.length != PROPERTY_COUNT)
+        if(utilities.length != UTILITY_COUNT)
         {
             throw new IllegalArgumentException(
                 String.format(
