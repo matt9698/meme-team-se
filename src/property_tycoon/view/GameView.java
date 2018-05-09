@@ -4,12 +4,18 @@
  */
 package property_tycoon.view;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import property_tycoon.model.Game;
 
@@ -17,6 +23,7 @@ public class GameView extends Stage
 {
     private Game model;
     private BoardView board;
+    private BorderPane overlay;
 
     public GameView(Game model)
     {
@@ -56,8 +63,16 @@ public class GameView extends Stage
 
         PlayerView pv = new PlayerView(model.getCurrentPlayer());
         bp.setRight(pv);
+        
+        overlay = new BorderPane();
+        overlay.setBackground(new Background(new BackgroundFill(
+            new Color(.2, .2, .2, .75), CornerRadii.EMPTY,
+            Insets.EMPTY)));
+        overlay.setVisible(false);
+        
+        StackPane layers = new StackPane(bp, overlay);
 
-        ScrollPane sp = new ScrollPane(bp);
+        ScrollPane sp = new ScrollPane(layers);
         return new Scene(sp);
     }
 }
