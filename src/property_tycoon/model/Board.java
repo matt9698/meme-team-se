@@ -6,9 +6,9 @@ package property_tycoon.model;
 
 /**
  * Represents a board.
- * An object of this class is called using arrays of board positions and players. 
+ * An object of this class is called using arrays of board positions and players.
  * It's directly instantiated once by the graphical user interface.
- * 
+ *
  * @author meme-team
  * @version 01/05/2018
  */
@@ -18,21 +18,20 @@ public class Board
     private Player[] players;
     private int[] playerPositionMap;
 
-    
     /**
      * Constructs a board.
      * The passed in board positions and players become this object's board
      * positions and players.
-     * 
+     *
      * @param positions This board's positions.
      * @param players This board's players.
-     * 
+     *
      * @throws IllegalArgumentException if the passed in positions array is null.
      * @throws IllegalArgumentException if there are no positions in the position array.
      * @throws IllegalArgumentException if there is a null position in the position array.
      * @throws IllegalArgumentException if the passed in players array is null.
      * @throws IllegalArgumentException if there are no players in the player array.
-     * @throws IllegalArgumentException if there is a null player in the player array. 
+     * @throws IllegalArgumentException if there is a null player in the player array.
      */
     public Board(BoardPosition[] positions, Player[] players)
     {
@@ -60,7 +59,7 @@ public class Board
         }
 
         for(Player player : players) {
-            if(players == null) {
+            if(player == null) {
                 throw new IllegalArgumentException(
                     "players should not contain null elements.");
             }
@@ -71,34 +70,33 @@ public class Board
 
     public void moveForward(Player player, BoardPosition to)
     {
+        // TODO: Implement
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     public void moveBackward(Player player, BoardPosition to)
     {
+        // TODO: Implement
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     public void moveSequential(Player player, int by)
     {
+        // TODO: Implement
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     public void moveDirect(Player player, BoardPosition to)
     {
-        throw new UnsupportedOperationException("Not yet implemented.");
-    }
-
-    public BoardPosition getStart()
-    {
+        // TODO: Implement
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     /**
      * Returns the next board position from the passed in position.
-     * 
+     *
      * @param position The original board position.
-     * 
+     *
      * @return The next position on the board.
      */
     public BoardPosition getNext(BoardPosition position)
@@ -108,9 +106,9 @@ public class Board
 
     /**
      * Returns the previous board position from the passed in position.
-     * 
+     *
      * @param position The original board position.
-     * 
+     *
      * @return The previous position on the board.
      */
     public BoardPosition getPrevious(BoardPosition position)
@@ -120,11 +118,11 @@ public class Board
 
     /**
      * Returns the index of the passed in board position in the position array.
-     * 
+     *
      * @param position The board position.
-     * 
+     *
      * @return The index of position within the board position array.
-     * 
+     *
      * @throws IllegalArgumentException if the passed in position is null.
      * @throws IllegalArgumentException if the position doesn't exist in the position array.
      */
@@ -147,14 +145,14 @@ public class Board
 
         return i;
     }
-    
+
     /**
      * Returns the position from the array located at the passed in index.
-     * 
+     *
      * @param index The array index.
-     * 
+     *
      * @return The position within the array at the index.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the index is out of bounds of the array.
      */
     public BoardPosition getPosition(int index)
@@ -169,11 +167,11 @@ public class Board
 
     /**
      * Returns the position from the array on which the passed in player is located at.
-     * 
+     *
      * @param of The player.
-     * 
+     *
      * @return The board position that the player is located at.
-     * 
+     *
      * @throws IllegalArgumentException if the player is a null object.
      * @throws IllegalArgumentException if the passed in player is not in this object's
      *         player array.
@@ -200,15 +198,11 @@ public class Board
 
     /**
      * Returns the number of positions in this board.
-     * 
+     *
      * @return The number of positions objects in the board position array.
      */
     public int getPositionCount()
     {
         return positions.length;
-    }
-    
-    public Player[] getPlayers(){
-        return players;
     }
 }
