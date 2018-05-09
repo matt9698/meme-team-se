@@ -146,7 +146,6 @@ public class PreGameMenu extends Application
         
         //create players upon the start button being clicked
         startButton.setOnMouseClicked((t) -> {
-            
             int numPlayers = 0;
             for (PlayerConfig config: configs)
             {
@@ -161,31 +160,39 @@ public class PreGameMenu extends Application
             int index = 0;
             for (PlayerConfig config: configs)
             {
+                //check that none of the name fields are empty
+                if (!checkNamesValid(configs))
+                {
+                    createNameError();
+                    return;
+                }
+                
+                if (!checkNumPlayers(configs))
+                {
+                    createNumPlayersError();
+                    return;
+                }
+                
                 if (config.playerType.getValue() == "Human")
                 {
-//                    if (!checkNamesValid(configs))
-//                    {
-//                        createNameError();
-//                    }
-                    
                     Player player = new Player(config.name.getText(), config.color.getSelectionModel().getSelectedItem(), new HumanController());
                     players[index] = player;
                     chosenColors[index] = config.color.getSelectionModel().getSelectedItem();
                     index++;
-                    System.out.println(player.getDescription());
-                    System.out.println(player.getColor().toString());
+//                    System.out.println(player.getDescription());
+//                    System.out.println(player.getColor().toString());
                 }
-                
-                else if (config.playerType.getValue() == "Computer")
+                else if (config.playerType.getValue() == "AI")
                 {
                     Player player = new Player(config.name.getText(), config.color.getSelectionModel().getSelectedItem(), new ComputerController());
                     players[index] = player;
                     chosenColors[index] = config.color.getSelectionModel().getSelectedItem();
                     index++;
-                    System.out.println(player.getDescription());
-                    System.out.println(player.getColor().toString());
+//                    System.out.println(player.getDescription());
+//                    System.out.println(player.getColor().toString());
                 }
             }
+            //check that none of the chosen colors are duplicates
             if (checkColorEquality(chosenColors))
             {
                 createColorError();
@@ -260,10 +267,14 @@ public class PreGameMenu extends Application
     {
         for (PlayerConfig c: configs)
         {
-            if (c.name.getText().trim().isEmpty())
+            if (c.playerType.getValue() != "No Player")
             {
-                return false;
+                if (c.name.getText().isEmpty())
+                {
+                    return false;
+                }
             }
+            
         }
         return true;
     }
@@ -277,10 +288,27 @@ public class PreGameMenu extends Application
         alert.showAndWait();
     }
 
-    private void setColorCircle(ActionEvent e, int i)
+    
+    private boolean checkNumPlayers(PlayerConfig[] configs)
     {
-        ComboBox<Color> combo = (ComboBox)e.getSource();
-        
-
+        int i = 0;
+        for (PlayerConfig c: configs)
+        {
+            if (c.playerType.getValue() != "No Player")
+            {
+                i++;
+            }
+            
+        }
+        return i >= 2;
+    }
+    
+    private void createNumPlayersError()
+    {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText("Resolve Player Count Error");
+        alert.setContentText("Two or more players are required!");
+        alert.showAndWait();
     }
 }

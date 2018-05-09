@@ -85,7 +85,7 @@ public class PlayerConfig extends HBox
         colorCircle = new Circle(10);
         colorCircle.setFill(Color.GRAY);
         
-        getChildren().addAll(new Label("Player " + i), playerType, new Label("Name:"), name, colorCircle, new Label("Colour:"), color);
+        getChildren().addAll(new Label("Player " + i), playerType, new Label("Name:"), name, new Label("Colour:"), colorCircle, color);
         
     }
 }

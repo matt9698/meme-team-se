@@ -17,7 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import property_tycoon.model.Card;
 import property_tycoon.model.Game;
+import property_tycoon.model.Property;
 
 public class GameView extends Stage
 {
@@ -52,6 +54,9 @@ public class GameView extends Stage
                 board.getSelectedPosition() instanceof PropertyPositionView
                     ? ((PropertyPositionView)board.getSelectedPosition()).getModel().getDescription() + " selected"
                     : "No property selected" ));
+        
+        board.setOnMouseClicked(
+            e -> showPropertyView());
 
         BorderPane bp = new BorderPane(board);
 
@@ -74,5 +79,25 @@ public class GameView extends Stage
 
         ScrollPane sp = new ScrollPane(layers);
         return new Scene(sp);
+    }
+
+    private void showPropertyView()
+    {
+        BoardPositionView pos = board.getSelectedPosition();
+        if(pos instanceof PropertyPositionView) {
+            Property model = ((PropertyPositionView)pos).getModel();
+            PropertyView dialog = new PropertyView(model);
+            dialog.showAndWait();
+        }
+    }
+    
+    private void showCardView()
+    {
+        BoardPositionView pos = board.getSelectedPosition();
+        if(pos instanceof CardPositionView) {
+            Card model = ((CardPositionView)pos).getModel();
+            CardView dialog = new CardView(model);
+            dialog.showAndWait();
+        }
     }
 }
