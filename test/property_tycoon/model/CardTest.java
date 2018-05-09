@@ -71,15 +71,6 @@ public class CardTest
 
     /**
      * Test of getActionCount method, of class Card.
-     * 
-     * 
-     */
-    
-        /**
-     * Gets the number of action choices associated with this card.
-     * For a single action card this method returns 1.
-     *
-     * @return The number of action choices associated with this card.
      */
     @Test
     public void testGetActionCount()

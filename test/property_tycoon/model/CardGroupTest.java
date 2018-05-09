@@ -4,6 +4,7 @@
  */
 package property_tycoon.model;
 
+import javafx.scene.paint.Color;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -44,25 +45,38 @@ public class CardGroupTest
     @Test
     public void testCreate()
     {
-//        Card pot = Card.create(description, true, choices);
+        Card pot = Card.create("any", true, new FakeAction(),new FakeAction());
+        Card opp = Card.create("jail", true, new FakeAction(), new FakeAction());
+        
+        Card.Group potOfLuck = Card.Group.create("pot of luck", pot);
+        Card.Group Opportunity = Card.Group.create("opportunity knocks", opp);
+        
+        assertEquals("pot of luck",potOfLuck.getDescription());
+        assertEquals("opportunity knocks",Opportunity.getDescription());
         
     }
     
-    @Test
-    public void testGetDescription()
-    {
-        
-    }
         
     @Test
-    public void tesDraw()
+    public void testDraw()
     {
-        
+        Player player = new Player("T", Color.CORAL);
+        Card pot = Card.create("any", true, new FakeAction(),new FakeAction());
+        Card.Group potOfLuck = Card.Group.create("pot of luck", pot);
+        pot = potOfLuck.draw(player);
+        assertEquals(player,pot.getOwner());
     }
         
     @Test        
     public void testReplace()
     {
+        Player player = new Player("T", Color.CORAL);
+        Card pot = Card.create("any", true, new FakeAction(),new FakeAction());
+        Card.Group potOfLuck = Card.Group.create("pot of luck", pot);
+        pot = potOfLuck.draw(player);
+        player.use(pot);
+        potOfLuck.replace(pot);
+        assertEquals(null,pot.getOwner());
         
     }
             
