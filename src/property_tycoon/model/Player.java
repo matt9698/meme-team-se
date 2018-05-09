@@ -370,6 +370,6 @@ public class Player
             this.player = player;
         }
         
-        public abstract void takeTurn();
+        public abstract void takeTurn(Board board);
     }
 }

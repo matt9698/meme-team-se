@@ -79,7 +79,7 @@ public class Game
     
     public void nextTurn()
     {
-        getCurrentPlayer().getController().takeTurn();
+        getCurrentPlayer().getController().takeTurn(board);
         incrementPlayerIndex();
     }
 }

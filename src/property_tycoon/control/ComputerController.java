@@ -4,6 +4,7 @@
  */
 package property_tycoon.control;
 
+import property_tycoon.model.Board;
 import property_tycoon.model.Player;
 
 /**
@@ -13,7 +14,7 @@ import property_tycoon.model.Player;
 public class ComputerController extends Player.Controller
 {
     @Override
-    public void takeTurn()
+    public void takeTurn(Board board)
     {
         throw new UnsupportedOperationException("Not yet implemented.");
     }
