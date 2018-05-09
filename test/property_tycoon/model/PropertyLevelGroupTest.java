@@ -74,7 +74,7 @@ public class PropertyLevelGroupTest
         PropertyLevel level2 = new PropertyLevel("Two Houses");
         PropertyLevel.Group group = PropertyLevel.Group.create(true, level1, level2);
         int level2Index = group.getIndex(level2);
-        assertEquals(group.getIndex(level2),level2Index);
+        assertEquals(1,level2Index);
     }
     
     @Test    
@@ -83,7 +83,7 @@ public class PropertyLevelGroupTest
         PropertyLevel level1 = new PropertyLevel("One House");
         PropertyLevel level2 = new PropertyLevel("Two Houses");
         PropertyLevel.Group group = PropertyLevel.Group.create(true, level1, level2);
-        assertEquals(group.getLevel(1),level2);
+        assertEquals(level2,group.getLevel(1));
     }
     
     @Test
@@ -120,7 +120,7 @@ public class PropertyLevelGroupTest
         PropertyLevel level2 = new PropertyLevel("Two Houses");
         PropertyLevel.Group group = PropertyLevel.Group.create(true, level1, level2);
         PropertyLevel nextLvl = group.getNext(level1);
-        assertEquals(group.getNext(level1),nextLvl);
+        assertEquals(level2,nextLvl);
     }
     
     @Test
