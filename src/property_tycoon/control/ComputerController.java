@@ -12,5 +12,10 @@ import property_tycoon.model.Player;
  */
 public class ComputerController extends Player.Controller
 {
+    @Override
+    public void takeTurn()
+    {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
     
 }

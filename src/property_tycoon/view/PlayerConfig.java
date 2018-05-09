@@ -59,11 +59,28 @@ public class PlayerConfig extends HBox
         index = i;
         playerType = new ComboBox<>();
         playerType.getItems().addAll("No Player", "Human", "AI");
+        playerType.getSelectionModel().select(0);
+        playerType.setOnAction (e -> {
+            if (playerType.getValue() != "No Player")
+            {
+                name.setDisable(false);
+                color.setDisable(false);
+            }
+            else
+            {
+                name.setDisable(true);
+                color.setDisable(true);
+            }
+        });
+        
+        name.setDisable(true);
         
         color = new ComboBox<>();
         color.getItems().addAll(Arrays.asList(COLORS));
         color.setConverter(STRING_CONVERTER);
         color.setOnAction(e -> colorCircle.setFill(color.getSelectionModel().getSelectedItem()));
+        color.setDisable(true);
+        
         
         colorCircle = new Circle(10);
         colorCircle.setFill(Color.GRAY);

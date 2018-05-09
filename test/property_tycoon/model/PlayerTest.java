@@ -53,15 +53,18 @@ public class PlayerTest
     @Test
     public void testBuy()
     {
-        System.out.println("buy");
-        Property property = null;
-        Player instance = null;
-        instance.buy(property);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        int startCash = player.getCash();
+        Property instance = Property.create("shop", 20, new int[]{1,1,1,1,1,1});
+        Property.Group.create("regular group", Color.CORAL,
+                                property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                                10,
+                                instance);
+        assertNull(instance.getOwner());
+        player.buy(instance);
+        assertEquals(player,instance.getOwner());
+        assertEquals(startCash - instance.getPrice(),player.getCash());
     }
-
-
 
     /**
      * Test of downgrade method, of class Player.
@@ -69,12 +72,22 @@ public class PlayerTest
     @Test
     public void testDowngrade()
     {
-        System.out.println("downgrade");
-        Property property = null;
-        Player instance = null;
-        instance.downgrade(property);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        int cash = player.getCash();
+        Property instance = Property.create("shop", 20, new int[]{1,1,1,1,1,1});
+        Property instance2 = Property.create("shop2", 20, new int[]{1,1,1,1,1,1});
+        Property.Group.create("regular group", Color.CORAL,
+                               property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                               10,
+                               instance,instance2);
+        player.buy(instance);
+        player.upgrade(instance);
+        cash = cash-instance.getPrice()-instance.getImprovementCost();
+        assertEquals(cash,player.getCash());
+        player.downgrade(instance);
+        cash = cash+instance.getImprovementCost();
+        assertEquals(cash,player.getCash());
+        
     }
 
     /**
@@ -83,15 +96,12 @@ public class PlayerTest
     @Test
     public void testDraw()
     {
-        System.out.println("draw");
-        Group from = null;
-        Player instance = null;
-        instance.draw(from);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        Card card = Card.create("tax",true,new FakeAction(),new FakeAction());
+        Group group = Group.create("potLuck", card);
+        player.draw(group);
+        assertEquals(player,card.getOwner());
     }
-
-
 
     /**
      * Test of getCash method, of class Player.
@@ -99,13 +109,8 @@ public class PlayerTest
     @Test
     public void testGetCash()
     {
-        System.out.println("getCash");
-        Player instance = null;
-        int expResult = 0;
-        int result = instance.getCash();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        assertEquals(1500,player.getCash());
     }
 
     /**
@@ -114,28 +119,8 @@ public class PlayerTest
     @Test
     public void testGetColor()
     {
-        System.out.println("getColor");
-        Player instance = null;
-        Color expResult = null;
-        Color result = instance.getColor();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getController method, of class Player.
-     */
-    @Test
-    public void testGetController()
-    {
-        System.out.println("getController");
-        Player instance = null;
-        Controller expResult = null;
-        Controller result = instance.getController();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        assertEquals(Color.CORAL,player.getColor());
     }
 
     /**
@@ -144,29 +129,8 @@ public class PlayerTest
     @Test
     public void testGetDescription()
     {
-        System.out.println("getDescription");
-        Player instance = null;
-        String expResult = "";
-        String result = instance.getDescription();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-
-    /**
-     * Test of isControlled method, of class Player.
-     */
-    @Test
-    public void testIsControlled()
-    {
-        System.out.println("isControlled");
-        Player instance = null;
-        boolean expResult = false;
-        boolean result = instance.isControlled();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        assertEquals("T",player.getDescription());
     }
 
     /**
@@ -175,12 +139,17 @@ public class PlayerTest
     @Test
     public void testMortgage()
     {
-        System.out.println("mortgage");
-        Property property = null;
-        Player instance = null;
-        instance.mortgage(property);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        int cash = player.getCash();
+        Property instance = Property.create("shop", 10, new int[]{1,1,1,1,1,1});
+        Property.Group.create("regular group", Color.CORAL,
+                                property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                                10,
+                                instance);
+        player.buy(instance);
+        player.mortgage(instance);
+        cash = cash-instance.getPrice()+instance.getMortgagedPrice();
+        assertEquals(cash,player.getCash());
     }
 
     /**
@@ -189,13 +158,33 @@ public class PlayerTest
     @Test
     public void testPayRent()
     {
-        System.out.println("payRent");
-        Property on = null;
-        int diceValue = 0;
-        Player instance = null;
-        instance.payRent(on, diceValue);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player1 = new Player("T", Color.CORAL);
+        int p1Cash = player1.getCash();
+        Player player2 = new Player("Ollie", Color.GRAY);
+        int p2Cash = player2.getCash();
+        Property instance = Property.create("shop", 10, new int[]{1,2,3,4,5,6});
+        Property.Group group = Property.Group.create("regular group", Color.CORAL,
+                                    property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                                    10,
+                                    instance);
+        
+        player1.buy(instance);
+        p1Cash = p1Cash - instance.getPrice();
+        player2.payRent(instance, 5);
+        p2Cash = p2Cash - instance.getRentPrice(7);
+        p1Cash = p1Cash + instance.getRentPrice(7);
+        assertEquals(p1Cash,player1.getCash());
+        assertEquals(p2Cash,player2.getCash());
+        
+        player1.upgrade(instance);
+        p1Cash = p1Cash - instance.getImprovementCost();
+        player2.payRent(instance,6);
+        p2Cash = p2Cash - instance.getRentPrice(7);
+        p1Cash = p1Cash + instance.getRentPrice(2);
+        
+        assertEquals(p1Cash,player1.getCash());
+        assertEquals(p2Cash,player2.getCash());
+        
     }
 
     /**
@@ -204,12 +193,19 @@ public class PlayerTest
     @Test
     public void testSell()
     {
-        System.out.println("sell");
-        Property property = null;
-        Player instance = null;
-        instance.sell(property);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        Property instance = Property.create("shop", 10, new int[]{1,1,1,1,1,1});
+        int p1Cash = player.getCash();
+        Property.Group.create("regular group",
+                                Color.BLUE,
+                               property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                               20,
+                               instance);
+        player.buy(instance);
+        p1Cash = p1Cash - instance.getPrice();
+        player.sell(instance);
+        p1Cash = p1Cash + instance.getPrice();
+        assertEquals(p1Cash, player.getCash());
     }
 
     /**
@@ -218,12 +214,21 @@ public class PlayerTest
     @Test
     public void testUnmortgage()
     {
-        System.out.println("unmortgage");
-        Property property = null;
-        Player instance = null;
-        instance.unmortgage(property);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        Property instance = Property.create("shop", 10, new int[]{1,1,1,1,1,1});
+        int p1Cash = player.getCash();
+        Property.Group.create("regular group",
+                                Color.BLUE,
+                               property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                               20,
+                               instance);
+        player.buy(instance);
+        p1Cash = p1Cash -instance.getPrice();
+        player.mortgage(instance);
+        p1Cash = p1Cash + instance.getMortgagedPrice();
+        player.unmortgage(instance);
+        p1Cash = p1Cash - instance.getMortgagedPrice();
+        assertEquals(p1Cash,player.getCash());
     }
 
     /**
@@ -232,12 +237,18 @@ public class PlayerTest
     @Test
     public void testUpgrade()
     {
-        System.out.println("upgrade");
-        Property property = null;
-        Player instance = null;
-        instance.upgrade(property);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        int cash = player.getCash();
+        Property instance = Property.create("shop", 20, new int[]{1,1,1,1,1,1});
+        Property instance2 = Property.create("shop2", 20, new int[]{1,1,1,1,1,1});
+        Property.Group.create("regular group", Color.CORAL,
+                               property_tycoon.model.PropertyLevel.Group.REGULAR_LEVELS, 
+                               10,
+                               instance,instance2);
+        player.buy(instance);
+        player.upgrade(instance);
+        cash = cash-instance.getPrice()-instance.getImprovementCost();
+        assertEquals(cash,player.getCash());
     }
 
     /**
@@ -246,12 +257,14 @@ public class PlayerTest
     @Test
     public void testUse_Card()
     {
-        System.out.println("use");
-        Card card = null;
-        Player instance = null;
-        instance.use(card);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        CardAction action = new FakeAction();
+        Card card = Card.create(action, true);
+        Group group = Group.create("potLuck", card);
+        player.draw(group);
+        player.use(card);
+        assertFalse(card.isOwned());
+        
     }
 
     /**
@@ -260,13 +273,12 @@ public class PlayerTest
     @Test
     public void testUse_Card_int()
     {
-        System.out.println("use");
-        Card card = null;
-        int action = 0;
-        Player instance = null;
-        instance.use(card, action);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player player = new Player("T", Color.CORAL);
+        Card card = Card.create("card", true, new FakeAction(), new FakeAction());
+        Group group = Group.create("potLuck", card);
+        player.draw(group);
+        player.use(card, 1);
+        assertFalse(card.isOwned());
     }
 
     

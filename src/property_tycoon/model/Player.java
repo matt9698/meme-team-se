@@ -369,5 +369,7 @@ public class Player
             }
             this.player = player;
         }
+        
+        public abstract void takeTurn();
     }
 }
