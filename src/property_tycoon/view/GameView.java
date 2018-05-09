@@ -92,13 +92,13 @@ public class GameView extends Stage
         }
     }
     
-    private void showCardView()
-    {
-        BoardPositionView pos = board.getSelectedPosition();
-        if(pos instanceof CardPositionView) {
-            Card model = ((CardPositionView)pos).getModel();
-            CardView dialog = new CardView(model);
-            dialog.showAndWait();
-        }
-    }
+//    private void showCardView()
+//    {
+//        BoardPositionView pos = board.getSelectedPosition();
+//        if(pos instanceof CardPositionView) {
+//            Card model = ((CardPositionView)pos).getModel();
+//            CardView dialog = new CardView(model);
+//            dialog.showAndWait();
+//        }
+//    }
 }
