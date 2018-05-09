@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import property_tycoon.control.HumanController;
 import property_tycoon.model.Property.Group;
 
 /**
@@ -128,7 +129,7 @@ public class PropertyTest
     public void testBuy()
     {
         
-        Player buyer = new Player("jim", Color.CORAL);       
+        Player buyer = new Player("jim", Color.CORAL , new HumanController());       
         Property instance = Property.create("shop", 100, new int[]{1,1,1,1,1,1});
         Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -151,8 +152,8 @@ public class PropertyTest
     @Test(expected = IllegalStateException.class)
     public void testBuyErrorState()
     {
-        Player buyer = new Player("jim", Color.CORAL);  
-        Player buyer2 = new Player("bob", Color.CORAL);
+        Player buyer = new Player("jim", Color.CORAL , new HumanController());  
+        Player buyer2 = new Player("bob", Color.CORAL , new HumanController());
         Property instance = Property.create("shop", 100, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -169,7 +170,7 @@ public class PropertyTest
     @Test
     public void testDowngrade()
     {
-        Player buyer = new Player("jim", Color.CORAL);
+        Player buyer = new Player("jim", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -224,7 +225,7 @@ public class PropertyTest
     @Test
     public void testGetRentPrice_Regular()
     {
-        Player buyer = new Player("jim", Color.CORAL);
+        Player buyer = new Player("jim", Color.CORAL , new HumanController());
         Property instance = Property.create("shop", 40, new int[]{1,5,10,15,20,30});
         Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -239,7 +240,7 @@ public class PropertyTest
     @Test
     public void testGetRentPrice_Station()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property station1 = Property.createStation("station", 50);
         Property station2 = Property.createStation("station2", 50);
         Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.STATION_LEVELS,60, station1,station2);
@@ -256,7 +257,7 @@ public class PropertyTest
     @Test
     public void testGetRentPrice_Utility()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property utility1 = Property.createUtility("util 1", 30);
         Property utility2 = Property.createUtility("util 2", 30);
         Property.Group group = Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.UTILITY_LEVELS,60, utility1,utility2);
@@ -276,7 +277,7 @@ public class PropertyTest
     @Test
     public void testSell()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("shop", 40, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -292,7 +293,7 @@ public class PropertyTest
     @Test
     public void testUpgrade()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -332,7 +333,7 @@ public class PropertyTest
     @Test
     public void testGetOwner()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -393,7 +394,7 @@ public class PropertyTest
     @Test
     public void testIsMortgaged()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -409,7 +410,7 @@ public class PropertyTest
     @Test
     public void testIsOwned()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         assertFalse(instance.isOwned());
@@ -425,7 +426,7 @@ public class PropertyTest
     @Test
     public void testIsValid()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance = instance.buy(buyer);
@@ -440,7 +441,7 @@ public class PropertyTest
     @Test
     public void testMortgage()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);
@@ -455,7 +456,7 @@ public class PropertyTest
     @Test
     public void testUnmortgage()
     {
-        Player buyer = new Player("T", Color.CORAL);
+        Player buyer = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("Adam's Hut", 50, new int[]{1,1,1,1,1,1});
         Property.Group.create("shop Group", Color.GREEN,PropertyLevel.Group.REGULAR_LEVELS,60, instance);
         instance.buy(buyer);

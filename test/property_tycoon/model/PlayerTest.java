@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import property_tycoon.control.HumanController;
 import property_tycoon.model.Card.Group;
 import property_tycoon.model.Player.Controller;
 
@@ -53,7 +54,7 @@ public class PlayerTest
     @Test
     public void testBuy()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL, new HumanController());
         int startCash = player.getCash();
         Property instance = Property.create("shop", 20, new int[]{1,1,1,1,1,1});
         Property.Group.create("regular group", Color.CORAL,
@@ -72,7 +73,7 @@ public class PlayerTest
     @Test
     public void testDowngrade()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL, new HumanController());
         int cash = player.getCash();
         Property instance = Property.create("shop", 20, new int[]{1,1,1,1,1,1});
         Property instance2 = Property.create("shop2", 20, new int[]{1,1,1,1,1,1});
@@ -96,7 +97,7 @@ public class PlayerTest
     @Test
     public void testDraw()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL, new HumanController());
         Card card = Card.create("tax",true,new FakeAction(),new FakeAction());
         Group group = Group.create("potLuck", card);
         player.draw(group);
@@ -109,7 +110,7 @@ public class PlayerTest
     @Test
     public void testGetCash()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL, new HumanController());
         assertEquals(1500,player.getCash());
     }
 
@@ -119,7 +120,7 @@ public class PlayerTest
     @Test
     public void testGetColor()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         assertEquals(Color.CORAL,player.getColor());
     }
 
@@ -129,7 +130,7 @@ public class PlayerTest
     @Test
     public void testGetDescription()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         assertEquals("T",player.getDescription());
     }
 
@@ -139,7 +140,7 @@ public class PlayerTest
     @Test
     public void testMortgage()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         int cash = player.getCash();
         Property instance = Property.create("shop", 10, new int[]{1,1,1,1,1,1});
         Property.Group.create("regular group", Color.CORAL,
@@ -158,9 +159,9 @@ public class PlayerTest
     @Test
     public void testPayRent()
     {
-        Player player1 = new Player("T", Color.CORAL);
+        Player player1 = new Player("T", Color.CORAL , new HumanController());
         int p1Cash = player1.getCash();
-        Player player2 = new Player("Ollie", Color.GRAY);
+        Player player2 = new Player("Ollie", Color.GRAY , new HumanController());
         int p2Cash = player2.getCash();
         Property instance = Property.create("shop", 10, new int[]{1,2,3,4,5,6});
         Property.Group group = Property.Group.create("regular group", Color.CORAL,
@@ -193,7 +194,7 @@ public class PlayerTest
     @Test
     public void testSell()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("shop", 10, new int[]{1,1,1,1,1,1});
         int p1Cash = player.getCash();
         Property.Group.create("regular group",
@@ -214,7 +215,7 @@ public class PlayerTest
     @Test
     public void testUnmortgage()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Property instance = Property.create("shop", 10, new int[]{1,1,1,1,1,1});
         int p1Cash = player.getCash();
         Property.Group.create("regular group",
@@ -237,7 +238,7 @@ public class PlayerTest
     @Test
     public void testUpgrade()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         int cash = player.getCash();
         Property instance = Property.create("shop", 20, new int[]{1,1,1,1,1,1});
         Property instance2 = Property.create("shop2", 20, new int[]{1,1,1,1,1,1});
@@ -257,7 +258,7 @@ public class PlayerTest
     @Test
     public void testUse_Card()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         CardAction action = new FakeAction();
         Card card = Card.create(action, true);
         Group group = Group.create("potLuck", card);
@@ -273,7 +274,7 @@ public class PlayerTest
     @Test
     public void testUse_Card_int()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card card = Card.create("card", true, new FakeAction(), new FakeAction());
         Group group = Group.create("potLuck", card);
         player.draw(group);

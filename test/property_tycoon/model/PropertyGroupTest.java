@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import property_tycoon.control.HumanController;
 import property_tycoon.model.Property;
 import property_tycoon.model.PropertyLevel;
 import property_tycoon.model.PropertyLevel.Group;
@@ -108,7 +109,7 @@ public class PropertyGroupTest
     @Test
     public void testGetHighestLevel()
     {
-        Player buyer = new Player("T", Color.CORAL); 
+        Player buyer = new Player("T", Color.CORAL , new HumanController()); 
         Property regular = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property regular2 = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property.Group reg = Property.Group.create("regular group",
@@ -129,7 +130,7 @@ public class PropertyGroupTest
     @Test
     public void testGetLowestLevel()
     {
-        Player buyer = new Player("T", Color.CORAL); 
+        Player buyer = new Player("T", Color.CORAL , new HumanController()); 
         Property regular = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property regular2 = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property.Group reg = Property.Group.create("regular group",
@@ -185,7 +186,7 @@ public class PropertyGroupTest
     @Test
     public void testGetLevels()
     {
-        Player buyer = new Player("T", Color.CORAL); 
+        Player buyer = new Player("T", Color.CORAL , new HumanController()); 
         Property regular = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property regular2 = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property.Group reg = Property.Group.create("regular group",
@@ -208,7 +209,7 @@ public class PropertyGroupTest
     @Test
     public void testGetOwner()
     {
-        Player buyer = new Player("T", Color.CORAL); 
+        Player buyer = new Player("T", Color.CORAL , new HumanController()); 
         Property regular = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property regular2 = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property.Group reg = Property.Group.create("regular group",
@@ -225,7 +226,7 @@ public class PropertyGroupTest
     @Test
     public void testGetProperties()
     {
-        Player buyer = new Player("T", Color.CORAL); 
+        Player buyer = new Player("T", Color.CORAL , new HumanController()); 
         Property regular = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property regular2 = Property.create("regular2", 10, new int[] {1,2,3,4,5,6});
         Property.Group reg = Property.Group.create("regular group",
@@ -243,7 +244,7 @@ public class PropertyGroupTest
     @Test
     public void testIsOwned()
     {
-        Player buyer = new Player("T", Color.CORAL); 
+        Player buyer = new Player("T", Color.CORAL , new HumanController()); 
         Property regular = Property.create("regular", 10, new int[] {1,2,3,4,5,6});
         Property regular2 = Property.create("regular2", 10, new int[] {1,2,3,4,5,6});
         Property.Group reg = Property.Group.create("regular group",
