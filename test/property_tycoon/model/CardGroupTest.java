@@ -81,10 +81,5 @@ public class CardGroupTest
         
     }
             
-    @Test
-    public void testShuffle()
-    {
-        
-    }
     
 }

@@ -284,6 +284,12 @@ public class PropertyTest
         int sellPrice = instance.sell();
         assertEquals(instance.getPrice(),sellPrice);
         assertFalse(instance.isOwned());
+        
+        instance.buy(buyer);
+        instance.mortgage();
+        sellPrice -= instance.getMortgagedPrice();
+        assertEquals(sellPrice,instance.sell());
+        
     }
     
     
