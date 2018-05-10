@@ -50,6 +50,7 @@ public class Board
         }
 
         this.positions = positions;
+        playerPositionMap = new int[players.length];
 
         if(players == null) {
             throw new IllegalArgumentException("players should not be null.");
