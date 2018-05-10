@@ -26,6 +26,7 @@ public class GameView extends Stage
     private Game model;
     private BoardView board;
     private BorderPane overlay;
+    private Label selected;
 
     public GameView(Game model)
     {
@@ -37,7 +38,6 @@ public class GameView extends Stage
         setTitle("Property Tycoon");
         setScene(buildScene());
         show();
-        model.nextTurn();
     }
 
     public Game getModel()
@@ -47,17 +47,12 @@ public class GameView extends Stage
 
     private Scene buildScene()
     {
-        Label selected = new Label("No property selected");
+        selected = new Label("No property selected");
         board = new BoardView(model.getBoard());
         board.setRotate(270);
-        board.setOnMouseClicked(
-            e -> selected.setText(
-                board.getSelectedPosition() instanceof PropertyPositionView
-                    ? ((PropertyPositionView)board.getSelectedPosition()).getModel().getDescription() + " selected"
-                    : "No property selected" ));
         
         board.setOnMouseClicked(
-            e -> showDialog());
+            e -> onBoardClick());
 
         BorderPane bp = new BorderPane(board);
 
@@ -83,10 +78,11 @@ public class GameView extends Stage
     }
 
 
-    private void showDialog()
+    private void onBoardClick()
     {
         BoardPositionView pos = board.getSelectedPosition();
         if(pos instanceof PropertyPositionView) {
+            selected.setText(((PropertyPositionView)board.getSelectedPosition()).getModel().getDescription() + " selected");
             Property model = ((PropertyPositionView)pos).getModel();
             PropertyView dialog = new PropertyView(model);
             dialog.showAndWait();
