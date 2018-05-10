@@ -32,8 +32,11 @@ public class PropertyView extends Stage
     
     private Scene buildScene()
     {
+        Label propertyName = new Label(model.getDescription());
+        propertyName.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
+        
         VBox details = new VBox(
-            new Label(model.getDescription()),
+            propertyName,
             new Label("Price: £" + model.getPrice()));
         
         PropertyLevel.Group levels = model.getGroup().getLevels();
@@ -49,7 +52,6 @@ public class PropertyView extends Stage
         details.setMinSize(200, 200);
         details.setPadding(new Insets(40));
         details.setAlignment(Pos.CENTER);
-//        details.setBackground(new Background(new BackgroundFill(model.getGroup().getColor(), CornerRadii.EMPTY, Insets.EMPTY)));
         
         
         

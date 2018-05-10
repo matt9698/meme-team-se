@@ -82,7 +82,12 @@ public class Player
         properties.add(property.buy(this));
         setCash(getCash() - property.getPrice());
     }
-
+    
+    /**
+     * Returns a non modifiable, read only object of the player's cash.
+     * 
+     * @return A read only cash object.
+     */
     public ReadOnlyIntegerProperty cashProperty()
     {
         return cash.getReadOnlyProperty();
@@ -124,6 +129,11 @@ public class Player
         cards.add(from.draw(this));
     }
 
+    /**
+     * Returns an unmodifiable list of the cards currently owned by this player.
+     * 
+     * @return The list of cards this player owns.
+     */
     public ObservableList<Card> getCards()
     {
         return FXCollections.unmodifiableObservableList(cards);
@@ -139,11 +149,22 @@ public class Player
         return cash.get();
     }
 
+    /**
+     * Returns this player's chosen color.
+     * 
+     * @return The color associated with this player.
+     */
     public Color getColor()
     {
         return color;
     }
 
+    /**
+     * Returns the Controller object associated with this player.
+     * Controllers are assigned at game start.
+     * 
+     * @return The controller object for this player.
+     */
     public Controller getController()
     {
         return controller;
@@ -170,6 +191,12 @@ public class Player
         return FXCollections.unmodifiableObservableList(properties);
     }
 
+    /**
+     * Indicates whether this player has a controller assigned to it.
+     * 
+     * @return A boolean indicating if this player has a controller object associated 
+     * with it.
+     */
     public boolean isControlled()
     {
         return controller != null;
