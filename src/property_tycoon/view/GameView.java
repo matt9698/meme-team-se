@@ -57,7 +57,7 @@ public class GameView extends Stage
                     : "No property selected" ));
         
         board.setOnMouseClicked(
-            e -> showPropertyView());
+            e -> showDialog());
 
         BorderPane bp = new BorderPane(board);
 
@@ -82,7 +82,8 @@ public class GameView extends Stage
         return new Scene(sp);
     }
 
-    private void showPropertyView()
+
+    private void showDialog()
     {
         BoardPositionView pos = board.getSelectedPosition();
         if(pos instanceof PropertyPositionView) {
@@ -90,15 +91,10 @@ public class GameView extends Stage
             PropertyView dialog = new PropertyView(model);
             dialog.showAndWait();
         }
+        else if(pos instanceof CardPositionView) {
+            Card card = ((CardPositionView)pos).getModel().draw(model.getCurrentPlayer());
+            CardView dialog  = new CardView(card);
+            dialog.showAndWait();
+        }
     }
-    
-//    private void showCardView()
-//    {
-//        BoardPositionView pos = board.getSelectedPosition();
-//        if(pos instanceof CardPositionView) {
-//            Card model = ((CardPositionView)pos).getModel();
-//            CardView dialog = new CardView(model);
-//            dialog.showAndWait();
-//        }
-//    }
 }

@@ -4,6 +4,7 @@
  */
 package property_tycoon.view;
 
+import javafx.scene.control.Label;
 import property_tycoon.model.BoardPosition;
 import property_tycoon.model.Card;
 
@@ -18,13 +19,12 @@ public class CardPositionView extends BoardPositionView
     
     public CardPositionView(Card.Group cardGroup){
         this.cardGroup=cardGroup;
+        getChildren().add(new Label(cardGroup.getDescription()));
     }
     
     @Override
     public Card.Group getModel()
     {
         return cardGroup;
-    }
-    
-    
+    }   
 }

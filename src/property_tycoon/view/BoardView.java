@@ -100,6 +100,8 @@ public class BoardView extends GridPane
             else if(pos instanceof CornerPosition) {
                 positions[i] = new CornerPositionView((CornerPosition)pos);
                 positions[i].setRotate(BOARD_POS_MAPPINGS[i].getRotation());
+                positions[i].setOnMouseClicked(e -> selected
+                    = (BoardPositionView)e.getSource());
                 add(new Group(positions[i]), BOARD_POS_MAPPINGS[i].getColumn(),
                     BOARD_POS_MAPPINGS[i].getRow());
             }
@@ -107,6 +109,8 @@ public class BoardView extends GridPane
             else if(pos instanceof TaxPosition) {
                 positions[i] = new TaxPositionView((TaxPosition)pos);
                 positions[i].setRotate(BOARD_POS_MAPPINGS[i].getRotation());
+                positions[i].setOnMouseClicked(e -> selected
+                    = (BoardPositionView)e.getSource());
                 add(new Group(positions[i]), BOARD_POS_MAPPINGS[i].getColumn(),
                     BOARD_POS_MAPPINGS[i].getRow());
             }
@@ -114,6 +118,8 @@ public class BoardView extends GridPane
             else if(pos instanceof Card.Group) {
                 positions[i] = new CardPositionView((Card.Group)pos);
                 positions[i].setRotate(BOARD_POS_MAPPINGS[i].getRotation());
+                positions[i].setOnMouseClicked(e -> selected
+                    = (BoardPositionView)e.getSource());
                 add(new Group(positions[i]), BOARD_POS_MAPPINGS[i].getColumn(),
                     BOARD_POS_MAPPINGS[i].getRow());
             }
