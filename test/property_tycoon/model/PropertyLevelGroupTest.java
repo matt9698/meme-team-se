@@ -130,7 +130,7 @@ public class PropertyLevelGroupTest
         PropertyLevel level2 = new PropertyLevel("Two Houses");
         PropertyLevel.Group group = PropertyLevel.Group.create(true, level1, level2);
         PropertyLevel prevLvl = group.getPrevious(level2);
-        assertEquals(group.getPrevious(level2),prevLvl);
+        assertEquals(level1,prevLvl);
     }
     
     @Test
