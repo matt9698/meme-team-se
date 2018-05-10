@@ -45,19 +45,19 @@ public class DiceTest
     /**
      * Test of rollDice method, of class Dice.
      */
-    @Test
-    public void testRollDice()
-    {
-        
-        Dice dice = new Dice();
-        
-        
-        System.out.println("rollDice");
-        int[] expResult = null;
-        int[] result = Dice.rollDice();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    @Test
+//    public void testRollDice()
+//    {
+//        
+//        Dice dice = new Dice();
+//        
+//        
+//        System.out.println("rollDice");
+//        int[] expResult = null;
+//        int[] result = Dice.rollDice();
+//        assertArrayEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
     
 }
