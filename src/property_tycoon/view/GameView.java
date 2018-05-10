@@ -90,6 +90,7 @@ public class GameView extends Stage
         else if(pos instanceof CardPositionView) {
             Card card = ((CardPositionView)pos).getModel().draw(model.getCurrentPlayer());
             CardView dialog  = new CardView(card);
+            card.use();
             dialog.showAndWait();
         }
     }
