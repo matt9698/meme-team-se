@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
  */
 public class Player
 {
-    public static final int STARTING_CASH = 1500;
+    private static final int STARTING_CASH = 1500;
 
     private final ObservableList<Card> cards;
     private final ReadOnlyIntegerWrapper cash;
@@ -31,7 +31,7 @@ public class Player
     private final String description;
     private final ObservableList<Property> properties;
 
-    public Player(String description, Color color)
+    public Player(String description, Color color, Controller controller)
     {
         if(description == null) {
             throw new IllegalArgumentException("description should not be null.");
@@ -47,12 +47,16 @@ public class Player
         }
         this.color = color;
 
-        cash = new ReadOnlyIntegerWrapper(this, "cash", STARTING_CASH);
+        if(controller == null) {
+            throw new IllegalArgumentException(
+                "controller should not be null.");
+        }
+        this.controller = controller;
+        controller.setPlayer(this);
 
+        cash = new ReadOnlyIntegerWrapper(this, "cash", STARTING_CASH);
         properties = FXCollections.observableArrayList();
         cards = FXCollections.observableArrayList();
-
-        controller = null;
     }
 
     /**
@@ -339,17 +343,6 @@ public class Player
         cards.remove(card);
     }
 
-    protected void setController(Controller controller)
-    {
-        if(isControlled()) {
-            throw new IllegalStateException("Player already has a controller.");
-        }
-        if(controller == null) {
-            throw new IllegalArgumentException("controller should not be null.");
-        }
-        this.controller = controller;
-    }
-
     private void setCash(int amount)
     {
         assert amount >= 0 : "amount should not be negative.";
@@ -358,16 +351,25 @@ public class Player
 
     public static abstract class Controller
     {
-        private final Player player;
+        private Player player;
 
-        public Controller(Player player)
-        {
-            this.player = player;
-        }
-
-        public Player getPlayer()
+        public final Player getPlayer()
         {
             return player;
         }
+
+        protected final void setPlayer(Player player)
+        {
+            if(this.player != null) {
+                throw new IllegalStateException(
+                    "Controller is already controlling a Player.");
+            }
+            if(player == null) {
+                throw new IllegalArgumentException("player should not be null.");
+            }
+            this.player = player;
+        }
+        
+        public abstract void takeTurn(Board board);
     }
 }

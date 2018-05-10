@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import property_tycoon.control.HumanController;
 
 /**
  *
@@ -60,7 +61,7 @@ public class CardGroupTest
     @Test
     public void testDraw()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card pot = Card.create("any", true, new FakeAction(),new FakeAction());
         Card.Group potOfLuck = Card.Group.create("pot of luck", pot);
         pot = potOfLuck.draw(player);
@@ -70,7 +71,7 @@ public class CardGroupTest
     @Test        
     public void testReplace()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card pot = Card.create("any", true, new FakeAction(),new FakeAction());
         Card.Group potOfLuck = Card.Group.create("pot of luck", pot);
         pot = potOfLuck.draw(player);

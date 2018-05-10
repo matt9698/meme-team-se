@@ -91,6 +91,11 @@ public final class PropertyPosition extends Property implements BoardPosition
         return realProperty.getPrice();
     }
 
+    public Property getProperty()
+    {
+        return realProperty;
+    }
+
     @Override
     public int getRentPrice(PropertyLevel level, int diceValue)
     {

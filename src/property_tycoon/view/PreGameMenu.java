@@ -8,31 +8,28 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
+import property_tycoon.control.ComputerController;
+import property_tycoon.control.HumanController;
+import property_tycoon.model.DefaultGameData;
+import property_tycoon.model.Game;
+import property_tycoon.model.Player;
 
 /**
  *
@@ -41,7 +38,7 @@ import javafx.util.StringConverter;
 public class PreGameMenu extends Application
 {
 
-    public static int WIDTH = 500, HEIGHT = 900;
+    public static int WIDTH = 800, HEIGHT = 800;
     public static Color defaultColor = Color.web("#cbe8ba");
     private Stage stage;
     //private MainMenu mainMenu = new MainMenu();
@@ -52,7 +49,7 @@ public class PreGameMenu extends Application
         stage.setMinWidth(WIDTH);
         stage.setMinHeight(HEIGHT);
         stage.setTitle("Property Tycoon");
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.setScene(createScene(stage));
         stage.show();
     }
@@ -106,11 +103,26 @@ public class PreGameMenu extends Application
         comboBox3.getItems().add("Full");
         comboBox3.getItems().add("Abridged");
         comboBox3.getSelectionModel().select(0);
-        comboBox3.setDisable(true);
 
-        Button button2 = new Button("Start");
+        Button startButton = new Button("Start");
+        startButton.setBackground(new Background(new BackgroundFill(Color.web(
+            "#3d8af7"), new CornerRadii(10), Insets.EMPTY)));
+        startButton.setMinSize(100, 40);
+        startButton.setOnMouseEntered((t) -> {
+            startButton.setBackground(new Background(new BackgroundFill(
+                Color.web(
+                    "#91e4fb"),
+                new CornerRadii(10), Insets.EMPTY)));
+        });
+        startButton.setOnMouseExited((t) -> {
+            startButton.setBackground(new Background(new BackgroundFill(
+                Color.web(
+                    "#3d8af7"), new CornerRadii(10), Insets.EMPTY)));
+        });
+        
+        
         Insets insets = new Insets(20);
-        HBox bottomHBox = new HBox(goBackButton, gameTypeLabel, comboBox3, button2);
+        HBox bottomHBox = new HBox(goBackButton, gameTypeLabel, comboBox3, startButton);
         bottomHBox.setMinSize(100, 50);
         bottomHBox.setAlignment(Pos.CENTER_LEFT);
         bottomHBox.setPadding(insets);
@@ -128,13 +140,75 @@ public class PreGameMenu extends Application
         PlayerConfig[] configs = new PlayerConfig[6];
         for(int i = 0; i < configs.length; i++) {
             configs[i] = new PlayerConfig(i+1);
+            configs[i].setSpacing(20);
+            configs[i].setAlignment(Pos.CENTER);
         }
         
-        
+        //create players upon the start button being clicked
+        startButton.setOnMouseClicked((t) -> {
+            int numPlayers = 0;
+            for (PlayerConfig config: configs)
+            {
+                if (config.playerType.getValue() != "No Player")
+                {
+                    numPlayers++;
+                }
+            }
+            
+            Player[] players = new Player[numPlayers];
+            Color[] chosenColors = new Color[numPlayers];
+            int index = 0;
+            for (PlayerConfig config: configs)
+            {
+                //check that none of the name fields are empty
+                if (!checkNamesValid(configs))
+                {
+                    createNameError();
+                    return;
+                }
+                
+                if (!checkNumPlayers(configs))
+                {
+                    createNumPlayersError();
+                    return;
+                }
+                
+                if (config.playerType.getValue() == "Human")
+                {
+                    Player player = new Player(config.name.getText(), config.color.getSelectionModel().getSelectedItem(), new HumanController());
+                    players[index] = player;
+                    chosenColors[index] = config.color.getSelectionModel().getSelectedItem();
+                    index++;
+//                    System.out.println(player.getDescription());
+//                    System.out.println(player.getColor().toString());
+                }
+                else if (config.playerType.getValue() == "AI")
+                {
+                    Player player = new Player(config.name.getText(), config.color.getSelectionModel().getSelectedItem(), new ComputerController());
+                    players[index] = player;
+                    chosenColors[index] = config.color.getSelectionModel().getSelectedItem();
+                    index++;
+//                    System.out.println(player.getDescription());
+//                    System.out.println(player.getColor().toString());
+                }
+            }
+            //check that none of the chosen colors are duplicates
+            if (checkColorEquality(chosenColors))
+            {
+                createColorError();
+            }
+            else
+            {
+                stage.hide();
+                GameView gameview = new GameView(new Game(players, new DefaultGameData()));
+            }
+            
+        });
         
         VBox vbox = new VBox(configs);
         vbox.setMinSize(WIDTH - 100, 100);
-        vbox.setPadding(insets);
+        vbox.setStyle("-fx-border-color:GREY; -fx-border-width: 1; -fx-border-radius: 5;");
+        vbox.setPadding(new Insets(10));
         vbox.setSpacing(30);
         vbox.setAlignment(Pos.CENTER);
 //        vbox.setBorder(new Border(new BorderStroke(Color.BLACK,
@@ -161,11 +235,79 @@ public class PreGameMenu extends Application
         //bp.setAlignment(bp.getTop(), Pos.CENTER);
         return scene;
     }
-
-    private void setColorCircle(ActionEvent e, int i)
+    
+    //checks if two of the chosen colours by players are the same
+    private boolean checkColorEquality(Color[] colors)
     {
-        ComboBox<Color> combo = (ComboBox)e.getSource();
-        
+        for (int i = 0; i < colors.length; i++)
+        {
+            for (int j = i+1; j < colors.length; j++)
+            {
+                if (colors[i] == colors[j])
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    //create an error window incase two or more chosen colors are the same
+    private void createColorError()
+    {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText("Resolve Duplicate Colors");
+        alert.setContentText("Two or more players have chosen the same colour. Please choose differently!");
+        alert.showAndWait();
+    }
+    
+    private boolean checkNamesValid(PlayerConfig[] configs)
+    {
+        for (PlayerConfig c: configs)
+        {
+            if (c.playerType.getValue() != "No Player")
+            {
+                if (c.name.getText().isEmpty())
+                {
+                    return false;
+                }
+            }
+            
+        }
+        return true;
+    }
+    
+    private void createNameError()
+    {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText("Resolve Empty Name Fields");
+        alert.setContentText("Atleast one player has an invalid player name. Please choose enter valid names!");
+        alert.showAndWait();
+    }
 
+    
+    private boolean checkNumPlayers(PlayerConfig[] configs)
+    {
+        int i = 0;
+        for (PlayerConfig c: configs)
+        {
+            if (c.playerType.getValue() != "No Player")
+            {
+                i++;
+            }
+            
+        }
+        return i >= 2;
+    }
+    
+    private void createNumPlayersError()
+    {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText("Resolve Player Count Error");
+        alert.setContentText("Two or more players are required!");
+        alert.showAndWait();
     }
 }

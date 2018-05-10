@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import property_tycoon.control.HumanController;
 import property_tycoon.model.Card.Group;
 
 /**
@@ -181,7 +182,7 @@ public class CardTest
     @Test
     public void testIsValid()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card action = Card.create("tax",true,new FakeAction(),new FakeAction());
         Group group = Group.create("potLuck", action);
         action = group.draw(player);
@@ -194,7 +195,7 @@ public class CardTest
     @Test
     public void testUse_0args()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         CardAction act = new FakeAction();
         Card action = Card.create(act, true);
         Group group = Group.create("potLuck", action);
@@ -210,7 +211,7 @@ public class CardTest
     @Test
     public void testUse_int()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card action = Card.create("tax",true,new FakeAction(),new FakeAction());
         Group group = Group.create("potLuck", action);
         action = group.draw(player);
@@ -226,7 +227,7 @@ public class CardTest
     @Test
     public void testIsOwned()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card action = Card.create("tax",true,new FakeAction(),new FakeAction());
         Group group = Group.create("potLuck", action);
         assertFalse(action.isOwned());
@@ -239,7 +240,7 @@ public class CardTest
     @Test
     public void testIsOwned_0args()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         CardAction act = new FakeAction();
         Card action = Card.create(act, true);
         Group group = Group.create("potLuck", action);
@@ -256,7 +257,7 @@ public class CardTest
     @Test
     public void testGetOwner()
     {
-        Player player = new Player("T", Color.CORAL);
+        Player player = new Player("T", Color.CORAL , new HumanController());
         Card action = Card.create("tax",true,new FakeAction(),new FakeAction());
         Group group = Group.create("potLuck", action);
         assertFalse(action.isOwned());
