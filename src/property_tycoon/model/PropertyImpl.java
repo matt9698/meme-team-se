@@ -301,8 +301,9 @@ final class PropertyImpl extends Property
                 + "It must be at its lowest improvement level before being sold.");
         }
 
+        int credit = getPrice();
         if(isMortgaged()) {
-            unmortgage();
+            credit -= unmortgage();
         }
 
         Player old = owner;
@@ -310,7 +311,7 @@ final class PropertyImpl extends Property
         getPropertyChangeSupport().firePropertyChange("owner", old, null);
         getPropertyChangeSupport().firePropertyChange("owned", true, false);
 
-        return getPrice();
+        return credit;
     }
 
     @Override
