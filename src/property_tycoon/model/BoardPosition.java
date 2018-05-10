@@ -17,7 +17,7 @@ public interface BoardPosition
      * Represents an action taken when the passed in player lands on and exits this
      * board position object.
      * 
-     * @param player The player to land on & exit the board position.
+     * @param player The player to land on and exit the board position.
      */
     void step(Player player);
 

@@ -55,6 +55,8 @@ public abstract class Card
     /**
      * Registers the specified property change listener
      * with this <code>Card</code> object.
+     * 
+     * @param listener The listener object for bound updates.
      */
     public void addPropertyChangeListener(PropertyChangeListener listener)
     {
@@ -64,6 +66,8 @@ public abstract class Card
     /**
      * Unregisters the specified property change listener
      * with this <code>Card</code> object.
+     * 
+     * @param listener The listener object for bound updates.
      */
     public void removePropertyChangeListener(PropertyChangeListener listener)
     {
