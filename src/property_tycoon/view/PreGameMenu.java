@@ -167,6 +167,7 @@ public class PreGameMenu extends Application
                     return;
                 }
                 
+                //check there are a sufficient number of players
                 if (!checkNumPlayers(configs))
                 {
                     createNumPlayersError();
@@ -179,8 +180,6 @@ public class PreGameMenu extends Application
                     players[index] = player;
                     chosenColors[index] = config.color.getSelectionModel().getSelectedItem();
                     index++;
-//                    System.out.println(player.getDescription());
-//                    System.out.println(player.getColor().toString());
                 }
                 else if (config.playerType.getValue() == "AI")
                 {
@@ -188,8 +187,6 @@ public class PreGameMenu extends Application
                     players[index] = player;
                     chosenColors[index] = config.color.getSelectionModel().getSelectedItem();
                     index++;
-//                    System.out.println(player.getDescription());
-//                    System.out.println(player.getColor().toString());
                 }
             }
             //check that none of the chosen colors are duplicates
@@ -197,6 +194,7 @@ public class PreGameMenu extends Application
             {
                 createColorError();
             }
+            //create the board with the required players/gameview
             else
             {
                 stage.hide();
@@ -211,28 +209,12 @@ public class PreGameMenu extends Application
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(30);
         vbox.setAlignment(Pos.CENTER);
-//        vbox.setBorder(new Border(new BorderStroke(Color.BLACK,
-//            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
-        //Right pane
-        //Color picked = comboBox2.getSelectionModel().getSelectedItem();
-        
-        //rightTopVBox.setPadding(new Insets(300, 80, 80, 80));
-        //TODO: make buttons for each colour and save colour upon button press
-
-//        hbox.setAlignment(Pos.CENTER);
-//        hbox.setPadding(insets);
-//        hbox.setSpacing(30);
-//        bp.setBackground(new Background(new BackgroundFill(Color.GREEN,
-//            CornerRadii.EMPTY, Insets.EMPTY)));
         //Scene
         Scene scene = new Scene(bp);
         bp.setBottom(bottomHBox);
         bp.setTop(hbox);
         bp.setCenter(vbox);
-        //bp.setRight(vbox2);
-//        bp.setPadding(insets);
-        //bp.setAlignment(bp.getTop(), Pos.CENTER);
         return scene;
     }
     

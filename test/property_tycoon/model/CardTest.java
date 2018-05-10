@@ -88,10 +88,8 @@ public class CardTest
     public void testGetActionDescription()
     {
         CardAction act =  new FakeAction();
-        Card action =  Card.create("jail",false,new FakeAction(),act);
-        Card action2 = Card.create(act, true);
-        assertEquals(action.getActionDescription(1),act);
-        assertEquals(action2.getActionDescription(0),act);
+        Card action = Card.create(act, true);
+        assertEquals(action.getActionDescription(0),act.getDescription());
     }
 
     /**
@@ -101,10 +99,7 @@ public class CardTest
     public void testGetDescription()
     {
         Card action =  Card.create("jail",false,new FakeAction(),new FakeAction());
-        CardAction act =  new FakeAction();
-        Card action2 = Card.create(act, true);
         assertEquals(action.getDescription(),"jail");
-        assertEquals(action2.getDescription(),act.getDescription());
     }
 
     /**
@@ -237,19 +232,6 @@ public class CardTest
         assertFalse(action.isOwned());
     }
 
-    @Test
-    public void testIsOwned_0args()
-    {
-        Player player = new Player("T", Color.CORAL , new HumanController());
-        CardAction act = new FakeAction();
-        Card action = Card.create(act, true);
-        Group group = Group.create("potLuck", action);
-        assertFalse(action.isOwned());
-        action = group.draw(player);
-        assertTrue(action.isOwned());
-        action.use();
-        assertFalse(action.isOwned());
-    }
     
     /**
      * Test of getOwner method, of class Card.

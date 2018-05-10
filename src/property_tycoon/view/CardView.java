@@ -37,7 +37,10 @@ public class CardView extends Stage
     
     private Scene buildScene()
     {
-        VBox details = new VBox( new Label(model.getGroup().getDescription()), new Label (model.getDescription()));
+        Label cardName = new Label(model.getGroup().getDescription());
+        cardName.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
+        
+        VBox details = new VBox( cardName, new Label (model.getDescription()));
         
         
         details.setSpacing(20);
