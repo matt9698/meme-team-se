@@ -1,0 +1,23 @@
+/*
+Meme Team Software Engineering Project
+Property Tycoon
+*/
+
+#background {
+    -fx-min-width: 146; /* unit - 2 * border*/
+    -fx-min-height: 146; /* unit * 1.5 - 2 * border*/
+    -fx-pref-width: 146; /* unit - 2 * border*/
+    -fx-pref-height: 146; /* unit * 1.5 - 2 * border*/
+
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-width: 2 2 4 4; 
+
+    -fx-background-color: #bfdbae;
+    
+    -fx-font-family: 'Helvetica';
+    -fx-font-size: 12;
+
+    -fx-text-alignment: center;
+}
+
