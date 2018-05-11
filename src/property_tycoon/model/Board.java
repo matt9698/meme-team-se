@@ -85,9 +85,24 @@ public class Board
 
     public void moveSequential(Player player, int by)
     {
-        // TODO: Implement
-        System.out.println("moving player '" + player.getDescription() + "sequentially");
-        throw new UnsupportedOperationException("Not yet implemented.");
+        BoardPosition from = getPosition(player);
+        
+        // Search the players array to find index of player
+        int index = 0;
+        while(index < players.length && !player.equals(players[index])) {
+            index++;
+        }
+        
+        for(int i = 0; i < by - 1; i++) {
+            playerPositionMap[index] += 1;
+            getPosition(player).step(player);
+        }
+        
+        playerPositionMap[index] += 1;
+        BoardPosition to = getPosition(player);
+        to.land(player);
+        
+        System.out.println(String.format("%s moved from position %d to %d.", player.getDescription(), getIndex(from), getIndex(to)));
     }
 
     public void moveDirect(Player player, BoardPosition to)
