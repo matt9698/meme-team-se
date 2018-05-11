@@ -23,7 +23,7 @@ import property_tycoon.model.PropertyPosition;
 /**
  * Control representing a property position on the game board.
  *
- * @author Matt
+ * @author meme-team
  * @version 02/05/2018
  */
 public class PropertyPositionView extends BoardPositionView

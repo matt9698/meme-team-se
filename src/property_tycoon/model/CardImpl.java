@@ -164,6 +164,7 @@ final class CardImpl extends Card
     @Override
     public void use(int action)
     {
+        System.out.println(owner + " is using this card: " +description);
         if(!isGrouped()) {
             throw new IllegalStateException("Card has no group.");
         }
@@ -195,8 +196,10 @@ final class CardImpl extends Card
     @Override
     protected void setOwner(Player owner)
     {
+        
         Player old = getOwner();
         this.owner = owner;
+        System.out.println(owner + " now owns this card");
         getPropertyChangeSupport().firePropertyChange("owner", old, owner);
     }
 }

@@ -9,7 +9,7 @@ import property_tycoon.model.TaxPosition;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class TaxPositionView extends BoardPositionView
 {

@@ -85,11 +85,11 @@ final class PropertyImpl extends Property
             
             level = getGroup().getLevels().getLevel(val);
         }
-
+        
         owner = buyer;
         getPropertyChangeSupport().firePropertyChange("owner", null, owner);
         getPropertyChangeSupport().firePropertyChange("owned", false, true);
-
+        System.out.println(getDescription()+ " is now owned by "+owner);
         return new PropertyProxy(this);
     }
 
@@ -119,7 +119,7 @@ final class PropertyImpl extends Property
         PropertyLevel old = getLevel();
         level = old.getPrevious();
         getPropertyChangeSupport().firePropertyChange("level", old, level);
-
+        System.out.println(getDescription()+ " is now at property level "+level.getIndex());
         return getImprovementCost();
     }
 
@@ -162,7 +162,7 @@ final class PropertyImpl extends Property
                     return UTILITY_HIGH_RENT * diceValue;
             }
         }
-
+        
         throw new AssertionError("levels has an invalid value.");
     }
 
@@ -235,6 +235,7 @@ final class PropertyImpl extends Property
 
         this.group = group;
         getPropertyChangeSupport().firePropertyChange("group", null, group);
+        System.out.println(getDescription()+ " is now part of the group "+group.getDescription());
     }
 
     @Override

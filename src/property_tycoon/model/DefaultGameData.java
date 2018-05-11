@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 /**
  *
- * @author matth
+ * @author meme-team
  */
 public class DefaultGameData implements GameData
 {

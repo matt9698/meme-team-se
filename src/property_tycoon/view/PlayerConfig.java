@@ -16,7 +16,7 @@ import javafx.util.StringConverter;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class PlayerConfig extends HBox
 {

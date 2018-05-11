@@ -33,7 +33,7 @@ import property_tycoon.model.Player;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class PreGameMenu extends Application
 {
