@@ -72,24 +72,28 @@ public class Board
     public void moveForward(Player player, BoardPosition to)
     {
         // TODO: Implement
+        System.out.println("moving player '" + player.getDescription() + " forward");
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     public void moveBackward(Player player, BoardPosition to)
     {
         // TODO: Implement
+        System.out.println("moving player '" + player.getDescription() + "backward");
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     public void moveSequential(Player player, int by)
     {
         // TODO: Implement
+        System.out.println("moving player '" + player.getDescription() + "sequentially");
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 
     public void moveDirect(Player player, BoardPosition to)
     {
         // TODO: Implement
+        System.out.println("moving player '" + player.getDescription() + "directly");
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 

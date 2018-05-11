@@ -79,6 +79,7 @@ public class Player
             throw new IllegalStateException(
                 "Player does not have enough cash to buy property.");
         }
+        System.out.println(getDescription() + "has purchased property "+property.getDescription());
         properties.add(property.buy(this));
         setCash(getCash() - property.getPrice());
     }
@@ -111,6 +112,7 @@ public class Player
             throw new IllegalArgumentException(
                 "property should be owned by this player.");
         }
+        System.out.print(getDescription() + "has downgraded property "+property.getDescription());
         setCash(getCash() + property.downgrade());
     }
 
@@ -126,6 +128,7 @@ public class Player
         if(from == null) {
             throw new IllegalArgumentException("from should not be null.");
         }
+        System.out.println("drawing a card from "+ from.getDescription());
         cards.add(from.draw(this));
     }
 
@@ -221,7 +224,10 @@ public class Player
             throw new IllegalArgumentException(
                 "property should be owned by this player.");
         }
+        System.out.println("player "+getDescription() + "is mortgaging "+property.getDescription());
+        System.out.println("player "+getDescription()+" had "+getCash()+ " cash.");
         setCash(getCash() + property.mortgage());
+        System.out.println("player "+getDescription()+ " now has "+getCash()+ " cash");
     }
 
     /**
@@ -251,9 +257,13 @@ public class Player
                 "Player does not have enough cash to pay rent.");
         }
 
+       
         Player to = on.getOwner();
         to.setCash(to.getCash() + on.getRentPrice(diceValue));
+        System.out.println("player "+getDescription()+" has stepped on "+to.getDescription()+ "'s property: "+on.getDescription());
+        
         this.setCash(getCash() - on.getRentPrice(diceValue));
+        System.out.println("player "+getDescription()+" now has "+getCash()+ " cash");
     }
 
     /**
@@ -277,6 +287,7 @@ public class Player
         }
         properties.remove(property);
         setCash(getCash() + property.sell());
+        System.out.println("Player "+getDescription()+" has sold property "+property.getDescription()+ " and now has "+getCash() + " cash");
     }
 
     /**
@@ -304,6 +315,7 @@ public class Player
                 "Player does not have enough cash to unmortgage property.");
         }
         setCash(getCash() - property.unmortgage());
+        System.out.println("Player "+getDescription()+" has unmortgaged property "+property.getDescription()+ " and now has "+getCash() + " cash");
     }
 
     /**
@@ -331,6 +343,7 @@ public class Player
                 "Player does not have enough cash to upgrade property.");
         }
         setCash(getCash() - property.upgrade());
+        System.out.println("Player "+getDescription()+" has upgraded property "+property.getDescription()+ " and now has "+getCash() + " cash");
     }
 
     /**
@@ -372,8 +385,10 @@ public class Player
 
     private void setCash(int amount)
     {
+        System.out.println(getDescription() + "has had their cash changed from "+cash+ "to " +amount);
         assert amount >= 0 : "amount should not be negative.";
         cash.set(amount);
+        
     }
 
     public static abstract class Controller
@@ -395,6 +410,7 @@ public class Player
                 throw new IllegalArgumentException("player should not be null.");
             }
             this.player = player;
+            System.out.println(player.getDescription() + "now has a controller");
         }
         
         public abstract void takeTurn(Board board);

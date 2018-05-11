@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author not matt
+ * @author meme-team
  */
 public class MainMenu extends Application
 {

@@ -75,6 +75,7 @@ public class Game
     public void incrementPlayerIndex()
     {
         currentPlayer = (currentPlayer + 1) % players.length;
+        System.out.println("It is currently "+players[currentPlayer].getDescription()+" 's turn");
     }
     
     public void nextTurn()

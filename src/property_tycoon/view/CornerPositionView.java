@@ -9,7 +9,7 @@ import property_tycoon.model.CornerPosition;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class CornerPositionView extends BoardPositionView
 {

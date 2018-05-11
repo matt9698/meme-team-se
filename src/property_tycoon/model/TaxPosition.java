@@ -6,7 +6,7 @@ package property_tycoon.model;
 
 /**
  *
- * @author adam
+ * @author meme-team-se
  */
 public class TaxPosition implements BoardPosition
 {

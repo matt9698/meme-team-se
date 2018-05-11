@@ -10,7 +10,7 @@ import property_tycoon.model.Card;
 
 /**
  *
- * @author adam
+ * @author meme-team
  */
 public class CardPositionView extends BoardPositionView
 {

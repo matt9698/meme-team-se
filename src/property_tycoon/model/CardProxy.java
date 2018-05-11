@@ -105,6 +105,7 @@ class CardProxy extends Card
             throw new IllegalStateException("Proxy card is not valid.");
         }
 
+        System.out.println(realCard.getDescription()+ " is being used by "+realCard.getOwner().getDescription());
         realCard.use(action);
         isValid = false;
     }
